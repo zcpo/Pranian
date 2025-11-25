@@ -26,9 +26,9 @@ export function ContentCard({
 }: ContentCardProps) {
   return (
     <Link href={href} className="group block">
-      <Card className={cn("overflow-hidden h-full transition-all duration-300 ease-in-out group-hover:border-primary/50 group-hover:shadow-lg group-hover:shadow-primary/10", className)}>
+      <Card className={cn("overflow-hidden h-full transition-all duration-300 ease-in-out group-hover:border-primary/50 group-hover:shadow-lg group-hover:shadow-primary/10 flex flex-col", className)}>
         <CardHeader className="p-0">
-          <div className="relative aspect-[3/2] w-full overflow-hidden">
+          <div className={cn("relative w-full overflow-hidden", className?.includes('aspect-square') ? 'aspect-square' : 'aspect-[3/2]')}>
             <Image
               src={imageUrl}
               alt={title}
@@ -38,14 +38,9 @@ export function ContentCard({
             />
           </div>
         </CardHeader>
-        <CardContent className="p-6">
-          <Badge variant="secondary" className="mb-2 bg-primary/10 text-primary border-primary/20">{category}</Badge>
-          <h3 className="text-xl font-semibold font-headline mb-2 text-foreground">{title}</h3>
-          <p className="text-muted-foreground text-sm mb-4">{description}</p>
-          <div className="flex items-center text-sm font-medium text-primary">
-            Read More
-            <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 ease-in-out group-hover:translate-x-1" />
-          </div>
+        <CardContent className="p-4 flex-grow">
+          <h3 className="text-md font-semibold font-headline mb-1 text-foreground truncate">{title}</h3>
+          <p className="text-muted-foreground text-sm truncate">{description}</p>
         </CardContent>
       </Card>
     </Link>
