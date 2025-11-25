@@ -4,7 +4,7 @@ export default function TeachingPage() {
       <div className="text-center">
         <h1 className="text-4xl md:text-5xl font-extrabold font-headline tracking-tight">Teaching Resources</h1>
         <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-          Resources for yoga teachers to refine their skills.
+          Cueing techniques, hands-on assists, class themes, safety guidelines, and teaching ethics.
         </p>
         <p className="mt-8 text-muted-foreground">
           Content coming soon. Stay tuned!

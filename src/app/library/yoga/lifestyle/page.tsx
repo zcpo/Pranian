@@ -4,7 +4,7 @@ export default function LifestylePage() {
       <div className="text-center">
         <h1 className="text-4xl md:text-5xl font-extrabold font-headline tracking-tight">Lifestyle & Ayurveda</h1>
         <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-          Integrate yoga and Ayurveda into your daily life for holistic wellness.
+          Ayurvedic doshas, yoga and nutrition, daily routines (dinacharya), and seasonal practices.
         </p>
         <p className="mt-8 text-muted-foreground">
           Content coming soon. Stay tuned!

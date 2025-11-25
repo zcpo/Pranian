@@ -4,7 +4,7 @@ export default function AsanaPage() {
       <div className="text-center">
         <h1 className="text-4xl md:text-5xl font-extrabold font-headline tracking-tight">Asana (Postures) Library</h1>
         <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-          A comprehensive guide to yoga postures.
+          Standing poses, sitting poses, twists, balancing poses, forward folds, backbends, arm balances, inversions, restorative poses, and prenatal variations.
         </p>
         <p className="mt-8 text-muted-foreground">
           Content coming soon. Stay tuned!

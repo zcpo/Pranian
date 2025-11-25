@@ -4,7 +4,7 @@ export default function StylesPage() {
       <div className="text-center">
         <h1 className="text-4xl md:text-5xl font-extrabold font-headline tracking-tight">Specialty Yoga Styles</h1>
         <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-          Explore different styles of yoga like Hatha, Vinyasa, and Kundalini.
+          Hatha, Vinyasa, Ashtanga, Iyengar, Yin, Restorative, Kundalini, Power Yoga, and Adaptive/Chair Yoga.
         </p>
         <p className="mt-8 text-muted-foreground">
           Content coming soon. Stay tuned!

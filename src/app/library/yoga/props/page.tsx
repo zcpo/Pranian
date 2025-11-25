@@ -4,7 +4,7 @@ export default function PropsPage() {
       <div className="text-center">
         <h1 className="text-4xl md:text-5xl font-extrabold font-headline tracking-tight">Props & Modifications</h1>
         <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-          Learn how to use props to support and deepen your practice.
+          Using blocks, straps, bolsters, wall-assisted poses, variations for beginners, and modifications for injuries.
         </p>
         <p className="mt-8 text-muted-foreground">
           Content coming soon. Stay tuned!

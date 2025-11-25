@@ -4,7 +4,7 @@ export default function ChakrasPage() {
       <div className="text-center">
         <h1 className="text-4xl md:text-5xl font-extrabold font-headline tracking-tight">Chakras & Energy Work</h1>
         <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-          Dive into the subtle energy body, chakras, and mudras.
+          Chakra descriptions, corresponding poses, mudras, mantras, and energetic balancing sequences.
         </p>
         <p className="mt-8 text-muted-foreground">
           Content coming soon. Stay tuned!

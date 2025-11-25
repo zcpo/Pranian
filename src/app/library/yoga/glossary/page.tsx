@@ -4,7 +4,7 @@ export default function GlossaryPage() {
       <div className="text-center">
         <h1 className="text-4xl md:text-5xl font-extrabold font-headline tracking-tight">Glossary & Sanskrit Guide</h1>
         <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-          A guide to Sanskrit terms and pose names.
+          Pose names, pronunciation, and terminology.
         </p>
         <p className="mt-8 text-muted-foreground">
           Content coming soon. Stay tuned!

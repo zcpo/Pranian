@@ -4,7 +4,7 @@ export default function YogaMeditationPage() {
       <div className="text-center">
         <h1 className="text-4xl md:text-5xl font-extrabold font-headline tracking-tight">Meditation & Mindfulness</h1>
         <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-          Discover guided meditations and mindfulness practices within the yoga tradition.
+          Guided meditations, breath-based meditations, mantra meditation, visualization practices, body scan, and Yoga Nidra.
         </p>
         <p className="mt-8 text-muted-foreground">
           Content coming soon. Stay tuned!

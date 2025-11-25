@@ -4,7 +4,7 @@ export default function PranayamaPage() {
       <div className="text-center">
         <h1 className="text-4xl md:text-5xl font-extrabold font-headline tracking-tight">Pranayama (Breathing Techniques)</h1>
         <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-          Learn various breathing exercises to control your prana or life-force.
+          Basic breath awareness, Ujjayi, Nadi Shodhana, Kapalabhati, Bhastrika, cooling breaths (Sitali, Sitkari), and retention techniques (Kumbhaka).
         </p>
         <p className="mt-8 text-muted-foreground">
           Content coming soon. Stay tuned!

@@ -4,7 +4,7 @@ export default function PhilosophyPage() {
       <div className="text-center">
         <h1 className="text-4xl md:text-5xl font-extrabold font-headline tracking-tight">Philosophy & Foundations</h1>
         <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-          Understand the core principles and texts of yoga philosophy.
+          Eight Limbs of Yoga, key texts (Yoga Sutras, Bhagavad Gita, Hatha Yoga Pradipika), Yamas & Niyamas, and concepts like prana, chakras, koshas, and nadis.
         </p>
         <p className="mt-8 text-muted-foreground">
           Content coming soon. Stay tuned!
