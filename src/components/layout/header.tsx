@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 import Logo from '@/components/logo';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 const navLinks = [
   { href: '/library', label: 'Library' },
@@ -76,10 +77,11 @@ export default function Header() {
               ))}
             </nav>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+             <ThemeToggle />
              <Button variant="ghost" size="icon" asChild>
                 <Link href="/login">
-                    <UserCircle className="h-5 w-5 text-primary" />
+                    <UserCircle className="h-5 w-5" />
                     <span className="sr-only">Login</span>
                 </Link>
              </Button>
