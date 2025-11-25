@@ -15,8 +15,20 @@
     {
       "id": "meditation-2",
       "description": "Close up of hands in a meditation pose.",
-      "imageUrl": "https://images.unsplash.com/photo-1593662486022-bcf418371230?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx6ZW4lMjBoYW5kc3xlbnwwfHx8fDE3NjQxMDA3NTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1593662486022-bcf418371230?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx6ZW4lMjBoYW5kc3xlbnwwfHx8fDE3NjQxMDA3NTh8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "zen hands"
+    },
+    {
+      "id": "meditation-3",
+      "description": "A collection of singing bowls.",
+      "imageUrl": "https://images.unsplash.com/photo-1579291465308-fba6c5db2dfe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzaW5naW5nJTIwYm93bHN8ZW58MHx8fHwxNzY0MTAzNDIwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "singing bowls"
+    },
+    {
+      "id": "yoga-nidra-1",
+      "description": "A person in a relaxed state for yoga nidra.",
+      "imageUrl": "https://images.unsplash.com/photo-1582106316415-d02d4d0e9066?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx5b2dhJTIwbmlkcmF8ZW58MHx8fHwxNzY0MTAzNDIwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "yoga nidra"
     },
     {
       "id": "yoga-1",
@@ -27,31 +39,31 @@
     {
       "id": "yoga-2",
       "description": "A group yoga class outdoors.",
-      "imageUrl": "https://images.unsplash.com/photo-1588286840104-8957b019727f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHx5b2dhJTIwY2xhc3N8ZW58MHx8fHwxNzY0MDkxMDM3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1588286840104-8957b019727f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHx5b2dhJTIwY2xhc3N8ZW58MHx8fHwxNzY0MDkxMDM3fDA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "yoga class"
     },
     {
       "id": "product-mat",
       "description": "A high-quality yoga mat.",
-      "imageUrl": "https://images.unsplash.com/photo-1591291621060-89264efbeaed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHx5b2dhJTIwbWF0fGVufDB8fHx8MTc2NDA5MjIyOHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1591291621060-89264efbeaed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHx5b2dhJTIwbWF0fGVufDB8fHx8MTc2NDA5MjIyOHww&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "yoga mat"
     },
     {
       "id": "product-book",
       "description": "A book about meditation and mindfulness.",
-      "imageUrl": "https://images.unsplash.com/photo-1709639288066-5cb6aa0f354e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxib29rJTIwbWVkaXRhdGlvbnxlbnwwfHx8fDE3NjQxMDA3NTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1709639288066-5cb6aa0f354e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxib29rJTIwbWVkaXRhdGlvbnxlbnwwfHx8fDE3NjQxMDA3NTh8MA&ixlibrb-4.1.0&q=80&w=1080",
       "imageHint": "book meditation"
     },
     {
       "id": "product-podcast",
       "description": "Cover art for a podcast.",
-      "imageUrl": "https://images.unsplash.com/photo-1709846486283-de18cb67bc67?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxwb2RjYXN0JTIwYXVkaW98ZW58MHx8fHwxNzY0MTAwNzU4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1709846486283-de18cb67bc67?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxwb2RjYXN0JTIwYXVkaW98ZW58MHx8fHwxNzY0MTAwNzU4fDA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "podcast audio"
     },
     {
       "id": "product-video",
       "description": "Thumbnail for an online learning video.",
-      "imageUrl": "https://images.unsplash.com/photo-1730890754666-fbffee87d65b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx2aWRlbyUyMGxlc3NvbnxlbnwwfHx8fDE3NjQwMDEwMDJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1730890754666-fbffee87d65b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx2aWRlbyUyMGxlc3NvbnxlbnwwfHx8fDE3NjQwMDEwMDJ8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "video lesson"
     },
     {
@@ -77,6 +89,324 @@
       "description": "A person breathing deeply in nature.",
       "imageUrl": "https://images.unsplash.com/photo-1617994422026-1ee4a32e3a65?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       "imageHint": "breathing nature"
+    },
+    {
+      "id": "hero-asana",
+      "description": "Collection of yoga poses.",
+      "imageUrl": "https://images.unsplash.com/photo-1717839339049-2aba90aaabc1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHx5b2dhJTIwcG9zZXN8ZW58MHx8fHwxNzY0MTAzNDIwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "yoga poses"
+    },
+    {
+      "id": "hero-pranayama",
+      "description": "Woman practicing pranayama.",
+      "imageUrl": "https://images.unsplash.com/photo-1611629154254-f601125d8417?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxwcmFuYXlhbWElMjBicmVhdGh8ZW58MHx8fHwxNzY0MTAzNDIwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "pranayama breath"
+    },
+    {
+      "id": "hero-meditation",
+      "description": "Person in deep meditation.",
+      "imageUrl": "https://images.unsplash.com/photo-1609718561976-d52836e625cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxtZWRpdGF0aW9uJTIwcGVhY2V8ZW58MHx8fHwxNzY0MTAzNDIwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "meditation peace"
+    },
+    {
+      "id": "hero-philosophy",
+      "description": "Ancient yoga texts.",
+      "imageUrl": "https://images.unsplash.com/photo-1758599879693-9e06f55a4ded?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx5b2dhJTIwcGhpbG9zb3BoeXxlbnwwfHx8fDE3NjQxMDM0MjB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "yoga philosophy"
+    },
+    {
+      "id": "hero-anatomy",
+      "description": "Anatomical drawing of human body.",
+      "imageUrl": "https://images.unsplash.com/photo-1678220052318-8699647588b7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx5b2dhJTIwYW5hdG9teXxlbnwwfHx8fDE3NjQxMDM0MjB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "yoga anatomy"
+    },
+    {
+      "id": "hero-sequencing",
+      "description": "A person planning a yoga sequence.",
+      "imageUrl": "https://images.unsplash.com/photo-1758599881359-a3f089f33502?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx5b2dhJTIwc2VxdWVuY2V8ZW58MHx8fHwxNzY0MTAzNDIwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "yoga sequence"
+    },
+    {
+      "id": "hero-styles",
+      "description": "Montage of different yoga styles.",
+      "imageUrl": "https://images.unsplash.com/photo-1557512724-931547195611?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHx5b2dhJTIwc3R5bGVzfGVufDB8fHx8MTc2NDEwMzQyMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "yoga styles"
+    },
+    {
+      "id": "hero-chakras",
+      "description": "Illustration of the chakra system.",
+      "imageUrl": "https://images.unsplash.com/photo-1631967407787-3f12a597ecfe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjaGFrcmElMjBzeXN0ZW18ZW58MHx8fHwxNzY0MTAzNDIwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "chakra system"
+    },
+    {
+      "id": "hero-props",
+      "description": "Various yoga props like blocks and straps.",
+      "imageUrl": "https://images.unsplash.com/photo-1646239646963-b0b9be56d6b5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx5b2dhJTIwcHJvcHN8ZW58MHx8fHwxNzY0MTAzNDIwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "yoga props"
+    },
+    {
+      "id": "hero-lifestyle",
+      "description": "Healthy food and yoga mat.",
+      "imageUrl": "https://images.unsplash.com/photo-1617734423221-dd4ad460bad6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx5b2dhJTIwbGlmZXN0eWxlfGVufDB8fHx8MTc2NDEwMzQyMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "yoga lifestyle"
+    },
+    {
+      "id": "hero-teaching",
+      "description": "Yoga teacher guiding a class.",
+      "imageUrl": "https://images.unsplash.com/photo-1591343395902-1adcb454c4e2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx5b2dhJTIwdGVhY2hlcnxlbnwwfHx8fDE3NjQxMDM0MjB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "yoga teacher"
+    },
+    {
+      "id": "hero-audio-video",
+      "description": "Person wearing headphones and watching a video.",
+      "imageUrl": "https://images.unsplash.com/photo-1760404699831-67d9927653e8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxtZWRpYSUyMGxpYnJhcnl8ZW58MHx8fHwxNzY0MTAzNDIwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "media library"
+    },
+    {
+      "id": "hero-glossary",
+      "description": "An open book with Sanskrit words.",
+      "imageUrl": "https://images.unsplash.com/photo-1740510986288-ecd1379e7f75?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxzYW5za3JpdCUyMGJvb2t8ZW58MHx8fHwxNzY0MTAzNDIwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "sanskrit book"
+    },
+    {
+      "id": "asana-1",
+      "description": "Mountain Pose",
+      "imageUrl": "https://images.unsplash.com/photo-1727843184074-458d71166c32?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxtb3VudGFpbiUyMHBvc2V8ZW58MHx8fHwxNzY0MTAzNDIwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "mountain pose"
+    },
+    {
+      "id": "asana-2",
+      "description": "Downward-Facing Dog",
+      "imageUrl": "https://images.unsplash.com/photo-1632167651512-2c8a19f534e5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxkb3dud2FyZCUyMGRvZ3xlbnwwfHx8fDE3NjQxMDM0MjB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "downward dog"
+    },
+    {
+      "id": "asana-3",
+      "description": "Warrior II",
+      "imageUrl": "https://images.unsplash.com/photo-1758274526447-ea3e051b3dee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHx3YXJyaW9yJTIwdHdvfGVufDB8fHx8MTc2NDEwMzQyMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "warrior two"
+    },
+    {
+      "id": "asana-4",
+      "description": "Triangle Pose",
+      "imageUrl": "https://images.unsplash.com/photo-1763699751433-7157ff4f4e31?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx0cmlhbmdsZSUyMHBvc2V8ZW58MHx8fHwxNzY0MTAzNDIwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "triangle pose"
+    },
+    {
+      "id": "pranayama-1",
+      "description": "Ujjayi Breath",
+      "imageUrl": "https://images.unsplash.com/photo-1502139214982-d0ad755818d8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx1ampheWklMjBicmVhdGh8ZW58MHx8fHwxNzY0MTAzNDIwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "ujjayi breath"
+    },
+    {
+      "id": "pranayama-2",
+      "description": "Nadi Shodhana",
+      "imageUrl": "https://images.unsplash.com/photo-1627767636387-94ffb0ed8861?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8YWx0ZXJuYXRlJTIwbm9zdHJpbHxlbnwwfHx8fDE3NjQxMDM0MjB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "alternate nostril"
+    },
+    {
+      "id": "pranayama-3",
+      "description": "Kapalabhati",
+      "imageUrl": "https://images.unsplash.com/photo-1502139214982-d0ad755818d8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjbGVhbnNpbmclMjBicmVhdGh8ZW58MHx8fHwxNzY0MTAzNDIwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "cleansing breath"
+    },
+    {
+      "id": "pranayama-4",
+      "description": "Sitali",
+      "imageUrl": "https://images.unsplash.com/photo-1761233976855-362555967b83?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb29saW5nJTIwYnJlYXRofGVufDB8fHx8MTc2NDEwMzQyMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "cooling breath"
+    },
+    {
+      "id": "philosophy-1",
+      "description": "Eight Limbs of Yoga Chart",
+      "imageUrl": "https://images.unsplash.com/photo-1763272117716-de05b01b331b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxlaWdodCUyMGxpbWJzfGVufDB8fHx8MTc2NDEwMzQyMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "eight limbs"
+    },
+    {
+      "id": "philosophy-2",
+      "description": "Yamas & Niyamas graphic",
+      "imageUrl": "https://picsum.photos/seed/philosophy2/600/400",
+      "imageHint": "yamas niyamas"
+    },
+    {
+      "id": "philosophy-3",
+      "description": "Yoga Sutras book",
+      "imageUrl": "https://images.unsplash.com/photo-1557512724-931547195611?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHx5b2dhJTIwc3V0cmFzfGVufDB8fHx8MTc2NDEwMzQyMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "yoga sutras"
+    },
+    {
+      "id": "philosophy-4",
+      "description": "Energy body diagram",
+      "imageUrl": "https://images.unsplash.com/photo-1750521280945-c533966f103c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxlbmVyZ3klMjBib2R5fGVufDB8fHx8MTc2NDEwMzQyMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "energy body"
+    },
+    {
+      "id": "anatomy-1",
+      "description": "Anatomy of the spine",
+      "imageUrl": "https://images.unsplash.com/photo-1714929818396-fdf43f0a40a1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxzcGluZSUyMGFuYXRvbXl8ZW58MHx8fHwxNzY0MTAzNDIwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "spine anatomy"
+    },
+    {
+      "id": "anatomy-2",
+      "description": "Shoulder muscles",
+      "imageUrl": "https://images.unsplash.com/photo-1715111641804-f8af88e93b01?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8c2hvdWxkZXIlMjBhbmF0b215fGVufDB8fHx8MTc2NDEwMzQyMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "shoulder anatomy"
+    },
+    {
+      "id": "anatomy-3",
+      "description": "Hip anatomy",
+      "imageUrl": "https://images.unsplash.com/photo-1650562373852-04c5682ec2e7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxoaXAlMjBhbmF0b215fGVufDB8fHx8MTc2NDEwMzQyMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "hip anatomy"
+    },
+    {
+      "id": "anatomy-4",
+      "description": "Core muscles",
+      "imageUrl": "https://images.unsplash.com/photo-1714929818864-48d3664c6c41?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxjb3JlJTIwYW5hdG9teXxlbnwwfHx8fDE3NjQxMDM0MjB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "core anatomy"
+    },
+    {
+      "id": "sequencing-1",
+      "description": "Sunrise yoga sequence",
+      "imageUrl": "https://images.unsplash.com/photo-1600974378606-abc8f59c61af?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxtb3JuaW5nJTIweW9nYXxlbnwwfHx8fDE3NjQwNjQwNzB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "morning yoga"
+    },
+    {
+      "id": "sequencing-2",
+      "description": "Moonlit yoga sequence",
+      "imageUrl": "https://images.unsplash.com/photo-1554067559-1e017957fa3b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxldmVuaW5nJTIweW9nYXxlbnwwfHx8fDE3NjQxMDM0MjB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "evening yoga"
+    },
+    {
+      "id": "sequencing-3",
+      "description": "Runner stretching",
+      "imageUrl": "https://images.unsplash.com/photo-1683194381604-b0f7ee52584a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8cnVubmVyJTIwc3RyZXRjaHxlbnwwfHx8fDE3NjQxMDM0MjB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "runner stretch"
+    },
+    {
+      "id": "sequencing-4",
+      "description": "Dynamic yoga flow",
+      "imageUrl": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxwb3dlciUyMHlvZ2F8ZW58MHx8fHwxNzY0MTAzNDIwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "power yoga"
+    },
+    {
+      "id": "style-hatha",
+      "description": "Hatha yoga pose",
+      "imageUrl": "https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxoYXRoYSUyMHlvZ2F8ZW58MHx8fHwxNzY0MTAzNDIwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "hatha yoga"
+    },
+    {
+      "id": "style-vinyasa",
+      "description": "Vinyasa yoga flow",
+      "imageUrl": "https://images.unsplash.com/photo-1755513176619-8e7e659bb912?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx2aW55YXNhJTIwZmxvd3xlbnwwfHx8fDE3NjQxMDM0MjB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "vinyasa flow"
+    },
+    {
+      "id": "style-yin",
+      "description": "Yin yoga pose",
+      "imageUrl": "https://images.unsplash.com/photo-1593358578736-186f3d13c789?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx5aW4lMjB5b2dhfGVufDB8fHx8MTc2NDEwMzQyMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "yin yoga"
+    },
+    {
+      "id": "style-restorative",
+      "description": "Restorative yoga setup",
+      "imageUrl": "https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxyZXN0b3JhdGl2ZSUyMHlvZ2F8ZW58MHx8fHwxNzY0MTAzNDIwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "restorative yoga"
+    },
+    {
+      "id": "chakra-1",
+      "description": "Root chakra symbol",
+      "imageUrl": "https://images.unsplash.com/photo-1625405625266-2b897c8afdeb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxyb290JTIwY2hha3JhfGVufDB8fHx8MTc2NDEwMzQyMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "root chakra"
+    },
+    {
+      "id": "chakra-2",
+      "description": "Heart chakra symbol",
+      "imageUrl": "https://images.unsplash.com/photo-1622952736534-4ca61f7992fb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxoZWFydCUyMGNoYWtyYXxlbnwwfHx8fDE3NjQxMDM0MjB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "heart chakra"
+    },
+    {
+      "id": "chakra-3",
+      "description": "Third eye chakra symbol",
+      "imageUrl": "https://images.unsplash.com/photo-1513758173941-bfbd2e4166f5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx0aGlyZCUyMGV5ZXxlbnwwfHx8fDE3NjQxMDM0MjB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "third eye"
+    },
+    {
+      "id": "chakra-4",
+      "description": "Crown chakra symbol",
+      "imageUrl": "https://images.unsplash.com/photo-1692136608271-e6327cb14e51?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjcm93biUyMGNoYWtyYXxlbnwwfHx8fDE3NjQxMDM0MjB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "crown chakra"
+    },
+    {
+      "id": "props-1",
+      "description": "Yoga blocks",
+      "imageUrl": "https://images.unsplash.com/photo-1646239646963-b0b9be56d6b5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx5b2dhJTIwYmxvY2tzfGVufDB8fHx8MTc2NDEwMzQyMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "yoga blocks"
+    },
+    {
+      "id": "props-2",
+      "description": "Yoga strap",
+      "imageUrl": "https://images.unsplash.com/photo-1763004871583-4183d64096b1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx5b2dhJTIwc3RyYXB8ZW58MHx8fHwxNzY0MTAzNDIwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "yoga strap"
+    },
+    {
+      "id": "props-3",
+      "description": "Yoga bolster",
+      "imageUrl": "https://images.unsplash.com/photo-1761971975858-c487bc10daab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHx5b2dhJTIwYm9sc3RlcnxlbnwwfHx8fDE3NjQxMDM0MjB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "yoga bolster"
+    },
+    {
+      "id": "props-4",
+      "description": "Wall yoga",
+      "imageUrl": "https://images.unsplash.com/photo-1758599879067-f99a68ea57ee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx3YWxsJTIweW9nYXxlbnwwfHx8fDE3NjQxMDM0MjB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "wall yoga"
+    },
+    {
+      "id": "lifestyle-1",
+      "description": "Ayurveda concept",
+      "imageUrl": "https://picsum.photos/seed/lifestyle1/600/400",
+      "imageHint": "ayurveda concept"
+    },
+    {
+      "id": "lifestyle-2",
+      "description": "Healthy gut food",
+      "imageUrl": "https://images.unsplash.com/photo-1540420773420-3366772f4999?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxoZWFsdGh5JTIwZm9vZHxlbnwwfHx8fDE3NjQwMjE3MDh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "healthy food"
+    },
+    {
+      "id": "lifestyle-3",
+      "description": "Morning routine flatlay",
+      "imageUrl": "https://images.unsplash.com/photo-1552650272-b8a34e21bc4b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxtb3JuaW5nJTIwcm91dGluZXxlbnwwfHx8fDE3NjQxMDM0MjB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "morning routine"
+    },
+    {
+      "id": "lifestyle-4",
+      "description": "Four seasons collage",
+      "imageUrl": "https://images.unsplash.com/photo-1574514366389-3c4fef242ca9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxmb3VyJTIwc2Vhc29uc3xlbnwwfHx8fDE3NjQxMDM0MjB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "four seasons"
+    },
+    {
+      "id": "teaching-1",
+      "description": "Person speaking",
+      "imageUrl": "https://images.unsplash.com/photo-1477281765962-ef34e8bb0967?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxwdWJsaWMlMjBzcGVha2luZ3xlbnwwfHx8fDE3NjQwOTI3ODN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "public speaking"
+    },
+    {
+      "id": "teaching-2",
+      "description": "Hands assisting yoga pose",
+      "imageUrl": "https://images.unsplash.com/photo-1758599879693-9e06f55a4ded?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx5b2dhJTIwYXNzaXN0fGVufDB8fHx8MTc2NDEwMzQyMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "yoga assist"
+    },
+    {
+      "id": "teaching-3",
+      "description": "Inspirational quote",
+      "imageUrl": "https://images.unsplash.com/photo-1584819004079-62cb0b40e1bd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxpbnNwaXJhdGlvbiUyMHF1b3RlfGVufDB8fHx8MTc2NDEwMzQyMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "inspiration quote"
+    },
+    {
+      "id": "teaching-4",
+      "description": "Compass and map",
+      "imageUrl": "https://images.unsplash.com/photo-1744212934894-03816e034524?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxldGhpY3MlMjBndWlkZXxlbnwwfHx8fDE3NjQxMDM0MjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "ethics guide"
     }
   ]
 }
