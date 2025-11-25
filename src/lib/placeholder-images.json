@@ -2,9 +2,9 @@
   "placeholderImages": [
     {
       "id": "hero-background",
-      "description": "A serene background for the hero section, showing a calm landscape or yoga pose.",
-      "imageUrl": "https://images.unsplash.com/photo-1592277508958-708f45ba15e5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8eW9nYSUyMG1lZGl0YXRpb258ZW58MHx8fHwxNzY0MDc5ODY2fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "yoga meditation"
+      "description": "A woman practicing yoga on a beach at sunset.",
+      "imageUrl": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3b21hbiUyMHlvZ2F8ZW58MHx8fHwxNzE2NDAxOTU5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "woman yoga"
     },
     {
       "id": "meditation-1",
