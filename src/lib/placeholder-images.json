@@ -1,3 +1,58 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-background",
+      "description": "A serene background for the hero section, showing a calm landscape or yoga pose.",
+      "imageUrl": "https://images.unsplash.com/photo-1592277508958-708f45ba15e5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8eW9nYSUyMG1lZGl0YXRpb258ZW58MHx8fHwxNzY0MDc5ODY2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "yoga meditation"
+    },
+    {
+      "id": "meditation-1",
+      "description": "A person meditating peacefully.",
+      "imageUrl": "https://images.unsplash.com/photo-1617824426121-e2ade63a1092?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxtZWRpdGF0aW9uJTIwc2VyZW5lfGVufDB8fHx8MTc2NDAxOTU5OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "meditation serene"
+    },
+    {
+      "id": "meditation-2",
+      "description": "Close up of hands in a meditation pose.",
+      "imageUrl": "https://images.unsplash.com/photo-1593662486022-bcf418371230?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx6ZW4lMjBoYW5kc3xlbnwwfHx8fDE3NjQxMDA3NTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "zen hands"
+    },
+    {
+      "id": "yoga-1",
+      "description": "A person in an advanced yoga pose.",
+      "imageUrl": "https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx5b2dhJTIwcG9zZXxlbnwwfHx8fDE3NjQwNzE2Nzl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "yoga pose"
+    },
+    {
+      "id": "yoga-2",
+      "description": "A group yoga class outdoors.",
+      "imageUrl": "https://images.unsplash.com/photo-1588286840104-8957b019727f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHx5b2dhJTIwY2xhc3N8ZW58MHx8fHwxNzY0MDkxMDM3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "yoga class"
+    },
+    {
+      "id": "product-mat",
+      "description": "A high-quality yoga mat.",
+      "imageUrl": "https://images.unsplash.com/photo-1591291621060-89264efbeaed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHx5b2dhJTIwbWF0fGVufDB8fHx8MTc2NDA5MjIyOHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "yoga mat"
+    },
+    {
+      "id": "product-book",
+      "description": "A book about meditation and mindfulness.",
+      "imageUrl": "https://images.unsplash.com/photo-1709639288066-5cb6aa0f354e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxib29rJTIwbWVkaXRhdGlvbnxlbnwwfHx8fDE3NjQxMDA3NTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "book meditation"
+    },
+    {
+      "id": "product-podcast",
+      "description": "Cover art for a podcast.",
+      "imageUrl": "https://images.unsplash.com/photo-1709846486283-de18cb67bc67?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxwb2RjYXN0JTIwYXVkaW98ZW58MHx8fHwxNzY0MTAwNzU4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "podcast audio"
+    },
+    {
+      "id": "product-video",
+      "description": "Thumbnail for an online learning video.",
+      "imageUrl": "https://images.unsplash.com/photo-1730890754666-fbffee87d65b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx2aWRlbyUyMGxlc3NvbnxlbnwwfHx8fDE3NjQwMDEwMDJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "video lesson"
+    }
+  ]
 }
