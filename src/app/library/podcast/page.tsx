@@ -70,32 +70,30 @@ export default function PodcastPage() {
               const episodeImageUrl = episodeImage?.imageUrl.replace(/seed\/[^/]+/, `seed/${episode.seed || 'podcast'}${index}`) || 'https://picsum.photos/100/100';
 
               return (
-                <div key={episode.slug}>
-                    <div className="flex items-center gap-4 group">
-                        <div className="w-24 h-24 relative flex-shrink-0">
-                            <Image
-                                src={episodeImageUrl}
-                                alt={episode.title}
-                                fill
-                                className="rounded-md object-cover"
-                                data-ai-hint={episodeImage?.imageHint || 'podcast audio'}
-                            />
+                <Link href={`/library/podcast/${episode.slug}`} key={episode.slug} className="block group">
+                    <div >
+                        <div className="flex items-center gap-4 group-hover:bg-muted/50 rounded-md transition-colors p-2 -m-2">
+                            <div className="w-24 h-24 relative flex-shrink-0">
+                                <Image
+                                    src={episodeImageUrl}
+                                    alt={episode.title}
+                                    fill
+                                    className="rounded-md object-cover"
+                                    data-ai-hint={episodeImage?.imageHint || 'podcast audio'}
+                                />
+                            </div>
+                            <div className="flex-grow">
+                                <h3 className="font-semibold text-lg font-headline text-foreground group-hover:underline">{episode.title}</h3>
+                                <p className="text-muted-foreground text-sm line-clamp-2 mt-1">{episode.description}</p>
+                                <p className="text-xs text-muted-foreground mt-2">{episode.duration}</p>
+                            </div>
+                             <Button variant="ghost" asChild className="ml-auto hidden sm:inline-flex">
+                                <div>Play</div>
+                             </Button>
                         </div>
-                        <div className="flex-grow">
-                             <Link href={`/library/podcast/${episode.slug}`} className="block group-hover:underline">
-                                <h3 className="font-semibold text-lg font-headline text-foreground">{episode.title}</h3>
-                            </Link>
-                            <p className="text-muted-foreground text-sm line-clamp-2 mt-1">{episode.description}</p>
-                            <p className="text-xs text-muted-foreground mt-2">{episode.duration}</p>
-                        </div>
-                         <Button variant="ghost" asChild className="ml-auto hidden sm:inline-flex">
-                            <Link href={`/library/podcast/${episode.slug}`}>
-                                Play
-                            </Link>
-                         </Button>
+                        {index < episodes.length - 1 && <Separator className="my-4" />}
                     </div>
-                    {index < episodes.length - 1 && <Separator className="my-6" />}
-                </div>
+                </Link>
               );
             })}
           </div>
