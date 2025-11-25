@@ -1,38 +1,101 @@
-import { ContentCard } from '@/components/content-card';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
+'use client';
 
-const content = [
-  { id: 'yoga-1', category: 'Yoga', title: 'Gentle Vinyasa Flow', description: 'Connect breath with movement in this gentle flow.' },
-  { id: 'yoga-2', category: 'Yoga', title: 'Power Yoga for Strength', description: 'Build heat and strength with this dynamic sequence.' },
-  { id: 'yoga-1', seed: 'y3', category: 'Yoga', title: 'Restorative Yoga for Relaxation', description: 'Unwind and release tension with passive stretches.' },
+import { ArrowRight } from 'lucide-react';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import Link from 'next/link';
+
+const sections = [
+  { 
+    title: 'Asana (Postures) Library', 
+    description: 'Explore a comprehensive guide to yoga postures.',
+    href: '/library/yoga/asana',
+  },
+  {
+    title: 'Pranayama (Breathing Techniques)', 
+    description: 'Learn various breathing exercises to control your prana or life-force.',
+    href: '/library/yoga/pranayama',
+  },
+  { 
+    title: 'Meditation & Mindfulness', 
+    description: 'Discover guided meditations and mindfulness practices within the yoga tradition.',
+    href: '/library/yoga/meditation',
+  },
+  { 
+    title: 'Philosophy & Foundations', 
+    description: 'Understand the core principles and texts of yoga philosophy.',
+    href: '/library/yoga/philosophy',
+  },
+  { 
+    title: 'Anatomy & Physiology', 
+    description: 'Learn about the body and how it moves in yoga.',
+    href: '/library/yoga/anatomy',
+  },
+  { 
+    title: 'Sequencing & Practice Plans', 
+    description: 'Find sequences and plans for your personal practice.',
+    href: '/library/yoga/sequencing',
+  },
+  { 
+    title: 'Specialty Yoga Styles', 
+    description: 'Explore different styles of yoga like Hatha, Vinyasa, and Kundalini.',
+    href: '/library/yoga/styles',
+  },
+  { 
+    title: 'Chakras & Energy Work', 
+    description: 'Dive into the subtle energy body, chakras, and mudras.',
+    href: '/library/yoga/chakras',
+  },
+  { 
+    title: 'Props & Modifications', 
+    description: 'Learn how to use props to support and deepen your practice.',
+    href: '/library/yoga/props',
+  },
+  { 
+    title: 'Lifestyle & Ayurveda', 
+    description: 'Integrate yoga and Ayurveda into your daily life for holistic wellness.',
+    href: '/library/yoga/lifestyle',
+  },
+  { 
+    title: 'Teaching Resources', 
+    description: 'Resources for yoga teachers to refine their skills.',
+    href: '/library/yoga/teaching',
+  },
+  { 
+    title: 'Glossary & Sanskrit Guide', 
+    description: 'A guide to Sanskrit terms and pose names.',
+    href: '/library/yoga/glossary',
+  },
 ];
 
-export default function YogaPage() {
+export default function YogaLibraryPage() {
   return (
     <div className="container mx-auto px-4 py-8 sm:py-16">
       <div className="text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-extrabold font-headline tracking-tight">Yoga</h1>
+        <h1 className="text-4xl md:text-5xl font-extrabold font-headline tracking-tight">Yoga Library</h1>
         <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-          Flow with our collection of yoga classes for all levels, from beginner to advanced.
+          Explore our comprehensive collection of yoga resources.
         </p>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-        {content.map((item, index) => {
-          const imageData = PlaceHolderImages.find(img => img.id === item.id);
-          const imageUrl = imageData?.imageUrl.replace(/seed\/[^/]+/, `seed/${item.seed || item.id}${index}`) || 'https://picsum.photos/600/400';
-          const imageHint = imageData?.imageHint || 'yoga meditation';
-          return (
-            <ContentCard
-              key={index}
-              href={`/library/yoga/${index + 1}`}
-              imageUrl={imageUrl}
-              imageHint={imageHint}
-              category={item.category}
-              title={item.title}
-              description={item.description}
-            />
-          );
-        })}
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {sections.map((section) => (
+            <Link href={section.href} className="group block" key={section.title}>
+              <Card className="h-full transition-all duration-300 ease-in-out group-hover:border-primary/50 group-hover:shadow-lg group-hover:shadow-primary/10 flex flex-col">
+                <CardHeader>
+                  <h3 className="text-2xl font-semibold font-headline text-foreground">{section.title}</h3>
+                </CardHeader>
+                <CardContent className="flex-grow">
+                  <p className="text-muted-foreground">{section.description}</p>
+                </CardContent>
+                <CardContent>
+                   <div className="flex items-center text-sm font-medium text-primary">
+                      View Section
+                      <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 ease-in-out group-hover:translate-x-1" />
+                    </div>
+                </CardContent>
+              </Card>
+            </Link>
+          ))}
       </div>
     </div>
   );
