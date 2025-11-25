@@ -23,31 +23,6 @@ const sections = [
     imageHint: 'meditation serene'
   },
   { 
-    id: 'product-book',
-    title: 'Books', 
-    description: 'Expand your knowledge with our curated books.',
-    icon: Book,
-    href: '/library/books',
-    imageHint: 'book meditation'
-  },
-  { 
-    id: 'product-mat',
-    title: 'Merchandise', 
-    description: 'Gear up for your practice with our merchandise.',
-    icon: Shirt,
-    href: '/library/merchandise',
-    imageHint: 'yoga mat'
-  },
-  { 
-    id: 'product-book',
-    seed: 'book2',
-    title: 'Ebooks', 
-    description: 'Read on the go with our digital collection.',
-    icon: BookOpen,
-    href: '/library/ebooks',
-    imageHint: 'book reading'
-  },
-  { 
     id: 'product-podcast',
     title: 'Podcast', 
     description: 'Listen to insightful conversations on wellness.',
