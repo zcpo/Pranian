@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
-import { Play, Pause, Rewind, FastForward, Speaker2, SpeakerX, Dot } from 'lucide-react';
+import { Play, Pause, Rewind, FastForward, Speaker, SpeakerX, Dot } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -129,7 +129,7 @@ export function PodcastPlayer({ imageUrl, imageHint, title, artist, src }: Podca
 
         <div className="mt-4 flex items-center justify-between">
           <Button variant="ghost" size="icon" className="text-muted-foreground" onClick={toggleMute}>
-            {isMuted ? <SpeakerX className="w-5 h-5" /> : <Speaker2 className="w-5 h-5" />}
+            {isMuted ? <SpeakerX className="w-5 h-5" /> : <Speaker className="w-5 h-5" />}
           </Button>
 
           <div className="flex items-center gap-4">
