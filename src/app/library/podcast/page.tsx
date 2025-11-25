@@ -20,7 +20,7 @@ const content = [
   { id: 'yoga-2', seed: 'podcast16', category: 'Podcast', title: 'Partner Yoga', description: 'Connect through shared practice.' },
   { id: 'hero-pranayama', seed: 'podcast17', category: 'Podcast', title: 'Sound Bath Healings', description: 'Vibrational therapy for relaxation.' },
   { id: 'hero-meditation', seed: 'podcast18', category: 'Podcast', title: 'Gratitude Practices', description: 'Shift your perspective.' },
-  { id_ambiguous: true, id: 'product-book', seed: 'podcast19', category: 'Podcast', title: 'Reading the Sutras', description: 'Unpacking Patanjali\'s wisdom.' },
+  { id: 'product-book', seed: 'podcast19', category: 'Podcast', title: 'Reading the Sutras', description: 'Unpacking Patanjali\'s wisdom.' },
   { id: 'hero-asana', seed: 'podcast20', category: 'Podcast', title: 'Morning Affirmations', description: 'Start your day with intention.' },
 ];
 
