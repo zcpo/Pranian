@@ -1,31 +1,28 @@
-import Image from 'next/image';
-import { PodcastPlayer } from '@/components/podcast-player';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
 import { Separator } from '@/components/ui/separator';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { NewPodcastPlayer } from '@/components/new-podcast-player';
 
 export default function PodcastEpisodePage() {
   const podcastImage = PlaceHolderImages.find(img => img.id === 'product-podcast');
+  const track = {
+    name: 'Paths to Peace',
+    author: 'Pranian Wellness',
+    img: podcastImage?.imageUrl.replace('1080', '400') || 'https://picsum.photos/400/400',
+    audio: 'https://storage.googleapis.com/studioprod-5112a-assets/assets/pranian/podcast-1.mp3',
+    duration: '28:00'
+  }
 
   return (
     <div className="bg-background">
       <div className="container mx-auto px-4 py-8 sm:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          <div className="md:col-span-1 flex justify-center">
-            {podcastImage && (
-              <PodcastPlayer
-                imageUrl={podcastImage.imageUrl}
-                imageHint={podcastImage.imageHint}
-                title="Paths to Peace"
-                artist="Pranian Wellness"
-                src="https://storage.googleapis.com/studioprod-5112a-assets/assets/pranian/podcast-1.mp3"
-              />
-            )}
-          </div>
-          <div className="md:col-span-2">
-            <div className="prose prose-lg dark:prose-invert max-w-none">
-              <h1 className="text-4xl font-extrabold font-headline tracking-tight">Paths to Peace</h1>
-              <p className="text-lg text-muted-foreground mt-2">Episode 1 | Exploring the journey to inner calm.</p>
+        <div className="flex flex-col items-center">
+          
+          <NewPodcastPlayer track={track} />
+          
+          <div className="prose prose-lg dark:prose-invert max-w-4xl w-full mt-12">
+              <h1 className="text-4xl font-extrabold font-headline tracking-tight text-center">Paths to Peace</h1>
+              <p className="text-lg text-muted-foreground mt-2 text-center">Episode 1 | Exploring the journey to inner calm.</p>
               
               <Separator className="my-8" />
 
@@ -56,7 +53,6 @@ export default function PodcastEpisodePage() {
                 (Transcript continues...)
               </p>
             </div>
-          </div>
         </div>
       </div>
     </div>

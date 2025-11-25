@@ -1,33 +1,30 @@
-import Image from 'next/image';
-import { PodcastPlayer } from '@/components/podcast-player';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
 import { Separator } from '@/components/ui/separator';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { NewPodcastPlayer } from '@/components/new-podcast-player';
 
 export default function PodcastEpisodePage() {
   const podcastImage = PlaceHolderImages.find(img => img.id === 'product-podcast');
-  const imageUrl = podcastImage?.imageUrl.replace(/seed\/[^/]+/, `seed/podcast2`) || 'https://picsum.photos/600/400';
+  const imageUrl = podcastImage?.imageUrl.replace(/seed\/[^/]+/, `seed/podcast2`).replace('1080', '400') || 'https://picsum.photos/400/400';
 
+  const track = {
+    name: 'Mindful Conversations',
+    author: 'Pranian Wellness',
+    img: imageUrl,
+    audio: 'https://storage.googleapis.com/studioprod-5112a-assets/assets/pranian/podcast-2.mp3',
+    duration: '35:00'
+  }
 
   return (
     <div className="bg-background">
       <div className="container mx-auto px-4 py-8 sm:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          <div className="md:col-span-1 flex justify-center">
-            {podcastImage && (
-              <PodcastPlayer
-                imageUrl={imageUrl}
-                imageHint={podcastImage.imageHint}
-                title="Mindful Conversations"
-                artist="Pranian Wellness"
-                src="https://storage.googleapis.com/studioprod-5112a-assets/assets/pranian/podcast-2.mp3"
-              />
-            )}
-          </div>
-          <div className="md:col-span-2">
-            <div className="prose prose-lg dark:prose-invert max-w-none">
-              <h1 className="text-4xl font-extrabold font-headline tracking-tight">Mindful Conversations</h1>
-              <p className="text-lg text-muted-foreground mt-2">Episode 2 | Interviews with wellness experts.</p>
+        <div className="flex flex-col items-center">
+
+            <NewPodcastPlayer track={track} />
+          
+            <div className="prose prose-lg dark:prose-invert max-w-4xl w-full mt-12">
+              <h1 className="text-4xl font-extrabold font-headline tracking-tight text-center">Mindful Conversations</h1>
+              <p className="text-lg text-muted-foreground mt-2 text-center">Episode 2 | Interviews with wellness experts.</p>
               
               <Separator className="my-8" />
 
@@ -58,7 +55,6 @@ export default function PodcastEpisodePage() {
                 (Transcript continues...)
               </p>
             </div>
-          </div>
         </div>
       </div>
     </div>
