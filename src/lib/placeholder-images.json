@@ -53,6 +53,30 @@
       "description": "Thumbnail for an online learning video.",
       "imageUrl": "https://images.unsplash.com/photo-1730890754666-fbffee87d65b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx2aWRlbyUyMGxlc3NvbnxlbnwwfHx8fDE3NjQwMDEwMDJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "video lesson"
+    },
+    {
+      "id": "video-pose",
+      "description": "A close up on a yoga pose.",
+      "imageUrl": "https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "imageHint": "yoga pose"
+    },
+    {
+      "id": "audio-meditation",
+      "description": "Abstract sound waves.",
+      "imageUrl": "https://images.unsplash.com/photo-1519994488312-6a324b074898?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "imageHint": "sound waves"
+    },
+    {
+      "id": "video-class",
+      "description": "A laptop showing a yoga class online.",
+      "imageUrl": "https://images.unsplash.com/photo-1585776245991-3897d2421a7a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "imageHint": "online yoga"
+    },
+    {
+      "id": "audio-breathwork",
+      "description": "A person breathing deeply in nature.",
+      "imageUrl": "https://images.unsplash.com/photo-1617994422026-1ee4a32e3a65?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "imageHint": "breathing nature"
     }
   ]
 }

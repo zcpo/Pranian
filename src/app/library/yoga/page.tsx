@@ -60,6 +60,11 @@ const sections = [
     description: 'Resources for yoga teachers to refine their skills.',
     href: '/library/yoga/teaching',
   },
+  {
+    title: 'Audio/Video Library',
+    description: 'Video pose breakdowns, follow-along classes, and audio meditations.',
+    href: '/library/yoga/audio-video',
+  },
   { 
     title: 'Glossary & Sanskrit Guide', 
     description: 'A guide to Sanskrit terms and pose names.',
