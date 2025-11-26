@@ -16,11 +16,13 @@ import {
   Brain,
   Podcast,
   Sparkles,
+  BookText,
 } from 'lucide-react';
 
 const navItems = [
   { href: '/', label: 'Home', icon: Home },
   { href: '/library', label: 'Library', icon: BookOpen },
+  { href: '/journal', label: 'Journal', icon: BookText },
   { href: '/library/yoga', label: 'Yoga', icon: Heart },
   { href: '/library/meditation', label: 'Audio Meditations', icon: Headphones },
   { href: '/library/video-meditation', label: 'Video Meditations', icon: Video },
