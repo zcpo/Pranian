@@ -82,4 +82,52 @@ export const meditations = [
         </p>
     `
   },
+  { 
+    slug: 'loving-kindness-meditation',
+    title: 'Loving-Kindness Meditation',
+    description: 'Cultivate compassion for yourself and others.',
+    longDescription: 'This guided meditation focuses on developing feelings of goodwill, kindness, and warmth towards others. By silently repeating phrases of loving-kindness, you can open your heart and foster a greater sense of connection.',
+    duration: '12:00',
+    audio: 'https://storage.googleapis.com/studioprod-5112a-assets/assets/pranian/meditation-1.mp3',
+    imageId: 'meditation-1',
+    author: 'Pranian Wellness',
+    bullets: [
+        'Open your heart to compassion.',
+        'Develop a sense of inner peace.',
+        'Improve your connection with others.',
+        'Foster feelings of love and kindness.',
+    ],
+    transcript: `
+        <p>
+            <strong>Guide:</strong> Find a comfortable position. Allow your eyes to gently close. Bring to mind someone you care about deeply. Picture them in your mind's eye. Now, silently repeat these phrases: May you be happy. May you be healthy. May you be safe. May you live with ease...
+        </p>
+        <p>
+            (Transcript continues...)
+        </p>
+    `
+  },
+  { 
+    slug: 'anxiety-relief-meditation',
+    title: 'Anxiety Relief Meditation',
+    description: 'Find calm in moments of stress.',
+    longDescription: 'This meditation is designed to help you find a sense of calm when you\'re feeling overwhelmed by anxiety. Using grounding techniques and focused breathing, you can anchor yourself in the present moment and soothe your nervous system.',
+    duration: '18:00',
+    audio: 'https://storage.googleapis.com/studioprod-5112a-assets/assets/pranian/meditation-2.mp3',
+    imageId: 'meditation-2',
+    author: 'Pranian Wellness',
+    bullets: [
+        'Soothe your nervous system.',
+        'Ground yourself in the present moment.',
+        'Reduce feelings of anxiety and overwhelm.',
+        'Cultivate a sense of inner stability.',
+    ],
+    transcript: `
+        <p>
+            <strong>Guide:</strong> When you feel the waves of anxiety, the first step is to anchor yourself. Feel your feet on the floor. Notice the support beneath you. Now, bring your attention to your breath. Inhale for a count of four, hold for four, and exhale for six...
+        </p>
+        <p>
+            (Transcript continues...)
+        </p>
+    `
+  },
 ];
