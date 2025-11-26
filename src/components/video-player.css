@@ -1,6 +1,7 @@
 .player-container {
     margin: 20px auto;
     width: 100%;
+    max-width: 800px;
     box-shadow: 0 1.5em 2em -1em rgba(0, 0, 0, 0.8), 
                 inset 0 0.0625em 0 rgba(255, 255, 255, 0.2), 
                 inset 0 -0.125em 0.0625em rgba(0, 0, 0, 0.3);
