@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
-import { Play, Pause, Rewind, FastForward, SkipBack, SkipForward } from 'lucide-react';
+import { Play, Pause, Rewind, FastForward } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import './new-podcast-player.css';
 
@@ -19,8 +19,6 @@ type NewPodcastPlayerProps = {
 };
 
 export function NewPodcastPlayer({ track }: NewPodcastPlayerProps) {
-  const [playlist] = useState<Track[]>([track]);
-  const [trackIndex, setTrackIndex] = useState(0);
   const [currentTime, setCurrentTime] = useState('0:00');
   const [isPaused, setIsPaused] = useState(true);
 
@@ -29,11 +27,10 @@ export function NewPodcastPlayer({ track }: NewPodcastPlayerProps) {
   const playheadRef = useRef<HTMLDivElement>(null);
   const hoverPlayheadRef = useRef<HTMLDivElement>(null);
 
-  const currentSong = playlist[trackIndex];
-
   const timeUpdate = () => {
     if (playerRef.current && timelineRef.current && playheadRef.current) {
       const duration = playerRef.current.duration;
+      if (isNaN(duration)) return;
       const playPercent = 100 * (playerRef.current.currentTime / duration);
       playheadRef.current.style.width = `${playPercent}%`;
       const newCurrentTime = formatTime(playerRef.current.currentTime);
@@ -68,6 +65,7 @@ export function NewPodcastPlayer({ track }: NewPodcastPlayerProps) {
   const changeCurrentTime = (e: React.MouseEvent<HTMLDivElement>) => {
     if (playerRef.current && timelineRef.current) {
       const duration = playerRef.current.duration;
+      if (isNaN(duration)) return;
       const timelineWidth = timelineRef.current.offsetWidth;
       const timelineRect = timelineRef.current.getBoundingClientRect();
       const userClickWidth = e.clientX - timelineRect.left;
@@ -83,6 +81,7 @@ export function NewPodcastPlayer({ track }: NewPodcastPlayerProps) {
   const hoverTimeLine = (e: React.MouseEvent<HTMLDivElement>) => {
     if (playerRef.current && timelineRef.current && hoverPlayheadRef.current) {
       const duration = playerRef.current.duration;
+      if (isNaN(duration)) return;
       const timelineWidth = timelineRef.current.offsetWidth;
       const timelineRect = timelineRef.current.getBoundingClientRect();
       const userClickWidth = e.clientX - timelineRect.left;
@@ -118,24 +117,29 @@ export function NewPodcastPlayer({ track }: NewPodcastPlayerProps) {
     }
   };
 
-
   useEffect(() => {
     const player = playerRef.current;
     const timeline = timelineRef.current;
 
     if (player && timeline) {
-      player.addEventListener('timeupdate', timeUpdate, false);
-      player.addEventListener('ended', handleEnded, false);
-      timeline.addEventListener('click', changeCurrentTime as any, false);
-      timeline.addEventListener('mousemove', hoverTimeLine as any, false);
-      timeline.addEventListener('mouseout', resetTimeLine, false);
+      const timeUpdateHandler = () => timeUpdate();
+      const endedHandler = () => handleEnded();
+      const clickHandler = (e: MouseEvent) => changeCurrentTime(e as any);
+      const mouseMoveHandler = (e: MouseEvent) => hoverTimeLine(e as any);
+      const mouseOutHandler = () => resetTimeLine();
+      
+      player.addEventListener('timeupdate', timeUpdateHandler);
+      player.addEventListener('ended', endedHandler);
+      timeline.addEventListener('click', clickHandler);
+      timeline.addEventListener('mousemove', mouseMoveHandler);
+      timeline.addEventListener('mouseout', mouseOutHandler);
 
       return () => {
-        player.removeEventListener('timeupdate', timeUpdate);
-        player.removeEventListener('ended', handleEnded);
-        timeline.removeEventListener('click', changeCurrentTime as any);
-        timeline.removeEventListener('mousemove', hoverTimeLine as any);
-        timeline.removeEventListener('mouseout', resetTimeLine);
+        player.removeEventListener('timeupdate', timeUpdateHandler);
+        player.removeEventListener('ended', endedHandler);
+        timeline.removeEventListener('click', clickHandler);
+        timeline.removeEventListener('mousemove', mouseMoveHandler);
+        timeline.removeEventListener('mouseout', mouseOutHandler);
       };
     }
   }, []);
@@ -144,18 +148,18 @@ export function NewPodcastPlayer({ track }: NewPodcastPlayerProps) {
     <div className="card-player">
       <div className="current-song">
         <audio ref={playerRef}>
-          <source src={currentSong.audio} type="audio/mp3" />
+          <source src={track.audio} type="audio/mp3" />
           Your browser does not support the audio element.
         </audio>
         <div className="img-wrap">
-          <Image src={currentSong.img} alt={currentSong.name} width={270} height={200} unoptimized />
+          <Image src={track.img} alt={track.name} width={270} height={200} unoptimized />
         </div>
-        <span className="song-name">{currentSong.name}</span>
-        <span className="song-author">{currentSong.author}</span>
+        <span className="song-name">{track.name}</span>
+        <span className="song-author">{track.author}</span>
 
         <div className="time">
           <div className="current-time">{currentTime}</div>
-          <div className="end-time">{currentSong.duration}</div>
+          <div className="end-time">{track.duration}</div>
         </div>
 
         <div ref={timelineRef} id="timeline">
@@ -174,28 +178,6 @@ export function NewPodcastPlayer({ track }: NewPodcastPlayerProps) {
             <FastForward />
           </button>
         </div>
-      </div>
-      <div className="play-list">
-        {playlist.map((music, key) => (
-          <div
-            key={key}
-            className={cn('track', {
-              'current-audio': trackIndex === key && !isPaused,
-              'play-now': trackIndex === key && isPaused,
-            })}
-          >
-            <div className="track-img relative w-[90px] h-auto">
-              <Image className="track-img" src={music.img} alt={music.name} width={90} height={90} unoptimized />
-            </div>
-            <div className="track-discr">
-              <span className="track-name">{music.name}</span>
-              <span className="track-author">{music.author}</span>
-            </div>
-            <span className="track-duration">
-              {trackIndex === key ? currentTime : music.duration}
-            </span>
-          </div>
-        ))}
       </div>
     </div>
   );
