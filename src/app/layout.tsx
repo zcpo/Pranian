@@ -4,7 +4,6 @@ import Header from '@/components/layout/header';
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from '@/components/theme-provider';
 import { FloatingNav } from '@/components/layout/floating-nav';
-import Footer from '@/components/layout/footer';
 
 export const metadata: Metadata = {
   title: 'Pranian - Yoga & Meditation',
@@ -37,7 +36,6 @@ export default function RootLayout({
             <main className="flex-1">
               {children}
             </main>
-            <Footer />
           </div>
           <Toaster />
           <FloatingNav />
