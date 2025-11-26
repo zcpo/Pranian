@@ -48,7 +48,7 @@ export default function VideoMeditationLibraryPage() {
         <div>
             <h2 className="text-2xl font-bold font-headline tracking-tight mb-4">All Video Meditations</h2>
              <div className="space-y-4">
-            {videoMeditations.map((meditation) => {
+            {videoMeditations.map((meditation, index) => {
               const episodeImage = PlaceHolderImages.find(img => img.id === meditation.imageId);
               const episodeImageUrl = meditation.posterUrl || episodeImage?.imageUrl.replace(/seed\/[^/]+/, `seed/${meditation.slug}`) || 'https://picsum.photos/100/100';
 
@@ -74,7 +74,7 @@ export default function VideoMeditationLibraryPage() {
                                 <div>Play</div>
                              </Button>
                         </div>
-                        <Separator className="my-4" />
+                        {index < videoMeditations.length - 1 && <Separator className="my-4" />}
                     </div>
                 </Link>
               );
