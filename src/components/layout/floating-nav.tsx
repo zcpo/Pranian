@@ -8,7 +8,7 @@ import { usePathname } from 'next/navigation';
 export function FloatingNav() {
   const pathname = usePathname();
 
-  if (pathname === '/' || pathname === '/quick-nav') {
+  if (pathname === '/' || pathname.startsWith('/quick-nav')) {
     return null;
   }
 
