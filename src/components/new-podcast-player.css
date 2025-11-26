@@ -1,9 +1,11 @@
 
+
 .card-player {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
   max-width: 381px;
   padding: 0 5px;
   margin-top: 40px;
@@ -282,4 +284,28 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+@media (max-width: 400px) {
+    .card-player .current-song .img-wrap {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 270 / 200;
+    }
+    .card-player .current-song .time,
+    .card-player .current-song #timeline {
+        width: 90%;
+    }
+    .card-player .play-list .track {
+        flex-direction: column;
+        text-align: center;
+    }
+    .card-player .play-list .track .track-discr {
+        margin-left: 0;
+        min-width: 0;
+        align-items: center;
+    }
+    .card-player .play-list .track .track-duration {
+        margin-top: 8px;
+    }
 }
