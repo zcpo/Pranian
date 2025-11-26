@@ -1,11 +1,17 @@
-
 'use client';
 
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { usePathname } from 'next/navigation';
 
 export function FloatingNav() {
+  const pathname = usePathname();
+
+  if (pathname === '/' || pathname === '/quick-nav') {
+    return null;
+  }
+
   return (
     <Button
       asChild
