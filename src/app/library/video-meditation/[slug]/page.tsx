@@ -1,4 +1,3 @@
-'use client';
 import { Separator } from '@/components/ui/separator';
 import VideoPlayer from '@/components/video-player';
 import { videoMeditations } from '@/lib/video-meditations';
