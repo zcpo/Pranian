@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import Footer from '@/components/layout/footer';
 
 export default function Home() {
   const heroImage = PlaceHolderImages.find(img => img.id === 'hero-background');
