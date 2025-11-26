@@ -16,10 +16,7 @@ import {
   Brain,
   Podcast,
   Sparkles,
-  X,
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import Logo from '@/components/logo';
 
 const navItems = [
   { href: '/', label: 'Home', icon: Home },
@@ -42,16 +39,7 @@ export default function QuickNavPage() {
 
   return (
     <div className="h-screen w-screen bg-background flex flex-col">
-        <header className="p-6 border-b text-left flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Logo />
-              <span className="text-xl font-headline tracking-tight">Quick Navigation</span>
-            </div>
-            <Button variant="ghost" size="icon" onClick={() => router.back()}>
-              <X className="h-5 w-5" />
-            </Button>
-        </header>
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 overflow-y-auto p-6 pt-12">
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {navItems.map((item) => (
               <Link
