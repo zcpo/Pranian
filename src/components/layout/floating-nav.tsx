@@ -61,12 +61,17 @@ export function FloatingNav() {
       </SheetTrigger>
       <SheetContent
         side="bottom"
-        className="h-3/4 rounded-t-2xl p-0 flex flex-col"
+        className="h-screen w-screen rounded-none p-0 flex flex-col"
       >
         <SheetHeader className="p-6 border-b text-left">
-          <SheetTitle className="flex items-center gap-4">
-            <Logo />
-            <span className="text-xl font-headline tracking-tight">Quick Navigation</span>
+          <SheetTitle className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Logo />
+              <span className="text-xl font-headline tracking-tight">Quick Navigation</span>
+            </div>
+            <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
+              <X className="h-5 w-5" />
+            </Button>
           </SheetTitle>
         </SheetHeader>
         <div className="flex-1 overflow-y-auto p-6">
@@ -78,7 +83,9 @@ export function FloatingNav() {
                 onClick={() => setIsOpen(false)}
                 className="group flex flex-col items-center justify-center p-4 rounded-lg bg-secondary/50 hover:bg-primary/10 text-center transition-colors"
               >
-                <item.icon className="h-8 w-8 mb-2 text-primary" />
+                <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/20 text-primary mb-2">
+                    <item.icon className="h-8 w-8" />
+                </div>
                 <span className="text-sm font-medium text-foreground group-hover:text-primary">
                   {item.label}
                 </span>
