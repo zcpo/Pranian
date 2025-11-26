@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowRight, Book, Clapperboard, Headphones, Shirt, BookOpen } from 'lucide-react';
+import { ArrowRight, Book, Clapperboard, Headphones, Shirt, BookOpen, Video } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import Link from 'next/link';
@@ -16,11 +16,19 @@ const sections = [
   },
   {
     id: 'meditation-1',
-    title: 'Meditation', 
-    description: 'Find your center with guided meditations.',
-    icon: null,
+    title: 'Audio Meditations', 
+    description: 'Find your center with guided audio meditations.',
+    icon: Headphones,
     href: '/library/meditation',
     imageHint: 'meditation serene'
+  },
+  { 
+    id: 'video-meditation-1',
+    title: 'Video Meditations', 
+    description: 'Visual guides to deepen your meditation practice.',
+    icon: Video,
+    href: '/library/video-meditation',
+    imageHint: 'video meditation'
   },
   { 
     id: 'product-podcast',
@@ -53,7 +61,7 @@ export default function LibraryPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {sections.map((section, index) => {
            const imageData = PlaceHolderImages.find(img => img.id === section.id);
-           const imageUrl = imageData?.imageUrl.replace(/seed\/[^/]+/, `seed/${section.seed || section.id}${index}`) || 'https://picsum.photos/600/400';
+           const imageUrl = imageData?.imageUrl.replace(/seed\/[^/]+/, `seed/${section.id}${index}`) || 'https://picsum.photos/600/400';
            const imageHint = section.imageHint || 'yoga meditation';
           return (
             <Link href={section.href} className="group block" key={section.title}>

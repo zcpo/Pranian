@@ -15,7 +15,7 @@
     {
       "id": "meditation-2",
       "description": "Close up of hands in a meditation pose.",
-      "imageUrl": "https://images.unsplash.com/photo-1593662486022-bcf418371230?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx6ZW4lMjBoYW5kc3xlbnwwfHx8fDE3NjQxMDA3NTh8MA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1593662486022-bcf418371230?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx6ZW4lMjBoYW5kc3xlbnwwfHx8fDE3NjQxMDA3NTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "zen hands"
     },
     {
@@ -39,13 +39,13 @@
     {
       "id": "yoga-2",
       "description": "A group yoga class outdoors.",
-      "imageUrl": "https://images.unsplash.com/photo-1588286840104-8957b019727f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHx5b2dhJTIwY2xhc3N8ZW58MHx8fHwxNzY0MDkxMDM3fDA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1588286840104-8957b019727f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHx5b2dhJTIwY2xhc3N8ZW58MHx8fHwxNzY0MDkxMDM3fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "yoga class"
     },
     {
       "id": "product-mat",
       "description": "A high-quality yoga mat.",
-      "imageUrl": "https://images.unsplash.com/photo-1591291621060-89264efbeaed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHx5b2dhJTIwbWF0fGVufDB8fHx8MTc2NDA5MjIyOHww&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1591291621060-89264efbeaed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHx5b2dhJTIwbWF0fGVufDB8fHx8MTc2NDA5MjIyOHww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "yoga mat"
     },
     {
@@ -57,7 +57,7 @@
     {
       "id": "product-podcast",
       "description": "Cover art for a podcast.",
-      "imageUrl": "https://images.unsplash.com/photo-1709846486283-de18cb67bc67?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxwb2RjYXN0JTIwYXVkaW98ZW58MHx8fHwxNzY0MTAwNzU4fDA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1709846486283-de18cb67bc67?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxwb2RjYXN0JTIwYXVkaW98ZW58MHx8fHwxNzY0MTAwNzU4fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "podcast audio"
     },
     {
@@ -407,6 +407,18 @@
       "description": "Compass and map",
       "imageUrl": "https://images.unsplash.com/photo-1744212934894-03816e034524?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxldGhpY3MlMjBndWlkZXxlbnwwfHx8fDE3NjQxMDM0MjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "ethics guide"
+    },
+    {
+      "id": "video-meditation-1",
+      "description": "A person breathing deeply in nature.",
+      "imageUrl": "https://images.unsplash.com/photo-1617994422026-1ee4a32e3a65?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxyZWxheGluZyUyMGJyZWF0aHxlbnwwfHx8fDE3NjQxMTAwMDB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "relaxing breath"
+    },
+    {
+      "id": "video-meditation-2",
+      "description": "A person relaxing in a yoga pose.",
+      "imageUrl": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx5b2dhJTIwcmVsYXh8ZW58MHx8fHwxNzY0MTEwMDAwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "yoga relax"
     }
   ]
 }

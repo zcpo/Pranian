@@ -1,0 +1,36 @@
+export const videoMeditations = [
+  { 
+    slug: '5-minute-breathing-exercise',
+    title: '5-Minute Breathing Exercise',
+    description: 'A short, guided breathwork session to center and calm your mind.',
+    longDescription: 'Join us for a 5-minute guided breathing exercise designed to quickly reduce stress and increase focus. This session is perfect for a short break during your workday or as a gentle start to your morning.',
+    videoUrl: 'https://storage.googleapis.com/studioprod-5112a-assets/assets/pranian/video-meditation-1.m3u8',
+    posterUrl: 'https://images.unsplash.com/photo-1617994422026-1ee4a32e3a65?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxyZWxheGluZyUyMGJyZWF0aHxlbnwwfHx8fDE3NjQxMTAwMDB8MA&ixlib=rb-4.1.0&q=80&w=1080',
+    imageId: 'video-meditation-1',
+    author: 'Pranian Wellness',
+    duration: '05:00',
+    bullets: [
+        'Quickly reduce stress and anxiety.',
+        'Improve focus and mental clarity.',
+        'Perfect for a short break.',
+        'Suitable for all levels.',
+    ],
+  },
+  { 
+    slug: '10-minute-body-scan',
+    title: '10-Minute Body Scan',
+    description: 'Release tension throughout your body with a guided body scan.',
+    longDescription: 'This 10-minute body scan meditation will guide you through a gentle process of bringing awareness to each part of your body, helping to release stored tension and promote deep relaxation. It\'s an excellent practice for improving body awareness and calming the nervous system.',
+    videoUrl: 'https://storage.googleapis.com/studioprod-5112a-assets/assets/pranian/video-meditation-2.m3u8',
+    posterUrl: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx5b2dhJTIwcmVsYXh8ZW58MHx8fHwxNzY0MTEwMDAwfDA&ixlib=rb-4.1.0&q=80&w=1080',
+    imageId: 'video-meditation-2',
+    author: 'Pranian Wellness',
+    duration: '10:00',
+    bullets: [
+        'Release physical tension.',
+        'Enhance mind-body connection.',
+        'Promote a sense of calm and well-being.',
+        'Ideal for unwinding after a long day.',
+    ],
+  },
+];
