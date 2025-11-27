@@ -223,8 +223,9 @@ main {
   padding: 10px;
   min-height: 250px;
   background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
-  transition: all 0.4s ease-in;
+  transition: all 0.4s ease-in-out;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -233,6 +234,7 @@ main {
   cursor: pointer;
   border-radius: 8px;
   color: white;
+  overflow: hidden;
 }
 
 .music__list-item:before {
@@ -251,9 +253,41 @@ main {
   background: rgba(0,0,0,0.6);
 }
 
+.music__list-item:hover {
+  transform: scale(1.05);
+  z-index: 10;
+}
+
+.music__list-item .music__list-item-hover {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: all 0.3s ease-in-out;
+}
+
+.music__list-item:hover .music__list-item-hover {
+  opacity: 1;
+  transform: scale(1);
+}
+
 .music__list-item > * {
     position: relative;
     z-index: 1;
+}
+
+.play-button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.play-button svg {
+  transition: transform 0.2s;
+}
+
+.play-button:hover svg {
+  transform: scale(1.1);
 }
 
 /* Activity pane */

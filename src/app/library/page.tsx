@@ -9,6 +9,7 @@ import { meditations } from '@/lib/meditations';
 import { videoMeditations } from '@/lib/video-meditations';
 import { videos } from '@/lib/videos';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { PlayCircle } from 'lucide-react';
 
 export default function LibraryPage() {
     // Get a few items from each category to feature
@@ -64,8 +65,13 @@ export default function LibraryPage() {
                             const imageUrl = imageData?.imageUrl.replace(/seed\/[^/]+/, `seed/${item.slug}`) || 'https://picsum.photos/600/400';
                             return (
                                 <li className="music__list-item" key={item.slug} style={{backgroundImage: `url(${imageUrl})`}}>
-                                    <h3 className="song__title">{item.title}</h3>
-                                    <p className="song__creator">{item.author}</p>
+                                    <div className="music__list-item-hover">
+                                        <h3 className="song__title">{item.title}</h3>
+                                        <p className="song__creator">{item.author}</p>
+                                        <button className="play-button">
+                                            <PlayCircle size={48} />
+                                        </button>
+                                    </div>
                                     <Link href={`/library/meditation/${item.slug}`} className="absolute inset-0" aria-label={`Play ${item.title}`} />
                                 </li>
                             );
@@ -81,8 +87,13 @@ export default function LibraryPage() {
                              const imageUrl = item.posterUrl || imageData?.imageUrl.replace(/seed\/[^/]+/, `seed/${item.slug}`) || 'https://picsum.photos/600/400';
                             return (
                                 <li className="music__list-item" key={item.slug} style={{backgroundImage: `url(${imageUrl})`}}>
-                                    <h3 className="song__title">{item.title}</h3>
-                                    <p className="song__creator">{item.author}</p>
+                                    <div className="music__list-item-hover">
+                                        <h3 className="song__title">{item.title}</h3>
+                                        <p className="song__creator">{item.author}</p>
+                                        <button className="play-button">
+                                            <PlayCircle size={48} />
+                                        </button>
+                                    </div>
                                     <Link href={`/library/video-meditation/${item.slug}`} className="absolute inset-0" aria-label={`Play ${item.title}`} />
                                 </li>
                             );
@@ -98,8 +109,13 @@ export default function LibraryPage() {
                             const imageUrl = item.posterUrl || imageData?.imageUrl.replace(/seed\/[^/]+/, `seed/${item.slug}${index}`) || 'https://picsum.photos/600/400';
                             return (
                                  <li className="music__list-item" key={item.slug} style={{backgroundImage: `url(${imageUrl})`}}>
-                                    <h3 className="song__title">{item.title}</h3>
-                                    <p className="song__creator">{item.author}</p>
+                                    <div className="music__list-item-hover">
+                                        <h3 className="song__title">{item.title}</h3>
+                                        <p className="song__creator">{item.author}</p>
+                                        <button className="play-button">
+                                            <PlayCircle size={48} />
+                                        </button>
+                                    </div>
                                      <Link href={`/library/video/${item.slug}`} className="absolute inset-0" aria-label={`Play ${item.title}`} />
                                 </li>
                             );
