@@ -68,7 +68,7 @@ export function MediaDetailsPage({ title, imageUrl, description, metadata, playe
           </Button>
 
           <Button variant="outline" className="bg-slate-700/50 border-slate-600 hover:bg-slate-700 py-3 flex flex-col px-5 rounded-sm shadow-sm mr-2.5 mb-3 h-auto">
-            <span className="truncate">Watch with Prime</span>
+            <span className="truncate">Watch Now</span>
             <span className="truncate text-xs">Start your 30-day free trial</span>
           </Button>
 
