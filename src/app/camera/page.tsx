@@ -4,7 +4,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Camera, RefreshCcw, Check, Video, Loader2 } from 'lucide-react';
+import { Camera, RefreshCcw, Check, Video, Loader2, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useUser, useStorage } from '@/firebase';
