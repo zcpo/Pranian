@@ -1,15 +1,15 @@
 
 import { Separator } from '@/components/ui/separator';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { NewPodcastPlayer } from '@/components/new-podcast-player';
+import { MusicPlayer } from '@/components/music-player';
 
 export default function PodcastEpisodePage() {
   const podcastImage = PlaceHolderImages.find(img => img.id === 'product-podcast');
   const track = {
-    name: 'Paths to Peace',
-    author: 'Pranian Wellness',
-    img: podcastImage?.imageUrl.replace('1080', '400') || 'https://picsum.photos/400/400',
-    audio: 'https://storage.googleapis.com/studioprod-5112a-assets/assets/pranian/podcast-1.mp3',
+    title: 'Paths to Peace',
+    artist: 'Pranian Wellness',
+    albumArt: podcastImage?.imageUrl.replace('1080', '400') || 'https://picsum.photos/400/400',
+    audioSrc: 'https://storage.googleapis.com/studioprod-5112a-assets/assets/pranian/podcast-1.mp3',
     duration: '28:00'
   }
 
@@ -18,7 +18,7 @@ export default function PodcastEpisodePage() {
       <div className="container mx-auto px-4 py-8 sm:py-16">
         <div className="flex flex-col items-center">
           
-          <NewPodcastPlayer track={track} />
+          <MusicPlayer track={track} />
           
           <div className="prose prose-lg dark:prose-invert max-w-4xl w-full mt-12">
               <h1 className="text-4xl font-extrabold font-headline tracking-tight text-center">Paths to Peace</h1>

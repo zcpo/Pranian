@@ -22,10 +22,8 @@ const VideoPlayer = ({ source, poster }: VideoPlayerProps) => {
     // Ensure Plyr and Hls are loaded
     if (typeof Plyr === 'undefined' || typeof Hls === 'undefined') {
         console.error('Plyr or HLS.js is not loaded');
-        // Optionally retry after a delay
         const timeout = setTimeout(() => {
             if (videoRef.current) {
-                // This will re-trigger the useEffect
                 videoRef.current.dataset.retry = 'true';
             }
         }, 100);
@@ -74,7 +72,7 @@ const VideoPlayer = ({ source, poster }: VideoPlayerProps) => {
   }, [source, videoRef.current]);
 
   return (
-    <div className="player-container rounded-lg overflow-hidden shadow-2xl">
+    <div className="player-container glass-card">
       <video ref={videoRef} controls crossOrigin="" playsInline poster={poster}></video>
     </div>
   );

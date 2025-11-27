@@ -1,17 +1,17 @@
 
 import { Separator } from '@/components/ui/separator';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { NewPodcastPlayer } from '@/components/new-podcast-player';
+import { MusicPlayer } from '@/components/music-player';
 
 export default function PodcastEpisodePage() {
   const podcastImage = PlaceHolderImages.find(img => img.id === 'product-podcast');
   const imageUrl = podcastImage?.imageUrl.replace(/seed\/[^/]+/, `seed/podcast2`).replace('1080', '400') || 'https://picsum.photos/400/400';
 
   const track = {
-    name: 'Mindful Conversations',
-    author: 'Pranian Wellness',
-    img: imageUrl,
-    audio: 'https://storage.googleapis.com/studioprod-5112a-assets/assets/pranian/podcast-2.mp3',
+    title: 'Mindful Conversations',
+    artist: 'Pranian Wellness',
+    albumArt: imageUrl,
+    audioSrc: 'https://storage.googleapis.com/studioprod-5112a-assets/assets/pranian/podcast-2.mp3',
     duration: '35:00'
   }
 
@@ -20,7 +20,7 @@ export default function PodcastEpisodePage() {
       <div className="container mx-auto px-4 py-8 sm:py-16">
         <div className="flex flex-col items-center">
 
-            <NewPodcastPlayer track={track} />
+            <MusicPlayer track={track} />
           
             <div className="prose prose-lg dark:prose-invert max-w-4xl w-full mt-12">
               <h1 className="text-4xl font-extrabold font-headline tracking-tight text-center">Mindful Conversations</h1>

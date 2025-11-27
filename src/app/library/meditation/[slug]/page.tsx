@@ -1,7 +1,7 @@
 
 import { Separator } from '@/components/ui/separator';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { NewPodcastPlayer } from '@/components/new-podcast-player';
+import { MusicPlayer } from '@/components/music-player';
 import { meditations } from '@/lib/meditations';
 import { notFound } from 'next/navigation';
 
@@ -16,10 +16,10 @@ export default function MeditationPlayerPage({ params }: { params: { slug: strin
   const imageUrl = meditationImage?.imageUrl.replace(/seed\/[^/]+/, `seed/${meditation.slug}`).replace('1080', '400') || 'https://picsum.photos/400/400';
 
   const track = {
-    name: meditation.title,
-    author: meditation.author,
-    img: imageUrl,
-    audio: meditation.audio,
+    title: meditation.title,
+    artist: meditation.author,
+    albumArt: imageUrl,
+    audioSrc: meditation.audio,
     duration: meditation.duration
   }
 
@@ -28,7 +28,7 @@ export default function MeditationPlayerPage({ params }: { params: { slug: strin
       <div className="container mx-auto px-4 py-8 sm:py-16">
         <div className="flex flex-col items-center">
           
-          <NewPodcastPlayer track={track} />
+          <MusicPlayer track={track} />
           
           <div className="prose prose-lg dark:prose-invert max-w-4xl w-full mt-12">
               <h1 className="text-4xl font-extrabold font-headline tracking-tight text-center">{meditation.title}</h1>
