@@ -1,3 +1,4 @@
+
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { ProductCard } from '@/components/product-card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';

@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -9,7 +10,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="flex flex-col min-h-[calc(100vh-3.6rem)] sm:min-h-[calc(100vh-14rem)]">
+      <div className="flex flex-col min-h-[calc(100vh-3.6rem)]">
         {/* Hero Section */}
         <section className="relative flex-1 flex items-center justify-center text-center text-white">
           {heroImage && (

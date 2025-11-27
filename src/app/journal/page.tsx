@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useEffect, useState, useCallback, useRef } from 'react';
@@ -161,62 +162,64 @@ export default function JournalPage() {
   
   return (
     <div className="bg-background min-h-screen">
-      <div className="p-4 border-b flex justify-between items-center">
-        <h1 className="text-xl font-bold">Pranian Journal</h1>
-        {user && <Button onClick={doSignOut}>Sign Out</Button>}
-      </div>
-
-      <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-8">
-        {/* Left & Middle Column: Main Content */}
-        <div className="md:col-span-2 space-y-8">
-          {!user ? (
-            <Card>
-              <CardHeader>
-                <CardTitle>Sign in to your Journal</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-4">
-                  Sign in to securely sync your journal across all your devices.
-                </p>
-                <Button className="w-full" onClick={doSignInGoogle}>
-                  Sign in with Google
-                </Button>
-              </CardContent>
-            </Card>
-          ) : (
-             <>
-              <DailyProgress categories={categories} />
-              <Card>
-                <CardHeader>
-                  <CardTitle>Journal Entries</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Accordion type="single" collapsible className="w-full">
-                    {categories.map((category, index) => (
-                      <AccordionItem value={`item-${index}`} key={index}>
-                        <AccordionTrigger>{category}</AccordionTrigger>
-                        <AccordionContent>
-                          <CategoryEntryForm category={category} />
-                        </AccordionContent>
-                      </AccordionItem>
-                    ))}
-                  </Accordion>
-                </CardContent>
-              </Card>
-            </>
-          )}
+      <div className="container mx-auto px-4 py-8">
+        <div className="p-4 border-b flex justify-between items-center mb-8">
+          <h1 className="text-2xl md:text-3xl font-bold">Pranian Journal</h1>
+          {user && <Button onClick={doSignOut}>Sign Out</Button>}
         </div>
 
-        {/* Right Column: Analytics & Tools */}
-        <div className="col-span-1 space-y-8">
-            <AnalyticsDashboard sessions={sessions || []} />
-            <MindfulnessTimer />
-            <div className="p-4 bg-card rounded-lg shadow">
-              <h4 className="font-bold">Sync & Status</h4>
-              <div className="text-sm text-muted-foreground">
-                Local queue: open console to inspect Dexie.
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Left & Middle Column: Main Content */}
+          <div className="md:col-span-2 space-y-8">
+            {!user ? (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Sign in to your Journal</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground mb-4">
+                    Sign in to securely sync your journal across all your devices.
+                  </p>
+                  <Button className="w-full" onClick={doSignInGoogle}>
+                    Sign in with Google
+                  </Button>
+                </CardContent>
+              </Card>
+            ) : (
+              <>
+                <DailyProgress categories={categories} />
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Journal Entries</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <Accordion type="single" collapsible className="w-full">
+                      {categories.map((category, index) => (
+                        <AccordionItem value={`item-${index}`} key={index}>
+                          <AccordionTrigger>{category}</AccordionTrigger>
+                          <AccordionContent>
+                            <CategoryEntryForm category={category} />
+                          </AccordionContent>
+                        </AccordionItem>
+                      ))}
+                    </Accordion>
+                  </CardContent>
+                </Card>
+              </>
+            )}
+          </div>
+
+          {/* Right Column: Analytics & Tools */}
+          <div className="col-span-1 space-y-8">
+              <AnalyticsDashboard sessions={sessions || []} />
+              <MindfulnessTimer />
+              <div className="p-4 bg-card rounded-lg shadow">
+                <h4 className="font-bold">Sync & Status</h4>
+                <div className="text-sm text-muted-foreground">
+                  Local queue: open console to inspect Dexie.
+                </div>
               </div>
-            </div>
+          </div>
         </div>
       </div>
     </div>
