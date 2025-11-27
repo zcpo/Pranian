@@ -65,6 +65,7 @@ export default function LibraryPage() {
                             const imageUrl = imageData?.imageUrl.replace(/seed\/[^/]+/, `seed/${item.slug}`) || 'https://picsum.photos/600/400';
                             return (
                                 <li className="music__list-item" key={item.slug} style={{backgroundImage: `url(${imageUrl})`}}>
+                                    <Link href={`/library/meditation/${item.slug}`} className="absolute inset-0" aria-label={`Play ${item.title}`} />
                                     <div className="music__list-item-hover">
                                         <h3 className="song__title">{item.title}</h3>
                                         <p className="song__creator">{item.author}</p>
@@ -72,7 +73,6 @@ export default function LibraryPage() {
                                             <PlayCircle size={48} />
                                         </button>
                                     </div>
-                                    <Link href={`/library/meditation/${item.slug}`} className="absolute inset-0" aria-label={`Play ${item.title}`} />
                                 </li>
                             );
                         })}
@@ -87,6 +87,7 @@ export default function LibraryPage() {
                              const imageUrl = item.posterUrl || imageData?.imageUrl.replace(/seed\/[^/]+/, `seed/${item.slug}`) || 'https://picsum.photos/600/400';
                             return (
                                 <li className="music__list-item" key={item.slug} style={{backgroundImage: `url(${imageUrl})`}}>
+                                    <Link href={`/library/video-meditation/${item.slug}`} className="absolute inset-0" aria-label={`Play ${item.title}`} />
                                     <div className="music__list-item-hover">
                                         <h3 className="song__title">{item.title}</h3>
                                         <p className="song__creator">{item.author}</p>
@@ -94,7 +95,6 @@ export default function LibraryPage() {
                                             <PlayCircle size={48} />
                                         </button>
                                     </div>
-                                    <Link href={`/library/video-meditation/${item.slug}`} className="absolute inset-0" aria-label={`Play ${item.title}`} />
                                 </li>
                             );
                         })}
@@ -108,16 +108,15 @@ export default function LibraryPage() {
                             const imageData = PlaceHolderImages.find(img => img.id === item.imageId);
                             const imageUrl = item.posterUrl || imageData?.imageUrl.replace(/seed\/[^/]+/, `seed/${item.slug}${index}`) || 'https://picsum.photos/600/400';
                             return (
-                                 <li className="music__list-item" key={item.slug}>
-                                    <Link href={`/library/video/${item.slug}`} className="absolute inset-0" style={{backgroundImage: `url(${imageUrl})`}} aria-label={`Play ${item.title}`}>
-                                        <div className="music__list-item-hover">
-                                            <h3 className="song__title">{item.title}</h3>
-                                            <p className="song__creator">{item.author}</p>
-                                            <button className="play-button">
-                                                <PlayCircle size={48} />
-                                            </button>
-                                        </div>
-                                    </Link>
+                                 <li className="music__list-item" key={item.slug} style={{backgroundImage: `url(${imageUrl})`}}>
+                                    <Link href={`/library/video/${item.slug}`} className="absolute inset-0" aria-label={`Play ${item.title}`} />
+                                    <div className="music__list-item-hover">
+                                        <h3 className="song__title">{item.title}</h3>
+                                        <p className="song__creator">{item.author}</p>
+                                        <button className="play-button">
+                                            <PlayCircle size={48} />
+                                        </button>
+                                    </div>
                                 </li>
                             );
                         })}
