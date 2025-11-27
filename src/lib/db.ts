@@ -9,10 +9,10 @@ class PranianDexie extends Dexie {
 
   constructor() {
     super('pranianDB');
-    this.version(2).stores({
+    this.version(3).stores({
       sessions: 'id, userId, modifiedAt',
       syncQueue: '++id, userId',
-      feed: 'id, createdAt',
+      feed: 'id, createdAt, status', // Added status for optimistic UI
     });
   }
 }

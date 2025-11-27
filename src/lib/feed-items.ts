@@ -15,6 +15,9 @@ export type FeedItem = {
   userId?: string;
   userName?: string;
   userAvatar?: string;
+  // Client-side only fields for optimistic UI
+  status?: 'uploading' | 'complete' | 'error';
+  uploadProgress?: number;
 };
 
 export const MOCK_FEED_ITEMS: Omit<FeedItem, 'id' | 'createdAt'>[] = [
@@ -93,7 +96,7 @@ export const MOCK_FEED_ITEMS: Omit<FeedItem, 'id' | 'createdAt'>[] = [
     userAvatar: 'https://i.pravatar.cc/150?u=calmcollective',
   },
   {
-    type: 'meditation_post',
+    type: 'user_post',
     title: 'Mindfulness of Breath',
     subtitle: 'A simple 5-minute practice to anchor you in the present moment. Just notice your breath, without judgment.',
     image: 'https://picsum.photos/seed/meditation1/1000/1000',
@@ -101,7 +104,7 @@ export const MOCK_FEED_ITEMS: Omit<FeedItem, 'id' | 'createdAt'>[] = [
     userAvatar: 'https://i.pravatar.cc/150?u=mindfulmoments',
   },
   {
-    type: 'meditation_post',
+    type: 'user_post',
     title: 'Gratitude Meditation',
     subtitle: 'Shift your perspective by focusing on what you\'re thankful for. What are three things you appreciate today?',
     image: 'https://picsum.photos/seed/meditation2/1000/1000',
@@ -109,7 +112,7 @@ export const MOCK_FEED_ITEMS: Omit<FeedItem, 'id' | 'createdAt'>[] = [
     userAvatar: 'https://i.pravatar.cc/150?u=gratefulheart',
   },
   {
-    type: 'meditation_post',
+    type: 'user_post',
     title: 'Loving-Kindness for a Difficult Person',
     subtitle: 'Extend compassion to someone you find challenging. May they be happy, may they be peaceful.',
     image: 'https://picsum.photos/seed/meditation3/1000/1000',

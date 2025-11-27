@@ -13,13 +13,14 @@ import {
   where,
   QueryDocumentSnapshot,
 } from 'firebase/firestore';
-import { useFirestore } from '@/firebase';
+import { useFirestore, useUser } from '@/firebase';
 import type { FeedItem } from '@/lib/feed-items';
 import { FeedCard } from '@/components/feed/feed-card';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { useUser } from '@/firebase';
+import { db } from '@/lib/db';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { FeedCardPlaceholder } from './feed-card-placeholder';
 
 const PAGE_SIZE = 5;
 
@@ -33,7 +34,7 @@ const toDate = (timestamp: any): Date => {
 const docToFeedItem = (doc: QueryDocumentSnapshot): FeedItem => {
     const data = doc.data();
     const createdAt = toDate(data.createdAt).toISOString();
-    return { id: doc.id, ...data, createdAt } as FeedItem;
+    return { id: doc.id, ...data, createdAt, status: 'complete' } as FeedItem;
 };
 
 export default function FeedClient({ initialItems }: { initialItems: FeedItem[] }) {
@@ -45,11 +46,14 @@ export default function FeedClient({ initialItems }: { initialItems: FeedItem[] 
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(initialItems.length === PAGE_SIZE);
 
-  const getUniqueSortedItems = (newItems: FeedItem[], existingItems: FeedItem[]): FeedItem[] => {
-    const all = [...newItems, ...existingItems];
-    const unique = Array.from(new Map(all.map(item => [item.id, item])).values());
-    return unique.sort((a, b) => toDate(b.createdAt).getTime() - toDate(a.createdAt).getTime());
-  };
+  const localItems = useLiveQuery(() => db.feed.reverse().sortBy('createdAt'), []);
+
+  const combinedItems = React.useMemo(() => {
+    const allItems = [...(localItems || []), ...items];
+    const uniqueItems = Array.from(new Map(allItems.map(item => [item.id, item])).values());
+    return uniqueItems.sort((a, b) => toDate(b.createdAt).getTime() - toDate(a.createdAt).getTime());
+  }, [localItems, items]);
+
 
   const loadNextPage = useCallback(async () => {
     if (!firestore || !hasMore || loadingMore) return;
@@ -77,7 +81,7 @@ export default function FeedClient({ initialItems }: { initialItems: FeedItem[] 
       setHasMore(newItems.length === PAGE_SIZE);
 
       if (newItems.length > 0) {
-        setItems(prev => getUniqueSortedItems(newItems, prev));
+        setItems(prev => [...prev, ...newItems]);
       }
     } catch (error) {
       console.error("Error fetching next page:", error);
@@ -86,7 +90,7 @@ export default function FeedClient({ initialItems }: { initialItems: FeedItem[] 
     }
   }, [firestore, hasMore, loadingMore]);
 
-  // Initial load and real-time listener setup
+  // Real-time listener for new remote posts
   useEffect(() => {
     if (!firestore) return;
     setLoading(false);
@@ -100,20 +104,18 @@ export default function FeedClient({ initialItems }: { initialItems: FeedItem[] 
     );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const newItems: FeedItem[] = [];
       snapshot.docChanges().forEach(change => {
         if (change.type === 'added') {
-          newItems.push(docToFeedItem(change.doc));
+          const newItem = docToFeedItem(change.doc);
+          // See if there's a local version to remove
+          db.feed.where('id').startsWith('local_').delete();
+          setItems(prev => [newItem, ...prev]);
         }
       });
-      
-      if (newItems.length > 0) {
-        setItems(prevItems => getUniqueSortedItems(newItems, prevItems));
-      }
     });
 
     return () => unsubscribe();
-  }, [firestore, user]);
+  }, [firestore, user, items]);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -125,9 +127,12 @@ export default function FeedClient({ initialItems }: { initialItems: FeedItem[] 
         </div>
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {items.map((item) => (
-          <FeedCard key={item.id} item={item} />
-        ))}
+        {combinedItems.map((item) => {
+          if (item.status === 'uploading' || item.status === 'error') {
+            return <FeedCardPlaceholder key={item.id} item={item} />;
+          }
+          return <FeedCard key={item.id} item={item} />;
+        })}
       </div>
 
       {loading && (
@@ -144,11 +149,11 @@ export default function FeedClient({ initialItems }: { initialItems: FeedItem[] 
         </div>
       )}
 
-      {!hasMore && items.length > 0 && (
+      {!hasMore && combinedItems.length > 0 && (
         <p className="text-center text-muted-foreground py-8">You've reached the end of the feed.</p>
       )}
 
-      {!loading && items.length === 0 && (
+      {!loading && combinedItems.length === 0 && (
           <p className="text-center text-muted-foreground py-8">The feed is empty. Create the first post!</p>
       )}
     </div>
