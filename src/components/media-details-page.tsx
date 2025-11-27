@@ -67,11 +67,6 @@ export function MediaDetailsPage({ title, imageUrl, description, metadata, playe
             Play
           </Button>
 
-          <Button variant="outline" className="bg-slate-700/50 border-slate-600 hover:bg-slate-700 py-3 flex flex-col px-5 rounded-sm shadow-sm mr-2.5 mb-3 h-auto">
-            <span className="truncate">Watch Now</span>
-            <span className="truncate text-xs">Start your 30-day free trial</span>
-          </Button>
-
           <Button variant="ghost" size="icon" className="bg-slate-700/50 hover:bg-slate-700 p-3 rounded-full shadow-sm mr-2.5 text-gray-300 mb-3 h-12 w-12">
             <Plus />
           </Button>
