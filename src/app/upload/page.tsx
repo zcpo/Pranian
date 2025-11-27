@@ -1,14 +1,14 @@
 
 'use client';
 
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useDropzone } from 'react-dropzone';
-import { useUser, useFirestore } from '@/firebase';
+import { useUser, useFirestore, useStorage } from '@/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -62,6 +62,7 @@ async function createThumbnail(file: File, maxSize = 1080): Promise<Blob> {
 export default function UploadPage() {
   const { user, isUserLoading } = useUser();
   const firestore = useFirestore();
+  const storage = useStorage();
   const router = useRouter();
   const { toast } = useToast();
 
@@ -111,27 +112,35 @@ export default function UploadPage() {
 
     try {
       // 1. Upload image thumbnail if it exists
-      if (file) {
-        const storage = getStorage();
-        const thumb = await createThumbnail(file);
-        const filename = `feed_images/${user.uid}/${Date.now()}-${file.name.replace(/\s+/g, '_')}`;
-        const storageRef = ref(storage, filename);
-        
-        const uploadTask = uploadBytesResumable(storageRef, thumb);
-        
-        await new Promise<void>((resolve, reject) => {
-            uploadTask.on('state_changed',
-                (snapshot) => {
-                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    setUploadProgress(progress);
-                },
-                (error) => reject(error),
-                async () => {
-                    imageUrl = await getDownloadURL(uploadTask.snapshot.ref);
-                    resolve();
-                }
-            );
-        });
+      if (file && storage) {
+        try {
+            const thumb = await createThumbnail(file);
+            const filename = `feed_images/${user.uid}/${Date.now()}-${file.name.replace(/\s+/g, '_')}`;
+            const storageRef = ref(storage, filename);
+            
+            const uploadTask = uploadBytesResumable(storageRef, thumb);
+            
+            await new Promise<void>((resolve, reject) => {
+                uploadTask.on('state_changed',
+                    (snapshot) => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        setUploadProgress(progress);
+                    },
+                    (error) => reject(error),
+                    async () => {
+                        imageUrl = await getDownloadURL(uploadTask.snapshot.ref);
+                        resolve();
+                    }
+                );
+            });
+        } catch (uploadError) {
+            console.error("Image upload failed, proceeding without image:", uploadError);
+            toast({
+                variant: 'destructive',
+                title: 'Image Upload Failed',
+                description: 'Could not upload the image, but the post will be created without it.',
+            });
+        }
       }
 
       // 2. Create Firestore document
