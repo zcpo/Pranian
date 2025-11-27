@@ -139,6 +139,21 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+    /**
+     * @description Feed items are public for all to read, but only admins can manage them.
+     * @path /feed_items/{feedItemId}
+     * @allow (get, list) any user, authenticated or not, can view the feed.
+     * @deny (create, update, delete) for non-admins.
+     * @principle Allows a public, curated feed managed by administrators.
+     */
+    match /feed_items/{feedItemId} {
+      allow get: if true;
+      allow list: if true;
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
     // ------------------------------------------------------------------------
     // Administrative Rules
     // ------------------------------------------------------------------------

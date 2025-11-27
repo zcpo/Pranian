@@ -31,6 +31,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 
 
 const navLinks = [
+  { href: '/feed', label: 'Feed' },
   { href: '/library', label: 'Library' },
   { href: '/store', label: 'Store' },
   { href: '/events', label: 'Events' },
