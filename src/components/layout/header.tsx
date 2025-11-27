@@ -2,12 +2,18 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { UserCircle } from 'lucide-react';
+import { UserCircle, Menu } from 'lucide-react';
+import * as React from "react"
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import Logo from '@/components/logo';
 import { ThemeToggle } from '@/components/theme-toggle';
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet"
 
 const navLinks = [
   { href: '/library', label: 'Library' },
@@ -18,13 +24,17 @@ const navLinks = [
 
 export default function Header() {
   const pathname = usePathname();
+  const [open, setOpen] = React.useState(false);
 
-  const NavLink = ({ href, label }: { href: string; label: string }) => (
+
+  const NavLink = ({ href, label, className }: { href: string; label: string; className?: string }) => (
     <Link
       href={href}
+      onClick={() => setOpen(false)}
       className={cn(
         "text-sm font-medium transition-colors hover:text-primary",
-        pathname === href ? "text-foreground" : "text-muted-foreground"
+        pathname === href ? "text-foreground" : "text-muted-foreground",
+        className
       )}
     >
       {label}
@@ -38,16 +48,15 @@ export default function Header() {
           <Logo />
         </div>
         
-        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-          <div className="w-full flex-1 md:w-auto md:flex-none">
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex md:gap-6">
-              {navLinks.map((link) => (
-                <NavLink key={link.href} {...link} />
-              ))}
-            </nav>
-          </div>
-          <div className="flex items-center gap-2">
+        <div className="flex flex-1 items-center justify-end">
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex md:gap-6">
+            {navLinks.map((link) => (
+              <NavLink key={link.href} {...link} />
+            ))}
+          </nav>
+          
+          <div className="flex items-center gap-2 ml-4">
              <ThemeToggle />
              <Button variant="ghost" size="icon" asChild>
                 <Link href="/login">
@@ -55,6 +64,28 @@ export default function Header() {
                     <span className="sr-only">Login</span>
                 </Link>
              </Button>
+             
+            {/* Mobile Navigation */}
+            <div className="md:hidden">
+                <Sheet open={open} onOpenChange={setOpen}>
+                  <SheetTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                      <Menu className="h-5 w-5" />
+                      <span className="sr-only">Open menu</span>
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent side="right">
+                      <div className="flex flex-col gap-4 py-6">
+                         <div className="mb-4">
+                            <Logo />
+                         </div>
+                        {navLinks.map((link) => (
+                           <NavLink key={link.href} {...link} className="text-lg" />
+                        ))}
+                      </div>
+                  </SheetContent>
+                </Sheet>
+            </div>
           </div>
         </div>
       </div>

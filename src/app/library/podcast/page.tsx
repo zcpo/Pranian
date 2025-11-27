@@ -28,7 +28,7 @@ export default function PodcastPage() {
       <div className="container mx-auto px-4 py-8 sm:py-12">
         
         {/* Hero Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8 md:gap-12 items-center mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 items-center mb-12">
           <div className="relative aspect-square w-full max-w-xs mx-auto md:max-w-none rounded-lg overflow-hidden shadow-2xl">
              {podcastCover && (
                 <Image
@@ -40,15 +40,15 @@ export default function PodcastPage() {
                 />
              )}
           </div>
-          <div className="md:col-span-2 lg:col-span-3 text-center md:text-left">
+          <div className="md:col-span-2 text-center md:text-left">
             <h3 className="text-sm font-semibold tracking-wider uppercase text-primary">Podcast</h3>
-            <h1 className="mt-2 text-4xl md:text-6xl font-extrabold font-headline tracking-tight">
+            <h1 className="mt-2 text-4xl md:text-5xl font-extrabold font-headline tracking-tight">
               The Pranian Podcast
             </h1>
             <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto md:mx-0">
               Mindful conversations on yoga, meditation, and well-being. Join us as we explore the path to inner peace.
             </p>
-            <div className="mt-6 flex gap-4 justify-center md:justify-start">
+            <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
                 <Button size="lg" asChild>
                     <Link href={`/library/podcast/${episodes[0].slug}`}>
                         Play Latest Episode
@@ -73,7 +73,7 @@ export default function PodcastPage() {
                 <Link href={`/library/podcast/${episode.slug}`} key={episode.slug} className="block group">
                     <div >
                         <div className="flex items-center gap-4 group-hover:bg-muted/50 rounded-md transition-colors p-2 -m-2">
-                            <div className="w-24 h-24 relative flex-shrink-0">
+                            <div className="w-16 h-16 sm:w-24 sm:h-24 relative flex-shrink-0">
                                 <Image
                                     src={episodeImageUrl}
                                     alt={episode.title}
@@ -83,7 +83,7 @@ export default function PodcastPage() {
                                 />
                             </div>
                             <div className="flex-grow">
-                                <h3 className="font-semibold text-lg font-headline text-foreground group-hover:underline">{episode.title}</h3>
+                                <h3 className="font-semibold text-base sm:text-lg font-headline text-foreground group-hover:underline">{episode.title}</h3>
                                 <p className="text-muted-foreground text-sm line-clamp-2 mt-1">{episode.description}</p>
                                 <p className="text-xs text-muted-foreground mt-2">{episode.duration}</p>
                             </div>

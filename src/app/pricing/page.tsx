@@ -39,7 +39,7 @@ const tiers = [
 
 export default function PricingPage() {
   return (
-    <div className="container mx-auto px-4 py-16 sm:py-24">
+    <div className="container mx-auto px-4 py-8 sm:py-16 md:py-24">
       <div className="text-center mb-12">
         <h1 className="text-4xl md:text-5xl font-extrabold font-headline tracking-tight">Choose Your Path</h1>
         <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
@@ -64,7 +64,7 @@ export default function PricingPage() {
               </div>
             )}
             <CardHeader>
-              <CardTitle className="font-headline tracking-tight">{tier.name}</CardTitle>
+              <CardTitle className="font-headline tracking-tight text-2xl">{tier.name}</CardTitle>
               <CardDescription>{tier.description}</CardDescription>
             </CardHeader>
             <CardContent className="flex-grow">

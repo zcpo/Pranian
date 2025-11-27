@@ -14,7 +14,7 @@ export default function StylesPage() {
   const heroImage = PlaceHolderImages.find(img => img.id === 'hero-styles');
   return (
     <div>
-      <section className="relative h-96 flex items-center justify-center text-center text-white">
+      <section className="relative h-64 sm:h-96 flex items-center justify-center text-center text-white">
         {heroImage && (
           <Image
             src={heroImage.imageUrl}

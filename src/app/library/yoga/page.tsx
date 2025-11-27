@@ -82,12 +82,12 @@ export default function YogaLibraryPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {sections.map((section) => (
             <Link href={section.href} className="group block" key={section.title}>
               <Card className="h-full transition-all duration-300 ease-in-out group-hover:border-primary/50 group-hover:shadow-lg group-hover:shadow-primary/10 flex flex-col">
                 <CardHeader>
-                  <h3 className="text-2xl font-semibold font-headline text-foreground">{section.title}</h3>
+                  <h3 className="text-xl font-semibold font-headline text-foreground">{section.title}</h3>
                 </CardHeader>
                 <CardContent className="flex-grow">
                   <p className="text-muted-foreground">{section.description}</p>

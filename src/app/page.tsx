@@ -9,7 +9,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="flex flex-col h-[calc(100vh-14rem)]">
+      <div className="flex flex-col min-h-[calc(100vh-3.6rem)] sm:min-h-[calc(100vh-14rem)]">
         {/* Hero Section */}
         <section className="relative flex-1 flex items-center justify-center text-center text-white">
           {heroImage && (
@@ -24,13 +24,13 @@ export default function Home() {
           )}
           <div className="absolute inset-0 bg-black/60" />
           <div className="relative z-10 px-4">
-            <h1 className="text-4xl md:text-6xl font-extrabold font-headline tracking-tight">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold font-headline tracking-tight">
               Find Your Inner Peace
             </h1>
             <p className="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-white/80">
               Discover a sanctuary of calm with our guided meditations, yoga flows, and a community dedicated to mindful living.
             </p>
-            <div className="mt-8 flex justify-center gap-4">
+            <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
               <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
                 <Link href="/pricing">Start Free Trial</Link>
               </Button>
