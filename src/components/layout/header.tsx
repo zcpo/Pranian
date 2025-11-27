@@ -13,6 +13,9 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import {
   Sheet,
   SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
   SheetTrigger,
 } from "@/components/ui/sheet"
 import {
@@ -127,12 +130,17 @@ export default function Header() {
                     </Button>
                   </SheetTrigger>
                   <SheetContent side="right">
-                      <div className="flex flex-col gap-4 py-6">
-                         <div className="mb-4">
-                            <Link href="/" onClick={() => setOpen(false)}>
+                      <SheetHeader className="border-b pb-4 mb-4">
+                        <SheetTitle>
+                           <Link href="/" onClick={() => setOpen(false)}>
                                 <Logo />
                             </Link>
-                         </div>
+                        </SheetTitle>
+                        <SheetDescription>
+                          Navigate through the Pranian app.
+                        </SheetDescription>
+                      </SheetHeader>
+                      <div className="flex flex-col gap-4">
                         {navLinks.map((link) => (
                            <NavLink key={link.href} {...link} className="text-lg" />
                         ))}
