@@ -138,8 +138,7 @@ main {
 }
 @media (min-width: 800px) {
   main {
-    padding: 10px 20px calc(var(--footer-height) + 40px);
-    margin-bottom: 20px;
+    padding: 10px 20px;
   }
 }
 

@@ -1,3 +1,4 @@
+
 :root {
   --lg-bg-color: rgba(255, 255, 255, 0.1);
   --lg-highlight: rgba(255, 255, 255, 0.25);
@@ -18,7 +19,7 @@
   background: transparent;
   border-radius: 9999px; /* rounded-full */
   overflow: hidden;
-  padding: 0.75rem 1.5rem; /* py-3 px-6 */
+  padding: 0.5rem 1rem; /* py-2 px-4 */
   text-decoration: none;
   color: var(--lg-grey);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 10px rgba(0, 0, 0, 0.05);

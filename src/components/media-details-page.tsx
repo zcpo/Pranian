@@ -62,8 +62,8 @@ export function MediaDetailsPage({ title, imageUrl, description, metadata, playe
         )}
 
         <div className="flex flex-wrap lg:flex-nowrap items-center mt-8">
-          <Button size="lg" className="bg-white text-black hover:bg-white/90 mr-2.5 mb-3">
-            <Play className="mr-2 h-5 w-5 fill-black" />
+          <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 mr-2.5 mb-3">
+            <Play className="mr-2 h-5 w-5 fill-current" />
             Play
           </Button>
 

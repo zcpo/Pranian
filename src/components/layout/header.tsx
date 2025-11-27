@@ -77,15 +77,15 @@ export default function Header() {
           </Link>
         </div>
         
-        <div className="flex flex-1 items-center justify-end">
+        <div className="flex flex-1 items-center justify-between md:justify-end">
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex md:gap-6">
+          <nav className="hidden md:flex md:gap-4 lg:gap-6">
             {navLinks.map((link) => (
               <NavLink key={link.href} {...link} />
             ))}
           </nav>
           
-          <div className="flex items-center gap-2 ml-4">
+          <div className="flex items-center gap-2 md:ml-4">
              <ThemeToggle />
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

@@ -175,9 +175,9 @@ export default function JournalPage() {
           {user && <Button onClick={doSignOut}>Sign Out</Button>}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Left & Middle Column: Main Content */}
-          <div className="md:col-span-2 space-y-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Main Content Column */}
+          <div className="lg:col-span-2 space-y-8">
             {!user ? (
               <Card>
                 <CardHeader>
@@ -217,7 +217,7 @@ export default function JournalPage() {
             )}
           </div>
 
-          {/* Right Column: Analytics & Tools */}
+          {/* Right Column: Tools & Status */}
           <div className="col-span-1 space-y-8">
               <MindfulnessTimer />
               <div className="p-4 bg-card rounded-lg shadow">
