@@ -1,14 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: poppins;
-  user-select: none;
-  --border: var(--bg);
-}
 
-.dark {
+:root {
   --bg: rgb(1, 29, 74);
   --text: #fff;
   --icon: cyan;
@@ -18,56 +10,24 @@
   --shadow1: rgba(187, 187, 187, 0.1);
   --shadow2: rgba(0, 0, 0, 0.35);
   --submit-shadow: rgba(0, 0, 0, 0.365);
-  --gradient: linear-gradient(70deg, #fff, #414141, #fff, #606060);
+  --destructive: #ef4444;
 }
 
-.light {
-  --bg: #e6e9ec;
-  --text: #232323;
-  --icon: #000000;
-  --submit: #232323;
-  --span: rgba(0, 0, 0, 0.464);
-  --input-border: rgba(0, 0, 0, 0.1);
-  --shadow1: #ffffff;
-  --submit-shadow: #000;
-  --shadow2: rgba(0, 0, 0, 0.35);
-  --gradient: linear-gradient(70deg, #414141, #7e7a7a, #000000);
-}
-
-.theme {
-  position: absolute;
-  width: fit-content;
-  right: 1rem;
-  top: 10px;
-  z-index: 999;
-}
-.theme .theme-btn {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
-.theme .theme-btn svg {
-  width: 30px;
-  height: 30px;
-  display: none;
-  margin-left: 10px;
-}
-.theme .theme-text {
-  width: 87px;
-  text-align: right;
-  font-weight: 600;
-  background: var(--gradient);
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  -webkit-background-clip: text;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: poppins, sans-serif;
+  user-select: none;
 }
 
 body {
   min-height: 100vh;
   background: var(--bg);
   overflow: hidden;
-  transition: background 0.5s ease;
+  color: var(--text);
 }
+
 @media (max-height: 600px) {
   body {
     overflow-y: scroll;
@@ -84,44 +44,64 @@ main {
 .container {
   padding: 40px;
   border-radius: 20px;
-  border: 8px solid var(--border);
+  border: 8px solid var(--bg);
   box-shadow: -5px -5px 15px var(--shadow1), 5px 5px 15px var(--shadow2), inset -5px -5px 15px var(--shadow1), inset 5px 5px 15px var(--shadow2);
 }
+
 @media (max-width: 400px) {
   .container {
     padding: 20px;
   }
 }
-.container .form {
+
+.form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.form form {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   gap: 25px;
 }
-.container .form h2 {
+
+.form h2 {
   color: var(--text);
   font-weight: 500;
   letter-spacing: 0.3ch;
 }
-.container .form p {
+
+.form .p-text {
   color: var(--span);
+  font-size: 14px;
 }
-.container .form p a {
+
+.form .login-toggle {
+  background: none;
+  border: none;
   color: var(--text);
   font-weight: 500;
-  text-decoration: none;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
 }
-.container .form .inputBox {
+
+.inputBox {
   position: relative;
   width: 270px;
 }
+
 @media (min-width: 500px) {
-  .container .form .inputBox {
+  .inputBox {
     width: 320px;
   }
 }
-.container .form .inputBox input {
+
+.inputBox input {
   padding: 12px 10px 12px 48px;
   border: none;
   outline: none;
@@ -136,10 +116,14 @@ main {
   box-shadow: -5px -5px 15px var(--shadow1), 5px 5px 15px var(--shadow2);
   transition: 0.5s;
 }
-.container .form .inputBox input:valid, .container .form .inputBox input:focus {
+
+.inputBox input:valid,
+.inputBox input:focus {
   border: 1px solid var(--icon);
 }
-.container .form .inputBox input:valid ~ span, .container .form .inputBox input:focus ~ span {
+
+.inputBox input:focus ~ span,
+.inputBox input:valid ~ span {
   color: var(--icon);
   border: 1px solid var(--icon);
   background: var(--bg);
@@ -148,43 +132,8 @@ main {
   font-size: 12px;
   padding: 0 8px;
 }
-.container .form .inputBox input:focus:invalid {
-  border: 1px solid red;
-  caret-color: red;
-  color: red;
-}
-.container .form .inputBox input:focus:invalid ~ span {
-  color: red;
-  border: 1px solid red;
-  background: var(--bg);
-  transform: translate(25px, -10px);
-  border-radius: 10px;
-  font-size: 12px;
-  padding: 0 8px;
-}
-.container .form .inputBox input:focus:invalid ~ svg {
-  color: red;
-  border-right: 1px solid red;
-}
-.container .form .inputBox input:focus:valid {
-  border: 1px solid #00ff88;
-  caret-color: #00ff88;
-  color: #00ff88;
-}
-.container .form .inputBox input:focus:valid ~ span {
-  color: #00ff88;
-  border: 1px solid #00ff88;
-  background: var(--bg);
-  transform: translate(25px, -10px);
-  border-radius: 10px;
-  font-size: 12px;
-  padding: 0 8px;
-}
-.container .form .inputBox input:focus:valid ~ svg {
-  color: #00ff88;
-  border-right: 1px solid #00ff88;
-}
-.container .form .inputBox input[type=submit] {
+
+.inputBox input[type=submit] {
   background: var(--submit);
   color: var(--bg);
   padding: 10px 0;
@@ -192,11 +141,13 @@ main {
   cursor: pointer;
   box-shadow: -5px -5px 15px var(--shadow1), 5px 5px 15px var(--shadow2), inset -5px -5px 10px var(--submit-shadow), inset 5px 5px 10px var(--shadow2);
 }
-.container .form .inputBox input[type=submit]:focus {
+
+.inputBox input[type=submit]:focus {
   color: #fff;
   background: #000;
 }
-.container .form .inputBox span {
+
+.inputBox span {
   position: absolute;
   left: 0;
   padding: 12px 10px 12px 48px;
@@ -205,7 +156,8 @@ main {
   pointer-events: none;
   color: var(--span);
 }
-.container .form .inputBox svg {
+
+.inputBox svg {
   position: absolute;
   top: 15px;
   left: 16px;
@@ -217,63 +169,41 @@ main {
   height: 1em;
 }
 
-#signin {
+/* Animations for form switching */
+.hidden {
   display: none;
-}
-
-.handle-error {
-  border: 1px solid red !important;
-  color: red !important;
-}
-
-.disable,
-.disable + svg {
-  cursor: not-allowed;
-  opacity: 0.2;
-}
-
-#error {
-  color: red;
-  display: none;
-  opacity: 0;
-  animation: fade 2s ease forwards;
-  position: absolute;
-  font-size: 12px;
-  bottom: -20px;
-  left: 10px;
-}
-@keyframes fade {
-  100% {
-    opacity: 1;
-  }
 }
 
 .fadeout {
-  animation: fadeout 2s ease forwards;
+  animation: fadeout 0.5s ease forwards;
 }
+
 @keyframes fadeout {
-  50% {
-    opacity: 0;
+  from {
+    opacity: 1;
+    transform: translateY(0);
   }
-  100% {
-    transform: translateX(10000px);
-    display: none;
+  to {
+    opacity: 0;
+    transform: translateY(20px);
   }
 }
 
 .fadein {
-  animation: fadein 2s ease forwards;
+  animation: fadein 0.5s ease forwards;
 }
+
 @keyframes fadein {
-  0% {
+  from {
     opacity: 0;
+    transform: translateY(-20px);
   }
-  50% {
-    opacity: 0;
-    transform: translateY(1000px);
-  }
-  100% {
-    display: flex;
+  to {
+    opacity: 1;
     transform: translateY(0);
   }
+}
+
+.text-destructive {
+  color: var(--destructive);
 }

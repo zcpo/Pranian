@@ -1,197 +1,208 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { User, Mail, Lock } from 'lucide-react';
+import React, { useState } from 'react';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Mail, Lock } from 'lucide-react';
+import { useAuth } from '@/firebase';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
+import { useRouter } from 'next/navigation';
+import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 
-const LoginClientPage: React.FC = () => {
-  useEffect(() => {
-    let loginBtn = document.querySelector('.login');
-    let createBtn = document.querySelector('.create');
-    let body = document.body;
-    let confirmPass = document.querySelector('#confirmpassword') as HTMLInputElement;
-    let password = document.querySelector('#password') as HTMLInputElement;
-    let themeBtn = document.querySelector('#themeButton');
-    let themeText = document.querySelector('.theme-text');
-    let savedTheme = localStorage.getItem('theme');
-    let email = document.getElementById('email') as HTMLInputElement;
-    let error = document.getElementById('error');
-    let emailSpan = document.getElementById('for-email');
-    let signUp = document.querySelector('.form.signup');
-    let signIn = document.querySelector('.form.signin');
-    
-    // Add dark theme by default if none is saved
-    if (!savedTheme) {
-        body.classList.add('dark');
-        savedTheme = 'dark';
-    } else {
-        body.className = savedTheme;
-    }
+const signUpSchema = z
+  .object({
+    email: z.string().email({ message: 'Invalid email address' }),
+    password: z
+      .string()
+      .min(8, { message: 'Password must be at least 8 characters' }),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ['confirmPassword'],
+  });
 
-    if(themeText) {
-        setTimeout(() => {
-            themeText.textContent = body.className.toUpperCase();
-        }, 2000);
-    }
-    
+const signInSchema = z.object({
+  email: z.string().email({ message: 'Invalid email address' }),
+  password: z.string().min(1, { message: 'Password is required' }),
+});
 
-    let themes = ['light', 'dark'];
-    
-    var count = 0;
-    if (savedTheme === null) {
-      count = 1; // Default to dark
-    } else {
-      count = themes.indexOf(savedTheme);
-    }
+type SignUpFormValues = z.infer<typeof signUpSchema>;
+type SignInFormValues = z.infer<typeof signInSchema>;
 
-    if (themeBtn) {
-        themeBtn.addEventListener('click', () => {
-            count++;
-            let selected;
-            if (count > themes.length - 1) {
-                count = 0;
-            }
-            selected = themes[count];
-            
-            localStorage.setItem('theme', selected);
-            body.className = selected;
-            if(themeText) {
-                themeText.textContent = selected.toUpperCase();
-            }
-        });
-    }
+export default function LoginClientPage() {
+  const [isSigningUp, setIsSigningUp] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const auth = useAuth();
+  const router = useRouter();
+  const { toast } = useToast();
 
-    if (loginBtn && signUp && signIn) {
-      loginBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        signUp.classList.add('fadeout');
-        signIn.classList.add('fadein');
-        setTimeout(() => {
-          (signUp as HTMLElement).style.display = 'none';
-          (signIn as HTMLElement).style.display = 'flex';
-        }, 1000);
+  const {
+    register: registerSignUp,
+    handleSubmit: handleSignUpSubmit,
+    formState: { errors: signUpErrors },
+  } = useForm<SignUpFormValues>({
+    resolver: zodResolver(signUpSchema),
+  });
 
-        setTimeout(() => {
-          signUp.classList.remove('fadeout');
-          signIn.classList.remove('fadein');
-        }, 3000);
+  const {
+    register: registerSignIn,
+    handleSubmit: handleSignInSubmit,
+    formState: { errors: signInErrors },
+  } = useForm<SignInFormValues>({
+    resolver: zodResolver(signInSchema),
+  });
+
+  const onSignUp: SubmitHandler<SignUpFormValues> = async (data) => {
+    setError(null);
+    try {
+      await createUserWithEmailAndPassword(auth, data.email, data.password);
+      toast({
+        title: 'Account Created',
+        description: 'You have been successfully signed up.',
       });
+      router.push('/profile');
+    } catch (err: any) {
+      setError(err.message);
     }
+  };
 
-    if (createBtn && signUp && signIn) {
-      createBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        signIn.classList.add('fadeout');
-        signUp.classList.add('fadein');
-        setTimeout(() => {
-          (signIn as HTMLElement).style.display = 'none';
-          (signUp as HTMLElement).style.display = 'flex';
-        }, 1000);
-        setTimeout(() => {
-          signIn.classList.remove('fadeout');
-          signUp.classList.remove('fadein');
-        }, 3000);
+  const onSignIn: SubmitHandler<SignInFormValues> = async (data) => {
+    setError(null);
+    try {
+      await signInWithEmailAndPassword(auth, data.email, data.password);
+      toast({
+        title: 'Signed In',
+        description: 'You have been successfully signed in.',
       });
+      router.push('/profile');
+    } catch (err: any) {
+      setError(err.message);
     }
+  };
 
-    if (email && emailSpan && error) {
-      email.addEventListener('input', () => {
-        if (!email.validity.valid && email.value !== '') {
-          (emailSpan as HTMLElement).style.opacity = '0';
-          (error as HTMLElement).style.display = 'block';
-          email.classList.add('handle-error');
-        } else {
-          email.classList.remove('handle-error');
-          (error as HTMLElement).style.display = 'none';
-          (emailSpan as HTMLElement).style.opacity = '1';
-        }
-      });
-    }
-    
-    if (confirmPass && password) {
-        confirmPass.disabled = true;
-        confirmPass.classList.add('disable');
-        password.addEventListener('input', () => {
-            if (password.validity.valid) {
-                confirmPass.disabled = false;
-                confirmPass.classList.remove('disable');
-            } else {
-                confirmPass.disabled = true;
-                confirmPass.classList.add('disable');
-            }
-        });
-    }
-  }, []);
+  const FormError = ({ message }: { message?: string }) =>
+    message ? <p className="text-destructive text-xs mt-1">{message}</p> : null;
 
   return (
-    <>
-      <div className="theme" id="themeButton">
-        <div className="theme-btn">
-          <span className="theme-text">THEMIFY</span>
-          {/* Icons are handled by CSS based on body class */}
-        </div>
-      </div>
-
-      <main>
-        <div className="container">
-          <div className="form signup " id="signup">
+    <main>
+      <div className="container">
+        <div
+          className={cn('form signup', {
+            fadein: isSigningUp,
+            fadeout: !isSigningUp,
+            hidden: !isSigningUp,
+          })}
+        >
+          <form onSubmit={handleSignUpSubmit(onSignUp)} noValidate>
             <h2>Sign Up</h2>
-            <div className="inputBox">
-              <input type="text" required autoComplete="off" minLength={3} />
-              <User />
-              <span>username</span>
-            </div>
+            {error && !isSigningUp && (
+              <p className="text-destructive text-sm my-2">{error}</p>
+            )}
             <div className="inputBox">
               <input
                 type="email"
-                id="email"
+                {...registerSignUp('email')}
                 required
-                autoComplete="off"
-                pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,63}$"
+                autoComplete="email"
               />
               <Mail />
-              <span id="for-email">email</span>
-              <p id="error">invalid email human</p>
+              <span>email</span>
+              <FormError message={signUpErrors.email?.message} />
             </div>
             <div className="inputBox">
-              <input type="password" id="password" required autoComplete="off" minLength={8} />
+              <input
+                type="password"
+                {...registerSignUp('password')}
+                required
+                autoComplete="new-password"
+              />
               <Lock />
               <span>create password</span>
+              <FormError message={signUpErrors.password?.message} />
             </div>
             <div className="inputBox">
-              <input type="password" id="confirmpassword" required autoComplete="off" minLength={8} />
+              <input
+                type="password"
+                {...registerSignUp('confirmPassword')}
+                required
+                autoComplete="new-password"
+              />
               <Lock />
               <span>confirm password</span>
+              <FormError message={signUpErrors.confirmPassword?.message} />
             </div>
             <div className="inputBox">
               <input type="submit" value="Create Account" />
             </div>
             <p className="p-text">
-              Already a member? <a href="#" className="login">login in</a>
+              Already a member?{' '}
+              <button
+                type="button"
+                onClick={() => setIsSigningUp(false)}
+                className="login-toggle"
+              >
+                Sign In
+              </button>
             </p>
-          </div>
-          <div className="form signin " id="signin">
+          </form>
+        </div>
+
+        <div
+          className={cn('form signin', {
+            fadein: !isSigningUp,
+            fadeout: isSigningUp,
+            hidden: isSigningUp,
+          })}
+        >
+          <form onSubmit={handleSignInSubmit(onSignIn)} noValidate>
             <h2>Sign In</h2>
+            {error && !isSigningUp && (
+              <p className="text-destructive text-sm my-2">{error}</p>
+            )}
             <div className="inputBox">
-              <input type="text" id="name" required autoComplete="off" minLength={3} />
-              <User />
-              <span>username</span>
+              <input
+                type="email"
+                {...registerSignIn('email')}
+                required
+                autoComplete="email"
+              />
+              <Mail />
+              <span>email</span>
+              <FormError message={signInErrors.email?.message} />
             </div>
             <div className="inputBox">
-              <input type="password" required autoComplete="off" minLength={8} />
+              <input
+                type="password"
+                {...registerSignIn('password')}
+                required
+                autoComplete="current-password"
+              />
               <Lock />
               <span>password</span>
+              <FormError message={signInErrors.password?.message} />
             </div>
             <div className="inputBox">
               <input type="submit" value="Login" />
             </div>
             <p className="p-text">
-              Not yet a member? <a href="#" className="create">Sign up</a>
+              Not yet a member?{' '}
+              <button
+                type="button"
+                onClick={() => setIsSigningUp(true)}
+                className="login-toggle"
+              >
+                Sign up
+              </button>
             </p>
-          </div>
+          </form>
         </div>
-      </main>
-    </>
+      </div>
+    </main>
   );
-};
-
-export default LoginClientPage;
+}
