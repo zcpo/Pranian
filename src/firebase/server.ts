@@ -1,3 +1,4 @@
+
 import { initializeApp, getApp, getApps } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 import { getAuth } from 'firebase-admin/auth';
@@ -44,10 +45,11 @@ export function getDb() {
   return getFirestore(getAdminApp());
 }
 
-export function getAuth() {
+export function getAdminAuth() {
   return getAuth(getAdminApp());
 }
 
-export function getStorage() {
+export function getAdminStorage() {
     return getStorage(getAdminApp());
 }
+
