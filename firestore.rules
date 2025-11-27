@@ -1,0 +1,161 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ------------------------------------------------------------------------
+    // Helper Functions
+    // ------------------------------------------------------------------------
+
+    /**
+     * Returns true if the user is authenticated.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * Returns true if the requesting user's UID matches the provided userId.
+     * This is the primary function for establishing document ownership.
+     */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    /**
+     * Returns true if a document already exists and the requesting user is the owner.
+     * CRITICAL: Used for all update and delete operations to prevent modifying
+     * non-existent data and to enforce ownership.
+     */
+    function isExistingOwner(userId) {
+      return isOwner(userId) && exists(resource.data.userId);
+    }
+    
+    /**
+     * Returns true if the requesting user has an admin role document.
+     * The role is granted by the existence of a document in the /roles_admin collection.
+     */
+    function isAdmin() {
+      return isSignedIn() && exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
+    }
+
+    /**
+     * Validates that the ID in a new user profile document matches the user's auth UID.
+     * Enforces relational integrity on creation.
+     */
+    function isCreatingOwnProfile(userId) {
+      return isOwner(userId) && request.resource.data.id == userId;
+    }
+
+    /**
+     * Validates that the ID in a user profile document is immutable upon update.
+     */
+    function isUpdatingOwnProfile() {
+      return request.resource.data.id == resource.data.id;
+    }
+
+    /**
+     * Validates that a new session document contains a `userId` field
+     * that matches the user path parameter, enforcing relational integrity.
+     */
+    function isValidNewSession(userId) {
+      return isOwner(userId) && request.resource.data.userId == userId;
+    }
+    
+    /**
+     * Validates that the `userId` field on a session document is immutable.
+     */
+    function isImmutableSessionOwner() {
+      return request.resource.data.userId == resource.data.userId;
+    }
+
+
+    // ------------------------------------------------------------------------
+    // User Data Rules
+    // ------------------------------------------------------------------------
+
+    /**
+     * @description Users can create, read, and update their own profile document.
+     * @path /users/{userId}
+     * @allow (create) a new user creating their own profile: auth.uid == 'user_abc', path == /users/user_abc
+     * @deny (get) one user trying to read another's profile: auth.uid == 'user_xyz', path == /users/user_abc
+     * @deny (list) any user trying to list all user profiles.
+     * @principle Restricts access to a user's own data tree and prevents user enumeration.
+     */
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow list: if false;
+      allow create: if isCreatingOwnProfile(userId);
+      allow update: if isExistingOwner(userId) && isUpdatingOwnProfile();
+      allow delete: if isExistingOwner(userId);
+
+      /**
+       * @description A user can manage their own collection of yoga sessions.
+       * @path /users/{userId}/sessions/{sessionId}
+       * @allow (create) an authenticated user creating a session in their own space: auth.uid == 'user_abc', path == /users/user_abc/sessions/session_123
+       * @deny (update) one user trying to modify another's session: auth.uid == 'user_xyz', path == /users/user_abc/sessions/session_123
+       * @principle Enforces strict document ownership within a user's private subcollection.
+       */
+      match /sessions/{sessionId} {
+        allow get: if isOwner(userId);
+        allow list: if isOwner(userId);
+        allow create: if isValidNewSession(userId);
+        allow update: if isExistingOwner(userId) && isImmutableSessionOwner();
+        allow delete: if isExistingOwner(userId);
+      }
+    }
+
+    // ------------------------------------------------------------------------
+    // Global Data Rules
+    // ------------------------------------------------------------------------
+
+    /**
+     * @description Product data is public for all to read, but only admins can manage it.
+     * @path /products/{productId}
+     * @allow (get) any anonymous or authenticated user reading a product.
+     * @deny (create) a non-admin user trying to add a new product.
+     * @principle Segregates public read-only data from privileged write operations.
+     */
+    match /products/{productId} {
+      allow get: if true;
+      allow list: if true;
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+    
+    /**
+     * @description A user can read their own subscription, but cannot modify it.
+     * @path /subscriptions/{subscriptionId}
+     * @allow (get) an authenticated user reading their own subscription document by its ID.
+     * @deny (list) any user listing all subscriptions in the database.
+     * @deny (create, update, delete) any user trying to modify a subscription.
+     * @principle Protects sensitive financial data. Assumes a backend service manages writes.
+     */
+    match /subscriptions/{subscriptionId} {
+      allow get: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow list: if false;
+      allow create: if false;
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    // ------------------------------------------------------------------------
+    // Administrative Rules
+    // ------------------------------------------------------------------------
+
+    /**
+     * @description This collection is private and used for authorization checks. No client access is allowed.
+     * @path /roles_admin/{uid}
+     * @allow None. All operations are denied.
+     * @deny (get, list, create, update, delete) any user trying to access this collection.
+     * @principle Secures the role-based access control mechanism.
+     */
+    match /roles_admin/{uid} {
+      allow get: if false;
+      allow list: if false;
+      allow create: if false;
+      allow update: if false;
+      allow delete: if false;
+    }
+  }
+}

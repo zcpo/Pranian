@@ -1,0 +1,345 @@
+{
+  "entities": {
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents a user of the Pranian application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the user."
+        },
+        "email": {
+          "type": "string",
+          "description": "User's email address.",
+          "format": "email"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "User's display name."
+        },
+        "avatarUrl": {
+          "type": "string",
+          "description": "URL of the user's avatar image.",
+          "format": "uri"
+        },
+        "subscriptionId": {
+          "type": "string",
+          "description": "Reference to the Subscription. (Relationship: User 1:1 Subscription)"
+        }
+      },
+      "required": [
+        "id",
+        "email"
+      ]
+    },
+    "Subscription": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Subscription",
+      "type": "object",
+      "description": "Represents a user's subscription status and details.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the subscription."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to the User. (Relationship: User 1:1 Subscription)"
+        },
+        "startDate": {
+          "type": "string",
+          "description": "Date when the subscription started.",
+          "format": "date-time"
+        },
+        "endDate": {
+          "type": "string",
+          "description": "Date when the subscription ends.",
+          "format": "date-time"
+        },
+        "tier": {
+          "type": "string",
+          "description": "Subscription tier (e.g., 'free_trial', 'paid')."
+        },
+        "isAutoRenewing": {
+          "type": "boolean",
+          "description": "Indicates whether the subscription is set to auto-renew."
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "startDate",
+        "endDate",
+        "tier"
+      ]
+    },
+    "SessionEntry": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "SessionEntry",
+      "type": "object",
+      "description": "Represents a single yoga or meditation session.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the session entry."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to the User. (Relationship: User 1:N SessionEntry)"
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the session."
+        },
+        "date": {
+          "type": "string",
+          "description": "Date of the session.",
+          "format": "date"
+        },
+        "duration": {
+          "type": "number",
+          "description": "Duration of the session in seconds."
+        },
+        "style": {
+          "type": "string",
+          "description": "Style of yoga or meditation (e.g., Vinyasa, Hatha)."
+        },
+        "intensity": {
+          "type": "number",
+          "description": "Intensity level of the session (e.g., 1-5)."
+        },
+        "poseSequence": {
+          "type": "array",
+          "description": "Sequence of poses in the session.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "instructor": {
+          "type": "string",
+          "description": "Name of the instructor."
+        },
+        "location": {
+          "type": "string",
+          "description": "Location where the session took place."
+        },
+        "mediaUrl": {
+          "type": "string",
+          "description": "URL of any media associated with the session.",
+          "format": "uri"
+        },
+        "caloriesBurned": {
+          "type": "number",
+          "description": "Estimated calories burned during the session."
+        },
+        "mood": {
+          "type": "string",
+          "description": "User's mood after the session."
+        },
+        "startAt": {
+          "type": "string",
+          "description": "Timestamp when the session started.",
+          "format": "date-time"
+        },
+        "endAt": {
+          "type": "string",
+          "description": "Timestamp when the session ended.",
+          "format": "date-time"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the session was created.",
+          "format": "date-time"
+        },
+        "modifiedAt": {
+          "type": "string",
+          "description": "Timestamp when the session was last modified.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "date",
+        "duration",
+        "style"
+      ]
+    },
+    "Product": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Product",
+      "type": "object",
+      "description": "Represents a product in the e-commerce store.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the product."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the product."
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the product."
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "URL of the product image.",
+          "format": "uri"
+        },
+        "price": {
+          "type": "number",
+          "description": "Price of the product."
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of product (e.g., 'podcast', 'merchandise', 'book')."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "description",
+        "imageUrl",
+        "price",
+        "type"
+      ]
+    },
+    "Pose": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Pose",
+      "type": "object",
+      "description": "Represents a yoga pose.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the yoga pose."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the yoga pose."
+        },
+        "difficulty": {
+          "type": "string",
+          "description": "Difficulty level of the pose (e.g., beginner, intermediate, advanced)."
+        },
+        "durationDefault": {
+          "type": "number",
+          "description": "Default duration of the pose in seconds."
+        },
+        "description": {
+          "type": "string",
+          "description": "Desription of the yoga pose"
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "URL of the yoga pose image.",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "difficulty"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Stores user profile information.  Authorization is based on the user's unique ID.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/sessions/{sessionId}",
+        "definition": {
+          "entityName": "SessionEntry",
+          "schema": {
+            "$ref": "#/backend/entities/SessionEntry"
+          },
+          "description": "Stores user-specific yoga and meditation session data. Includes denormalized 'userId' for authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            },
+            {
+              "name": "sessionId",
+              "description": "The unique identifier of the session."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/products/{productId}",
+        "definition": {
+          "entityName": "Product",
+          "schema": {
+            "$ref": "#/backend/entities/Product"
+          },
+          "description": "Stores product information for the e-commerce store.",
+          "params": [
+            {
+              "name": "productId",
+              "description": "The unique identifier of the product."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/subscriptions/{subscriptionId}",
+        "definition": {
+          "entityName": "Subscription",
+          "schema": {
+            "$ref": "#/backend/entities/Subscription"
+          },
+          "description": "Stores subscription details for users. Includes denormalized 'userId' for authorization independence.",
+          "params": [
+            {
+              "name": "subscriptionId",
+              "description": "The unique identifier of the subscription."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/roles_admin/{uid}",
+        "definition": {
+          "entityName": "roles_admin",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Existence determines admin role. (DBAC - Existence over Content).",
+          "params": [
+            {
+              "name": "uid",
+              "description": "The unique identifier of the user."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure is designed to support a yoga and meditation PWA (Pranian) with a focus on user-owned session data, products, and subscription management. The core principle is Authorization Independence, achieved through denormalization. This approach avoids `get()` calls in security rules, enabling atomic operations and easier debugging. Segregation is used to isolate data with different security needs (e.g., user sessions vs. global products).  Access modeling follows a consistent pattern: private data is stored under user-specific paths, while global data (products) reside in root-level collections.\n\nSpecifically:\n\n*   `/users/{userId}`: Stores user profiles.\n*   `/users/{userId}/sessions/{sessionId}`: Stores user-specific yoga/meditation session data. The `userId` is denormalized into each `session` document to ensure authorization independence.\n*   `/products/{productId}`: Stores product information for the e-commerce store. These are globally accessible, so no user-specific authorization is needed at the document level.\n*   `/subscriptions/{subscriptionId}`: Stores subscription details. The `userId` is stored in each `subscription` document to enable rules to verify the requesting user owns the subscription.\n*   `/roles_admin/{uid}`: Allows the application to determine admin privileges based on the existance of a document with the users UID. \n\nThis structure supports the required QAPs:\n\n*   **Secure List Operations:**  Since session data is segregated under user-specific paths (`/users/{userId}/sessions/{sessionId}`), listing sessions is secure. Rules can easily enforce that only the logged-in user can list their own sessions, as all sessions under that path belong to that user. Similarly, the products collection can be listed securely as it is assumed to be public.\n*   **Authorization Independence:** The denormalization of `userId` into the `sessions` collection is critical for authorization independence. Security rules can validate that `request.auth.uid == resource.data.userId` without needing to perform a `get()` operation on the parent `/users/{userId}` document. This allows atomic creation and modification of sessions.\n\nThis design promotes clear intent, prevents hierarchical authorization dependencies, and ensures robust security rules."
+  }
+}
