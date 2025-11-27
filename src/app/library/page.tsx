@@ -63,15 +63,10 @@ export default function LibraryPage() {
                             const imageData = PlaceHolderImages.find(img => img.id === item.imageId);
                             const imageUrl = imageData?.imageUrl.replace(/seed\/[^/]+/, `seed/${item.slug}`) || 'https://picsum.photos/600/400';
                             return (
-                                <li key={item.slug}>
-                                    <ContentCard
-                                      href={`/library/meditation/${item.slug}`}
-                                      imageUrl={imageUrl}
-                                      imageHint={imageData?.imageHint || 'meditation serene'}
-                                      category="Audio Meditation"
-                                      title={item.title}
-                                      description={item.description}
-                                    />
+                                <li className="music__list-item" key={item.slug} style={{backgroundImage: `url(${imageUrl})`}}>
+                                    <h3 className="song__title">{item.title}</h3>
+                                    <p className="song__creator">{item.author}</p>
+                                    <Link href={`/library/meditation/${item.slug}`} className="absolute inset-0" aria-label={`Play ${item.title}`} />
                                 </li>
                             );
                         })}
@@ -85,15 +80,10 @@ export default function LibraryPage() {
                             const imageData = PlaceHolderImages.find(img => img.id === item.imageId);
                              const imageUrl = item.posterUrl || imageData?.imageUrl.replace(/seed\/[^/]+/, `seed/${item.slug}`) || 'https://picsum.photos/600/400';
                             return (
-                                <li key={item.slug}>
-                                    <ContentCard
-                                      href={`/library/video-meditation/${item.slug}`}
-                                      imageUrl={imageUrl}
-                                      imageHint={imageData?.imageHint || 'video meditation'}
-                                      category="Video Meditation"
-                                      title={item.title}
-                                      description={item.description}
-                                    />
+                                <li className="music__list-item" key={item.slug} style={{backgroundImage: `url(${imageUrl})`}}>
+                                    <h3 className="song__title">{item.title}</h3>
+                                    <p className="song__creator">{item.author}</p>
+                                    <Link href={`/library/video-meditation/${item.slug}`} className="absolute inset-0" aria-label={`Play ${item.title}`} />
                                 </li>
                             );
                         })}
@@ -106,17 +96,11 @@ export default function LibraryPage() {
                         {featuredVideos.map((item, index) => {
                             const imageData = PlaceHolderImages.find(img => img.id === item.imageId);
                             const imageUrl = item.posterUrl || imageData?.imageUrl.replace(/seed\/[^/]+/, `seed/${item.slug}${index}`) || 'https://picsum.photos/600/400';
-                            const imageHint = imageData?.imageHint || 'video lesson';
                             return (
-                                 <li key={item.slug}>
-                                    <ContentCard
-                                      href={`/library/video/${item.slug}`}
-                                      imageUrl={imageUrl}
-                                      imageHint={imageHint}
-                                      category="Video"
-                                      title={item.title}
-                                      description={item.description}
-                                    />
+                                 <li className="music__list-item" key={item.slug} style={{backgroundImage: `url(${imageUrl})`}}>
+                                    <h3 className="song__title">{item.title}</h3>
+                                    <p className="song__creator">{item.author}</p>
+                                     <Link href={`/library/video/${item.slug}`} className="absolute inset-0" aria-label={`Play ${item.title}`} />
                                 </li>
                             );
                         })}

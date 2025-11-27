@@ -224,7 +224,7 @@ main {
   min-height: 250px;
   background-size: cover;
   background-repeat: no-repeat;
-  transition: opacity 0.4s ease-in;
+  transition: all 0.4s ease-in;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -232,9 +232,28 @@ main {
   position: relative;
   cursor: pointer;
   border-radius: 8px;
+  color: white;
 }
-.music__list-item:hover {
-  opacity: 1 !important;
+
+.music__list-item:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.3);
+    border-radius: 8px;
+    transition: background 0.3s;
+}
+
+.music__list-item:hover:before {
+  background: rgba(0,0,0,0.6);
+}
+
+.music__list-item > * {
+    position: relative;
+    z-index: 1;
 }
 
 /* Activity pane */
@@ -257,7 +276,7 @@ main {
 /* Footer */
 .footer {
   position: fixed;
-  display: none; /* Hidden by default, can be enabled */
+  display: grid; 
   height: var(--footer-height);
   grid-template-columns: 150px 1fr auto;
   bottom: 0;
