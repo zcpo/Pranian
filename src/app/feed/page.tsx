@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -17,9 +18,11 @@ export default function FeedPage() {
           The latest updates, new content, and special events just for you.
         </p>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="flex flex-col items-center gap-8">
         {items.map((item) => (
-          <FeedCard key={item.id} item={item} />
+          <div key={item.id} className="w-full max-w-md">
+            <FeedCard item={item} />
+          </div>
         ))}
       </div>
     </div>
