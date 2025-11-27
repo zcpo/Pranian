@@ -14,78 +14,70 @@ import {
   QueryDocumentSnapshot,
 } from 'firebase/firestore';
 import { useFirestore } from '@/firebase';
-import { db as localDB } from '@/lib/db';
 import type { FeedItem } from '@/lib/feed-items';
 import { FeedCard } from '@/components/feed/feed-card';
+import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useUser } from '@/firebase';
 
 const PAGE_SIZE = 5;
 
 const toDate = (timestamp: any): Date => {
   if (!timestamp) return new Date(0);
   if (timestamp instanceof Timestamp) return timestamp.toDate();
+  if (typeof timestamp === 'string') return new Date(timestamp);
   return new Date(timestamp);
 };
 
 const docToFeedItem = (doc: QueryDocumentSnapshot): FeedItem => {
     const data = doc.data();
-    const createdAt = data.createdAt instanceof Timestamp ? data.createdAt.toDate().toISOString() : data.createdAt;
+    const createdAt = toDate(data.createdAt).toISOString();
     return { id: doc.id, ...data, createdAt } as FeedItem;
 };
 
 export default function FeedClient({ initialItems }: { initialItems: FeedItem[] }) {
+  const { user } = useUser();
   const firestore = useFirestore();
   const [items, setItems] = useState<FeedItem[]>(initialItems);
   const lastDocRef = useRef<QueryDocumentSnapshot | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(initialItems.length === 0);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(initialItems.length === PAGE_SIZE);
-  const realtimeUnsubscribeRef = useRef<() => void | null>(null);
-  const loaderRef = useRef(null);
 
-  // Function to sort and deduplicate items
-  const getUniqueSortedItems = (newItems: FeedItem[]): FeedItem[] => {
-    const all = [...items, ...newItems];
+  const getUniqueSortedItems = (newItems: FeedItem[], existingItems: FeedItem[]): FeedItem[] => {
+    const all = [...newItems, ...existingItems];
     const unique = Array.from(new Map(all.map(item => [item.id, item])).values());
     return unique.sort((a, b) => toDate(b.createdAt).getTime() - toDate(a.createdAt).getTime());
   };
-  
+
   const loadNextPage = useCallback(async () => {
     if (!firestore || !hasMore || loadingMore) return;
     setLoadingMore(true);
 
     let q;
     if (lastDocRef.current) {
-        q = query(
-            collection(firestore, 'feed_items'),
-            orderBy('createdAt', 'desc'),
-            startAfter(lastDocRef.current),
-            limit(PAGE_SIZE)
-        );
+      q = query(
+        collection(firestore, 'feed_items'),
+        orderBy('createdAt', 'desc'),
+        startAfter(lastDocRef.current),
+        limit(PAGE_SIZE)
+      );
     } else {
-        // This case should ideally not be hit if initial load is handled correctly, but as a fallback
-         q = query(collection(firestore, 'feed_items'), orderBy('createdAt', 'desc'), limit(PAGE_SIZE));
+      q = query(collection(firestore, 'feed_items'), orderBy('createdAt', 'desc'), limit(PAGE_SIZE));
     }
-
 
     try {
       const querySnapshot = await getDocs(q);
-      const newItems = querySnapshot.docs.map(docToFeedItem);
-      
       if (querySnapshot.docs.length > 0) {
         lastDocRef.current = querySnapshot.docs[querySnapshot.docs.length - 1];
       }
       
+      const newItems = querySnapshot.docs.map(docToFeedItem);
       setHasMore(newItems.length === PAGE_SIZE);
 
       if (newItems.length > 0) {
-        setItems(prev => {
-          const combined = [...prev, ...newItems];
-          const unique = Array.from(new Map(combined.map(item => [item.id, item])).values());
-          return unique.sort((a, b) => toDate(b.createdAt).getTime() - toDate(a.createdAt).getTime());
-        });
-        await localDB.feed.bulkPut(newItems);
+        setItems(prev => getUniqueSortedItems(newItems, prev));
       }
     } catch (error) {
       console.error("Error fetching next page:", error);
@@ -94,42 +86,11 @@ export default function FeedClient({ initialItems }: { initialItems: FeedItem[] 
     }
   }, [firestore, hasMore, loadingMore]);
 
-  // Effect for initial setup and loading from cache
+  // Initial load and real-time listener setup
   useEffect(() => {
-    const setup = async () => {
-      // Load from cache first for instant UI
-      const cachedItems = await localDB.feed.orderBy('createdAt').reverse().limit(PAGE_SIZE * 2).toArray();
-      if (cachedItems.length > 0) {
-        setItems(cachedItems);
-      }
+    if (!firestore) return;
+    setLoading(false);
 
-      // Reconcile with initial server data
-      const reconciledItems = getUniqueSortedItems(initialItems);
-      setItems(reconciledItems);
-      setLoading(false);
-      
-      if(initialItems.length > 0){
-        // We can't serialize a QueryDocumentSnapshot, so we have to re-fetch the last doc ref client-side
-        // based on the last item from SSR. This is a small price for SSR.
-        // A more complex solution might avoid this, but this is robust.
-      }
-      
-      // If there are initial items, start pagination from the last of them.
-      // This is a simplified approach. A robust one would need to query for the doc.
-      if (initialItems.length < PAGE_SIZE) {
-          setHasMore(false);
-      }
-    };
-    setup();
-  }, []); // Run only once
-
-  // Real-time listener for NEW items
-  useEffect(() => {
-    if (!firestore || loading) return;
-
-    if (realtimeUnsubscribeRef.current) realtimeUnsubscribeRef.current();
-    
-    // Listen for items newer than the newest one we have
     const newestItemTimestamp = items.length > 0 ? toDate(items[0].createdAt) : new Date(0);
     
     const q = query(
@@ -139,8 +100,6 @@ export default function FeedClient({ initialItems }: { initialItems: FeedItem[] 
     );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      if (snapshot.empty) return;
-
       const newItems: FeedItem[] = [];
       snapshot.docChanges().forEach(change => {
         if (change.type === 'added') {
@@ -149,69 +108,48 @@ export default function FeedClient({ initialItems }: { initialItems: FeedItem[] 
       });
       
       if (newItems.length > 0) {
-        setItems(prevItems => {
-            const all = [...newItems, ...prevItems];
-            const unique = Array.from(new Map(all.map(item => [item.id, item])).values())
-              .sort((a, b) => toDate(b.createdAt).getTime() - toDate(a.createdAt).getTime());
-            localDB.feed.bulkPut(unique).catch(console.error);
-            return unique;
-        });
+        setItems(prevItems => getUniqueSortedItems(newItems, prevItems));
       }
     });
 
-    realtimeUnsubscribeRef.current = unsubscribe;
     return () => unsubscribe();
-  }, [firestore, items, loading]);
-
-  // Infinite scroll observer
-  useEffect(() => {
-    if (loading) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasMore) {
-          loadNextPage();
-        }
-      },
-      { threshold: 1.0, rootMargin: '200px' }
-    );
-
-    const currentLoader = loaderRef.current;
-    if (currentLoader) {
-      observer.observe(currentLoader);
-    }
-
-    return () => {
-      if (currentLoader) {
-        observer.unobserve(currentLoader);
-      }
-    };
-  }, [loading, hasMore, loadNextPage]);
+  }, [firestore, user]);
 
   return (
-    <div className="h-screen w-screen bg-black overflow-y-auto overflow-x-hidden snap-y snap-mandatory">
-      {loading && items.length === 0 && (
-        <div className="snap-start h-screen w-screen flex items-center justify-center text-white">
-          <Loader2 className="w-12 h-12 animate-spin text-primary" />
+    <div className="container mx-auto px-4 py-8">
+      {user && (
+        <div className="mb-8">
+          <Button asChild>
+            <a href="/upload">Create Post</a>
+          </Button>
         </div>
       )}
-      
-      {items.map((item) => (
-        <div key={item.id} className="snap-start h-screen w-screen flex items-center justify-center relative">
-          <div className="h-full w-full max-w-md">
-             <FeedCard item={item} />
-          </div>
-        </div>
-      ))}
-
-      <div ref={loaderRef} className={cn("snap-start h-screen w-screen flex items-center justify-center text-white", !hasMore && "hidden")}>
-        {loadingMore && <Loader2 className="w-12 h-12 animate-spin text-primary" />}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {items.map((item) => (
+          <FeedCard key={item.id} item={item} />
+        ))}
       </div>
 
-      {!loading && !hasMore && items.length > 0 && (
-        <div className="snap-start h-screen w-screen flex items-center justify-center">
-            <p className="text-muted-foreground text-center">You've reached the end of the feed.</p>
+      {loading && (
+        <div className="text-center py-8">
+          <Loader2 className="w-8 h-8 animate-spin mx-auto text-primary" />
         </div>
+      )}
+
+      {hasMore && !loading && (
+        <div className="text-center py-8">
+          <Button onClick={loadNextPage} disabled={loadingMore}>
+            {loadingMore ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Loading...</> : 'Load More'}
+          </Button>
+        </div>
+      )}
+
+      {!hasMore && items.length > 0 && (
+        <p className="text-center text-muted-foreground py-8">You've reached the end of the feed.</p>
+      )}
+
+      {!loading && items.length === 0 && (
+          <p className="text-center text-muted-foreground py-8">The feed is empty. Create the first post!</p>
       )}
     </div>
   );

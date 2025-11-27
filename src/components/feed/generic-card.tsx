@@ -2,37 +2,42 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Bell, User } from 'lucide-react';
 import { FeedItem } from '@/lib/feed-items';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { CardContent, CardHeader, CardTitle } from '../ui/card';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
-// A fallback card for unknown or generic item types
+dayjs.extend(relativeTime);
+
 export function GenericCard({ item }: { item: FeedItem }) {
-
-  const cardType = item.type === 'user_post' ? 'Post' : (item.type || 'Update');
+  const timeAgo = dayjs(item.createdAt).fromNow();
 
   return (
     <>
       {item.image && (
-        <Image src={item.image} alt={item.title || 'Feed item image'} fill className="object-cover -z-10" />
+         <div className="relative w-full aspect-video">
+            <Image src={item.image} alt={item.title || 'Feed item image'} fill className="object-cover" />
+         </div>
       )}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent -z-10" />
-      
-      <div className="p-6 flex flex-col justify-end h-full">
-        <div className="flex items-center gap-3 mb-4">
+      <CardHeader>
+        <div className="flex items-center gap-3">
             <Avatar className="h-10 w-10 border-2 border-white/50">
                 <AvatarImage src={item.userAvatar} />
                 <AvatarFallback>{item.userName?.charAt(0).toUpperCase()}</AvatarFallback>
             </Avatar>
-            <span className="text-base font-semibold text-white">{item.userName || 'User'}</span>
+            <div>
+              <CardTitle className="text-base">{item.userName || 'User'}</CardTitle>
+              <p className="text-xs text-muted-foreground">{timeAgo}</p>
+            </div>
         </div>
-        <h3 className="text-2xl font-bold font-headline text-white drop-shadow-md">{item.title}</h3>
+      </CardHeader>
+      <CardContent>
+        <h3 className="font-semibold text-lg mb-2">{item.title}</h3>
         {item.subtitle && (
-          <p className="mt-2 text-white/90 text-base drop-shadow-sm">{item.subtitle}</p>
+          <p className="text-muted-foreground text-sm">{item.subtitle}</p>
         )}
-      </div>
+      </CardContent>
     </>
   );
 }

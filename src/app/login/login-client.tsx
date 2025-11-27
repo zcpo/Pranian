@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Mail, Lock, User as UserIcon } from 'lucide-react';
+import { Mail, Lock } from 'lucide-react';
 import { useAuth } from '@/firebase';
 import {
   createUserWithEmailAndPassword,
