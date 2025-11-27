@@ -131,15 +131,6 @@ export default function LibraryPage() {
                 <h2>Friend Activity</h2>
                 <button className="button">Find Friends</button>
             </aside>
-            <footer className="footer">
-                <div className="now-playing">
-                    <img className="album__image" src="https://images.unsplash.com/photo-1515233451477-90d9cd4d57ed?ixlib=rb-0.3.5&q=85&fm=jpg&crop=entropy&cs=srgb&ixid=eyJhcHBfaWQiOjE0NTg5fQ&s=cade564aeff757d648625aaac06e837c" alt="Album cover" />
-                    <div className="album__info">
-                        <span className="album__title">Stay There Now</span>
-                        <span className="album__musician">The Harmonics</span>
-                    </div>
-                </div>
-            </footer>
         </div>
     );
 }
