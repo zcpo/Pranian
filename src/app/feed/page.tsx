@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useCallback, useRef } from 'react';
-import { feedItems as staticFeedItems } from '@/lib/feed-items';
-import { FeedCard } from '@/components/feed/feed-card';
+import { db } from '@/lib/db';
 import { useFirestore } from '@/firebase';
 import {
   collection,
@@ -21,6 +20,9 @@ import type { FeedItem } from '@/lib/feed-items';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
+import { FeedCard } from '@/components/feed/feed-card';
+
+const PAGE_SIZE = 5;
 
 // Helper to convert Firestore Timestamp or string to Date for sorting
 const toDate = (timestamp: any): Date => {
@@ -31,12 +33,10 @@ const toDate = (timestamp: any): Date => {
   return new Date(timestamp);
 };
 
-const PAGE_SIZE = 5;
-
 export default function FeedPage() {
   const firestore = useFirestore();
   const [items, setItems] = useState<FeedItem[]>([]);
-  const [lastDoc, setLastDoc] = useState<QueryDocumentSnapshot<DocumentData> | null>(null);
+  const lastDocRef = useRef<QueryDocumentSnapshot | null>(null);
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const initialLoadDone = useRef(false);
@@ -49,15 +49,15 @@ export default function FeedPage() {
     setLoading(true);
 
     let q;
-    if (lastDoc) {
+    if (lastDocRef.current) {
       q = query(
         collection(firestore, 'feed_items'),
         orderBy('createdAt', 'desc'),
-        startAfter(lastDoc),
+        startAfter(lastDocRef.current),
         limit(PAGE_SIZE)
       );
     } else {
-      // First page load includes static items
+      // First page load
       q = query(
         collection(firestore, 'feed_items'),
         orderBy('createdAt', 'desc'),
@@ -72,12 +72,12 @@ export default function FeedPage() {
         newItems.push({ id: doc.id, ...doc.data() } as FeedItem);
       });
 
-      setLastDoc(querySnapshot.docs[querySnapshot.docs.length - 1] ?? null);
+      lastDocRef.current = querySnapshot.docs[querySnapshot.docs.length - 1] ?? null;
       setHasMore(newItems.length === PAGE_SIZE);
 
       setItems((prevItems) => {
-        const all = lastDoc ? [...prevItems, ...newItems] : [...staticFeedItems, ...newItems];
-        // Deduplicate items based on ID
+        // Deduplicate items based on ID and sort
+        const all = lastDocRef.current ? [...prevItems, ...newItems] : [...newItems];
         const uniqueItems = Array.from(new Map(all.map(item => [item.id, item])).values());
         return uniqueItems.sort((a, b) => toDate(b.createdAt).getTime() - toDate(a.createdAt).getTime());
       });
@@ -90,28 +90,32 @@ export default function FeedPage() {
         initialLoadDone.current = true;
       }
     }
-  }, [firestore, lastDoc, hasMore, loading]);
-
-  // Initial data load
+  }, [firestore, hasMore, loading]);
+  
+  // Load initial data from Dexie cache first, then from network
   useEffect(() => {
-    if (firestore && !initialLoadDone.current) {
+    async function loadInitial() {
+      const cachedItems = await db.feed.orderBy('createdAt').reverse().limit(PAGE_SIZE).toArray();
+      if (cachedItems.length > 0) {
+        setItems(cachedItems);
+        setLoading(false);
+      }
       loadNextPage();
     }
-  }, [firestore, loadNextPage]);
+    loadInitial();
+  }, [loadNextPage]);
+
 
   // Real-time listener for new items
   useEffect(() => {
     if (!firestore || !initialLoadDone.current) return;
     
-    // Unsubscribe from previous listener if it exists
     if (realtimeUnsubscribe.current) {
         realtimeUnsubscribe.current();
     }
 
     const newestItem = items.length > 0 ? items[0] : null;
 
-    // Listen for documents newer than the newest one we have.
-    // Firestore Timestamps can be compared directly in queries.
     const q = newestItem?.createdAt
       ? query(
           collection(firestore, 'feed_items'),
@@ -120,25 +124,22 @@ export default function FeedPage() {
       : query(
           collection(firestore, 'feed_items'),
           orderBy('createdAt', 'desc'),
-          limit(1) // On first listen, just get the absolute latest
+          limit(1)
         );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const newItems: FeedItem[] = [];
       snapshot.docChanges().forEach(change => {
         if (change.type === 'added') {
-          newItems.push({ id: change.doc.id, ...change.doc.data() } as FeedItem);
+          const newItem = { id: change.doc.id, ...change.doc.data() } as FeedItem;
+          setItems(prevItems => {
+            const all = [newItem, ...prevItems];
+            const uniqueItems = Array.from(new Map(all.map(item => [item.id, item])).values());
+            const sorted = uniqueItems.sort((a, b) => toDate(b.createdAt).getTime() - toDate(a.createdAt).getTime());
+            db.feed.bulkPut(sorted).catch(console.error); // Update cache
+            return sorted;
+          });
         }
       });
-
-      if (newItems.length > 0) {
-        setItems(prevItems => {
-           // Add new items to the top and resort
-          const all = [...newItems, ...prevItems];
-          const uniqueItems = Array.from(new Map(all.map(item => [item.id, item])).values());
-          return uniqueItems.sort((a, b) => toDate(b.createdAt).getTime() - toDate(a.createdAt).getTime());
-        });
-      }
     });
 
     realtimeUnsubscribe.current = unsubscribe;

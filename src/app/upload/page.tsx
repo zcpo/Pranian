@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useDropzone } from 'react-dropzone';
 import { useUser, useFirestore } from '@/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -24,6 +24,36 @@ const feedSchema = z.object({
 });
 
 type FeedFormValues = z.infer<typeof feedSchema>;
+
+async function createThumbnail(file: File, maxSize = 1080): Promise<Blob> {
+  return new Promise((resolve, reject) => {
+    const img = new window.Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      let { width, height } = img;
+      if (width > maxSize || height > maxSize) {
+        const scale = Math.min(maxSize / width, maxSize / height);
+        width = Math.round(width * scale);
+        height = Math.round(height * scale);
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        return reject(new Error('Could not get canvas context'));
+      }
+      ctx.drawImage(img, 0, 0, width, height);
+      canvas.toBlob((blob) => {
+        if (!blob) return reject(new Error('Canvas toBlob failed'));
+        resolve(blob);
+        URL.revokeObjectURL(url);
+      }, 'image/jpeg', 0.85); // 85% quality
+    };
+    img.onerror = (e) => reject(e);
+    img.src = url;
+  });
+}
 
 export default function UploadPage() {
   const { user, isUserLoading } = useUser();
@@ -67,19 +97,32 @@ export default function UploadPage() {
     let imageUrl: string | undefined = undefined;
 
     try {
-      // 1. Upload image if it exists
+      // 1. Upload image thumbnail if it exists
       if (file) {
         const storage = getStorage();
-        const storageRef = ref(storage, `feed_images/${user.uid}/${Date.now()}-${file.name}`);
-        const snapshot = await uploadBytes(storageRef, file);
-        imageUrl = await getDownloadURL(snapshot.ref);
+        const thumb = await createThumbnail(file);
+        const filename = `feed_images/${user.uid}/${Date.now()}-${file.name}`;
+        const storageRef = ref(storage, filename);
+        
+        const uploadTask = uploadBytesResumable(storageRef, thumb);
+        
+        await new Promise<void>((resolve, reject) => {
+            uploadTask.on('state_changed',
+                (snapshot) => { /* Optional: track progress */ },
+                (error) => reject(error),
+                async () => {
+                    imageUrl = await getDownloadURL(uploadTask.snapshot.ref);
+                    resolve();
+                }
+            );
+        });
       }
 
       // 2. Create Firestore document
       const feedCollection = collection(firestore, 'feed_items');
       await addDoc(feedCollection, {
         ...data,
-        type: 'user_post', // A new type for user-generated content
+        type: 'user_post',
         image: imageUrl,
         userId: user.uid,
         userName: user.displayName,
