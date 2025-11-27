@@ -22,6 +22,7 @@ const navLinks = [
   { href: '/events', label: 'Events' },
   { href: '/pricing', label: 'Pricing' },
   { href: '/journal', label: 'Journal' },
+  { href: '/class-vibes', label: 'Class Vibes' },
 ];
 
 export default function Header() {
