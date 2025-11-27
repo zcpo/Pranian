@@ -34,6 +34,8 @@ import {
   XAxis,
   YAxis,
   Tooltip,
+  Legend,
+  CartesianGrid,
 } from 'recharts';
 
 import type { SessionEntry, Pose, PoseInSequence, SyncQueueItem } from '@/lib/types';
@@ -41,7 +43,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Progress } from '@/components/ui/progress';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { useAuth } from '@/firebase';
 import { Camera } from 'lucide-react';
@@ -53,7 +55,6 @@ const nowISO = () => new Date().toISOString();
 export default function JournalPage() {
   const { user, isUserLoading } = useUser();
   const firestore = useFirestore();
-  const auth = useAuth();
   const [activeSession, setActiveSession] = useState<SessionEntry | null>(null);
 
   // --- LOCAL DATA (DEXIE) ---
@@ -193,6 +194,7 @@ export default function JournalPage() {
             ) : (
               <>
                 <DailyProgress categories={categories} />
+                <AnalyticsDashboard sessions={sessions || []} />
                 <Card>
                   <CardHeader>
                     <CardTitle>Journal Entries</CardTitle>
@@ -216,7 +218,6 @@ export default function JournalPage() {
 
           {/* Right Column: Analytics & Tools */}
           <div className="col-span-1 space-y-8">
-              <AnalyticsDashboard sessions={sessions || []} />
               <MindfulnessTimer />
               <div className="p-4 bg-card rounded-lg shadow">
                 <h4 className="font-bold">Sync & Status</h4>
@@ -505,24 +506,104 @@ function MoodTracker({ onMoodSelect }: { onMoodSelect: (mood: string) => void })
     );
 }
 
-function AnalyticsDashboard({ sessions }: { sessions: SessionEntry[] }) {
-    // This is a placeholder for a more complex analytics dashboard.
-    // We will build this out with charts and summaries in the next steps.
-    
-    const totalMinutes = sessions.reduce((acc, s) => acc + (s.duration / 60), 0);
-    
-    return (
-        <Card>
-            <CardHeader>
-                <CardTitle>Analytics</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <p>Total Sessions: {sessions.length}</p>
-                <p>Total Minutes: {totalMinutes.toFixed(0)}</p>
-                <div className="h-48 border-2 border-dashed rounded-md flex items-center justify-center mt-4">
-                  <p className="text-muted-foreground">Charts coming soon</p>
-               </div>
-            </CardContent>
-        </Card>
-    );
-}
+const AnalyticsDashboard = ({ sessions }: { sessions: SessionEntry[] }) => {
+  const chartData = sessions
+    .filter(s => s.duration > 0) // Only include timed sessions
+    .map(s => ({
+      date: dayjs(s.date).format('MMM D'),
+      duration: Math.round(s.duration / 60), // in minutes
+      intensity: s.intensity || 0,
+    }))
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+  const totalMinutes = sessions.reduce((acc, s) => acc + s.duration, 0) / 60;
+  const totalSessions = sessions.length;
+  const avgDuration = totalSessions > 0 ? totalMinutes / totalSessions : 0;
+  const longestSession = Math.max(...sessions.map(s => s.duration), 0) / 60;
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Your Analytics Dashboard</CardTitle>
+        <CardDescription>An overview of your practice and wellness journey.</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-8">
+        {/* Core Metrics */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+          <div className="p-4 bg-muted/50 rounded-lg">
+            <p className="text-2xl font-bold">{totalSessions}</p>
+            <p className="text-sm text-muted-foreground">Total Sessions</p>
+          </div>
+          <div className="p-4 bg-muted/50 rounded-lg">
+            <p className="text-2xl font-bold">{totalMinutes.toFixed(0)}</p>
+            <p className="text-sm text-muted-foreground">Total Minutes</p>
+          </div>
+          <div className="p-4 bg-muted/50 rounded-lg">
+            <p className="text-2xl font-bold">{avgDuration.toFixed(0)}</p>
+            <p className="text-sm text-muted-foreground">Avg. Duration</p>
+          </div>
+          <div className="p-4 bg-muted/50 rounded-lg">
+            <p className="text-2xl font-bold">{longestSession.toFixed(0)}</p>
+            <p className="text-sm text-muted-foreground">Longest Session</p>
+          </div>
+        </div>
+
+        {/* Practice Analytics */}
+        <div className="space-y-4">
+            <h3 className="font-semibold">Practice Analytics</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="text-base">Session Duration (minutes)</CardTitle>
+                    </CardHeader>
+                    <CardContent className="h-60">
+                         <ResponsiveContainer width="100%" height="100%">
+                            <LineChart data={chartData}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="date" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Line type="monotone" dataKey="duration" stroke="hsl(var(--primary))" />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </CardContent>
+                </Card>
+                 <Card>
+                    <CardHeader>
+                        <CardTitle className="text-base">Session Intensity (1-5)</CardTitle>
+                    </CardHeader>
+                    <CardContent className="h-60">
+                         <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={chartData}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="date" />
+                                <YAxis domain={[0, 5]} />
+                                <Tooltip />
+                                <Legend />
+                                <Bar dataKey="intensity" fill="hsl(var(--primary))" />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </CardContent>
+                </Card>
+            </div>
+        </div>
+        
+        {/* Placeholder sections */}
+        <div className="space-y-2">
+            <h3 className="font-semibold">Wellness & Mindfulness</h3>
+            <p className="text-sm text-muted-foreground">Mood charts, stress scores, and sleep trends coming soon.</p>
+        </div>
+         <div className="space-y-2">
+            <h3 className="font-semibold">Pose-Level Analytics</h3>
+            <p className="text-sm text-muted-foreground">Pose frequency, duration, and progress tracking coming soon.</p>
+        </div>
+        <div className="space-y-2">
+            <h3 className="font-semibold">Habit Tracking & Gamification</h3>
+            <p className="text-sm text-muted-foreground">Streaks, badges, and milestones coming soon.</p>
+        </div>
+
+      </CardContent>
+    </Card>
+  );
+};
