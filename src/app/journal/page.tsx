@@ -522,37 +522,85 @@ const AnalyticsDashboard = ({ sessions }: { sessions: SessionEntry[] }) => {
   const avgDuration = totalSessions > 0 ? totalMinutes / totalSessions : 0;
   const longestSession = Math.max(...sessions.map(s => s.duration || 0), 0) / 60;
 
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Your Analytics Dashboard</CardTitle>
-        <CardDescription>An overview of your practice and wellness journey.</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-8">
-        {/* Core Metrics */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-          <div className="p-4 bg-muted/50 rounded-lg">
-            <p className="text-2xl font-bold">{totalSessions}</p>
-            <p className="text-sm text-muted-foreground">Total Sessions</p>
-          </div>
-          <div className="p-4 bg-muted/50 rounded-lg">
-            <p className="text-2xl font-bold">{totalMinutes.toFixed(0)}</p>
-            <p className="text-sm text-muted-foreground">Total Minutes</p>
-          </div>
-          <div className="p-4 bg-muted/50 rounded-lg">
-            <p className="text-2xl font-bold">{avgDuration.toFixed(0)}</p>
-            <p className="text-sm text-muted-foreground">Avg. Duration</p>
-          </div>
-          <div className="p-4 bg-muted/50 rounded-lg">
-            <p className="text-2xl font-bold">{longestSession.toFixed(0)}</p>
-            <p className="text-sm text-muted-foreground">Longest Session</p>
-          </div>
-        </div>
+  const featureStubs = {
+    practice: [
+      "Daily/weekly practice frequency", "Calendar heatmap of practice habits", "Practice time-of-day distribution",
+      "Pose category distribution", "Yoga style distribution", "Intensity trend over time", "Instructor preference analysis",
+      "Top used sequences", "Most repeated session type", "Longest streaks for each yoga style",
+      "Average intensity score vs. mood score correlation", "Time between sessions (recovery tracking)"
+    ],
+    wellness: [
+      "Mood-before vs. mood-after comparison charts", "Stress reduction score", "Sleep quality vs. practice trend",
+      "Breathwork minutes completed", "Meditation minutes completed", "Emotional trend graph (7-90 days)",
+      "Mindfulness streak", "Body pain tracking", "Flexibility improvement monitors", "Balance improvement meter"
+    ],
+    pose: [
+      "Most practiced poses", "Poses improving (by hold time)", "Poses needing attention", "Holds duration trend per pose",
+      "Side-to-side symmetry", "Pose difficulty curve", "Personalized recommended poses", "Pose fatigue detection"
+    ],
+    sequence: [
+      "Sequence completion rates", "Average sequence length", "Most effective sequences (by mood)", "AI-optimized suggestions",
+      "Drag-and-drop efficiency tracking", "Transitions used most frequently", "Time spent per sequence category", "Flow consistency rating"
+    ],
+    gamification: [
+      "Daily goals completed", "Weekly challenge progress", "Monthly milestone achievements", "Leveling system (XP)",
+      "Badge system", "Goal prediction", "Celebration cards for milestones"
+    ],
+    content: [
+        "Most watched video classes", "Most saved or bookmarked sessions", "Average video completion rate", "New classes engagement",
+        "Category popularity", "Audio vs. video practice preference"
+    ],
+    personal: [
+        "Personalized growth timeline ('Year in Review')", "Strength, flexibility, and balance scores", "Body & mind improvement dashboard",
+        "Recommended routines", "Personalized 'Practice Persona'", "Top wellness categories"
+    ],
+    ai: [
+        "AI mood trend analysis", "AI-overexertion warnings", "AI recommended rest days", "Sequence auto-optimizer",
+        "AI summary of weekly practice", "AI detection of burnout risk", "AI clustering of similar sessions"
+    ],
+    backup: [
+        "Session backup health (local vs. cloud)", "Export analytics report (PDF/CSV)", "Last sync timestamp & queue length",
+        "Conflict resolution logs"
+    ],
+    media: [
+        "Photo pose comparisons over time", "Progress timeline (side-by-side)", "Video playback insights (pause hotspots)"
+    ]
+  };
+  
+  const StubList = ({ items }: { items: string[] }) => (
+    <ul className="list-disc list-inside space-y-2 text-sm text-muted-foreground">
+        {items.map(item => <li key={item}>{item} (coming soon)</li>)}
+    </ul>
+  );
 
-        {/* Practice Analytics */}
-        <div className="space-y-4">
-            <h3 className="font-semibold">Practice Analytics</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+  return (
+    <div className="space-y-8">
+      <Card>
+        <CardHeader>
+          <CardTitle>Your Analytics Dashboard</CardTitle>
+          <CardDescription>An overview of your practice and wellness journey.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <h3 className="font-semibold text-lg mb-4">📈 Practice Analytics (Core Metrics)</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center mb-8">
+            <div className="p-4 bg-muted/50 rounded-lg">
+              <p className="text-2xl font-bold">{totalSessions}</p>
+              <p className="text-sm text-muted-foreground">Total Sessions</p>
+            </div>
+            <div className="p-4 bg-muted/50 rounded-lg">
+              <p className="text-2xl font-bold">{totalMinutes.toFixed(0)}</p>
+              <p className="text-sm text-muted-foreground">Total Minutes</p>
+            </div>
+            <div className="p-4 bg-muted/50 rounded-lg">
+              <p className="text-2xl font-bold">{avgDuration.toFixed(0)}</p>
+              <p className="text-sm text-muted-foreground">Avg. Duration</p>
+            </div>
+            <div className="p-4 bg-muted/50 rounded-lg">
+              <p className="text-2xl font-bold">{longestSession.toFixed(0)}</p>
+              <p className="text-sm text-muted-foreground">Longest Session</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                 <Card>
                     <CardHeader>
                         <CardTitle className="text-base">Session Duration (minutes)</CardTitle>
@@ -588,23 +636,90 @@ const AnalyticsDashboard = ({ sessions }: { sessions: SessionEntry[] }) => {
                     </CardContent>
                 </Card>
             </div>
-        </div>
-        
-        {/* Placeholder sections */}
-        <div className="space-y-2">
-            <h3 className="font-semibold">Wellness & Mindfulness</h3>
-            <p className="text-sm text-muted-foreground">Mood charts, stress scores, and sleep trends coming soon.</p>
-        </div>
-         <div className="space-y-2">
-            <h3 className="font-semibold">Pose-Level Analytics</h3>
-            <p className="text-sm text-muted-foreground">Pose frequency, duration, and progress tracking coming soon.</p>
-        </div>
-        <div className="space-y-2">
-            <h3 className="font-semibold">Habit Tracking & Gamification</h3>
-            <p className="text-sm text-muted-foreground">Streaks, badges, and milestones coming soon.</p>
-        </div>
+            <StubList items={featureStubs.practice} />
+        </CardContent>
+      </Card>
 
-      </CardContent>
-    </Card>
+        <Card>
+            <CardHeader>
+                <CardTitle>🌿 Wellness & Mindfulness Metrics</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <StubList items={featureStubs.wellness} />
+            </CardContent>
+        </Card>
+        
+        <Card>
+            <CardHeader>
+                <CardTitle>🧘‍♂️ Pose-Level Analytics</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <StubList items={featureStubs.pose} />
+            </CardContent>
+        </Card>
+
+        <Card>
+            <CardHeader>
+                <CardTitle>🔥 Sequence Builder Insights</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <StubList items={featureStubs.sequence} />
+            </CardContent>
+        </Card>
+
+        <Card>
+            <CardHeader>
+                <CardTitle>🔒 Habit Tracking & Gamification</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <StubList items={featureStubs.gamification} />
+            </CardContent>
+        </Card>
+        
+        <Card>
+            <CardHeader>
+                <CardTitle>📚 Content Usage Metrics</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <StubList items={featureStubs.content} />
+            </CardContent>
+        </Card>
+
+        <Card>
+            <CardHeader>
+                <CardTitle>👤 Profile & Personal Growth</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <StubList items={featureStubs.personal} />
+            </CardContent>
+        </Card>
+        
+        <Card>
+            <CardHeader>
+                <CardTitle>🤖 AI-Driven Insights</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <StubList items={featureStubs.ai} />
+            </CardContent>
+        </Card>
+
+        <Card>
+            <CardHeader>
+                <CardTitle>📤 Sessions, Export & Backup Insights</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <StubList items={featureStubs.backup} />
+            </CardContent>
+        </Card>
+
+        <Card>
+            <CardHeader>
+                <CardTitle>🖼️ Media Dashboard</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <StubList items={featureStubs.media} />
+            </CardContent>
+        </Card>
+    </div>
   );
 };
