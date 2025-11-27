@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useCallback, useEffect } from 'react';
@@ -16,10 +15,14 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, UploadCloud, Image as ImageIcon, X, Link as LinkIcon } from 'lucide-react';
+import { Loader2, UploadCloud, Image as ImageIcon, X, Link as LinkIcon, Eye } from 'lucide-react';
 import Image from 'next/image';
 import { v4 as uuidv4 } from 'uuid';
 import { db } from '@/lib/db';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { FeedCard } from '@/components/feed/feed-card';
+import type { FeedItem } from '@/lib/feed-items';
+
 
 const feedSchema = z.object({
   title: z.string().min(1, 'Title is required').max(100, 'Title is too long'),
@@ -80,7 +83,7 @@ export default function UploadPage() {
     defaultValues: { title: '', subtitle: '', mediaUrl: '' }
   });
 
-  const mediaUrlValue = watch('mediaUrl');
+  const watchedValues = watch();
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles[0]) {
@@ -187,6 +190,28 @@ export default function UploadPage() {
       setIsSubmitting(false);
     }
   };
+  
+  const getPreviewItem = (): FeedItem => {
+    let imageUrl: string | undefined;
+    if (uploadMode === 'file' && preview) {
+        imageUrl = preview;
+    } else if (uploadMode === 'url' && watchedValues.mediaUrl) {
+        imageUrl = watchedValues.mediaUrl;
+    }
+
+    return {
+        id: 'preview',
+        type: 'user_post',
+        title: watchedValues.title || 'Your Title Here',
+        subtitle: watchedValues.subtitle || 'Your content will appear here.',
+        image: imageUrl,
+        createdAt: new Date().toISOString(),
+        userId: user?.uid,
+        userName: user?.displayName || 'Your Name',
+        userAvatar: user?.photoURL || undefined,
+        status: 'complete'
+    };
+  }
 
   if (isUserLoading) {
     return <div className="flex items-center justify-center h-screen"><Loader2 className="h-12 w-12 animate-spin" /></div>;
@@ -281,12 +306,12 @@ export default function UploadPage() {
                         />
                     </div>
                     {errors.mediaUrl && <p className="text-sm text-destructive">{errors.mediaUrl.message}</p>}
-                    {mediaUrlValue && (
+                    {watchedValues.mediaUrl && (
                         <div className="pt-2">
                             <p className="text-sm text-muted-foreground mb-2">URL Preview:</p>
                              <div className="aspect-video w-full overflow-hidden rounded-md border bg-muted">
                                 <iframe
-                                    src={mediaUrlValue.replace('watch?v=', 'embed/')}
+                                    src={watchedValues.mediaUrl.replace('watch?v=', 'embed/')}
                                     title="Media Preview"
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                     allowFullScreen
@@ -298,8 +323,25 @@ export default function UploadPage() {
                 </div>
             )}
             
-            <div className="flex justify-end">
-              <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
+            <div className="flex justify-end gap-2">
+                <Dialog>
+                    <DialogTrigger asChild>
+                         <Button type="button" variant="outline">
+                            <Eye className="mr-2 h-4 w-4" />
+                            Preview
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-md">
+                        <DialogHeader>
+                            <DialogTitle>Post Preview</DialogTitle>
+                        </DialogHeader>
+                        <div className="mt-4 -mx-4">
+                           <FeedCard item={getPreviewItem()} />
+                        </div>
+                    </DialogContent>
+                </Dialog>
+
+              <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {isSubmitting ? `Posting...` : 'Create Post'}
               </Button>

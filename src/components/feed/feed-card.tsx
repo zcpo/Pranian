@@ -8,11 +8,11 @@ import { PromoCard } from './promo-card';
 import { RewardCard } from './reward-card';
 import { GenericCard } from './generic-card';
 import { cn } from '@/lib/utils';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 
 
 export function FeedCard({ item, className }: { item: FeedItem; className?: string }) {
-  const CardContent = () => {
+  const CardContentComponent = () => {
     switch (item.type) {
       case 'song':
         return <SongCard item={item} />;
@@ -33,7 +33,7 @@ export function FeedCard({ item, className }: { item: FeedItem; className?: stri
 
   return (
     <Card className={cn("overflow-hidden h-full flex flex-col", className)}>
-        <CardContent />
+        <CardContentComponent />
     </Card>
   );
 }
