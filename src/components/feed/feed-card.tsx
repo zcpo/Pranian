@@ -22,6 +22,8 @@ export function FeedCard({ item }: { item: FeedItem }) {
       return <PromoCard item={item} />;
     case 'reward':
       return <RewardCard item={item} />;
+    case 'user_post':
+      return <GenericCard item={item} />;
     default:
       // Fallback for any unknown card types
       return <GenericCard item={item} />;
