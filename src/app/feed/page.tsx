@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { feedItems as staticFeedItems } from '@/lib/feed-items';
 import { FeedCard } from '@/components/feed/feed-card';
-import { useFirestore, useMemoFirebase } from '@/firebase/provider';
+import { useFirestore } from '@/firebase';
 import {
   collection,
   query,
@@ -27,7 +27,7 @@ const toDate = (timestamp: any): Date => {
   if (timestamp instanceof Timestamp) {
     return timestamp.toDate();
   }
-  // For static items that have ISO strings
+  // For static items that have ISO strings or other date formats
   return new Date(timestamp);
 };
 
@@ -40,10 +40,11 @@ export default function FeedPage() {
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const initialLoadDone = useRef(false);
+  const realtimeUnsubscribe = useRef<() => void | null>(null);
 
   // Function to fetch paginated data
   const loadNextPage = useCallback(async () => {
-    if (!firestore || !hasMore) return;
+    if (!firestore || !hasMore || loading) return;
 
     setLoading(true);
 
@@ -76,6 +77,7 @@ export default function FeedPage() {
 
       setItems((prevItems) => {
         const all = lastDoc ? [...prevItems, ...newItems] : [...staticFeedItems, ...newItems];
+        // Deduplicate items based on ID
         const uniqueItems = Array.from(new Map(all.map(item => [item.id, item])).values());
         return uniqueItems.sort((a, b) => toDate(b.createdAt).getTime() - toDate(a.createdAt).getTime());
       });
@@ -84,9 +86,11 @@ export default function FeedPage() {
       console.error("Error fetching feed items:", error);
     } finally {
       setLoading(false);
-      initialLoadDone.current = true;
+      if (!initialLoadDone.current) {
+        initialLoadDone.current = true;
+      }
     }
-  }, [firestore, lastDoc, hasMore]);
+  }, [firestore, lastDoc, hasMore, loading]);
 
   // Initial data load
   useEffect(() => {
@@ -97,39 +101,39 @@ export default function FeedPage() {
 
   // Real-time listener for new items
   useEffect(() => {
-    if (!firestore) return;
+    if (!firestore || !initialLoadDone.current) return;
+    
+    // Unsubscribe from previous listener if it exists
+    if (realtimeUnsubscribe.current) {
+        realtimeUnsubscribe.current();
+    }
 
-    // Only listen for items newer than the newest item we have
     const newestItem = items.length > 0 ? items[0] : null;
-    const now = new Date();
 
+    // Listen for documents newer than the newest one we have.
+    // Firestore Timestamps can be compared directly in queries.
     const q = newestItem?.createdAt
       ? query(
           collection(firestore, 'feed_items'),
-          orderBy('createdAt', 'desc'),
           where('createdAt', '>', toDate(newestItem.createdAt))
         )
       : query(
           collection(firestore, 'feed_items'),
           orderBy('createdAt', 'desc'),
-          limit(1)
+          limit(1) // On first listen, just get the absolute latest
         );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      if (!initialLoadDone.current) return;
-
       const newItems: FeedItem[] = [];
       snapshot.docChanges().forEach(change => {
         if (change.type === 'added') {
-          // Ensure we don't add items from the past
-          if (toDate(change.doc.data().createdAt) > (newestItem ? toDate(newestItem.createdAt) : now)) {
-            newItems.push({ id: change.doc.id, ...change.doc.data() } as FeedItem);
-          }
+          newItems.push({ id: change.doc.id, ...change.doc.data() } as FeedItem);
         }
       });
 
       if (newItems.length > 0) {
         setItems(prevItems => {
+           // Add new items to the top and resort
           const all = [...newItems, ...prevItems];
           const uniqueItems = Array.from(new Map(all.map(item => [item.id, item])).values());
           return uniqueItems.sort((a, b) => toDate(b.createdAt).getTime() - toDate(a.createdAt).getTime());
@@ -137,8 +141,11 @@ export default function FeedPage() {
       }
     });
 
+    realtimeUnsubscribe.current = unsubscribe;
+
     return () => unsubscribe();
-  }, [firestore, items]);
+  }, [firestore, items, initialLoadDone.current]);
+
 
   return (
     <div className="container mx-auto px-4 py-8 sm:py-16">
