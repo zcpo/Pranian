@@ -71,7 +71,7 @@
   }
 
   .dark body {
-    background: linear-gradient(to bottom, #5d326c, #350048);
+    background-color: hsl(var(--background));
   }
 
   .dark .glass-card {
