@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Accordion,
@@ -187,7 +187,7 @@ const DailyProgress = ({ entries, categories }: { entries: Record<string, any>, 
 
     // Calculate streak
     let currentStreak = 0;
-    if (localStorage.getItem('streakData')) {
+    if (isClient && localStorage.getItem('streakData')) {
         const savedStreak = JSON.parse(localStorage.getItem('streakData')!);
         const yesterday = format(subDays(new Date(), 1), 'yyyy-MM-dd');
         if (completedCount > 0) {
@@ -202,13 +202,13 @@ const DailyProgress = ({ entries, categories }: { entries: Record<string, any>, 
         } else {
             currentStreak = savedStreak.lastDate === todayStr ? savedStreak.streak : (savedStreak.lastDate === yesterday ? savedStreak.streak : 0);
         }
-    } else if (completedCount > 0) {
+    } else if (isClient && completedCount > 0) {
         currentStreak = 1;
         localStorage.setItem('streakData', JSON.stringify({ lastDate: todayStr, streak: 1 }));
     }
 
     return { completed: completedCount, streak: currentStreak, categoryStatus: status };
-  }, [entries, categories]);
+  }, [entries, categories, isClient]);
 
   if (!isClient) return null;
 
@@ -511,5 +511,3 @@ export default function JournalPage() {
     </div>
   );
 }
-
-    
