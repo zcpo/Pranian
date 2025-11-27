@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { UserCircle, Menu, BookOpen, Store, Calendar, DollarSign, BookText, Music4, Heart, Headphones, Video, Podcast, Clapperboard, Brain, Sparkles, Feed as FeedIcon } from 'lucide-react';
+import { UserCircle, Menu, BookOpen, Store, Calendar, DollarSign, BookText, Music4, Heart, Headphones, Video, Podcast, Clapperboard, Brain, Sparkles, Rss as FeedIcon } from 'lucide-react';
 import * as React from "react"
 import { signOut } from 'firebase/auth';
 
