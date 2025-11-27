@@ -4,6 +4,7 @@ import Header from '@/components/layout/header';
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from '@/components/theme-provider';
 import { FloatingNav } from '@/components/layout/floating-nav';
+import { FirebaseClientProvider } from '@/firebase';
 
 export const metadata: Metadata = {
   title: 'Pranian - Yoga & Meditation',
@@ -31,14 +32,16 @@ export default function RootLayout({
           defaultTheme="system"
           enableSystem
         >
-          <div className="flex flex-col min-h-screen">
-            <Header />
-            <main className="flex-1">
-              {children}
-            </main>
-          </div>
-          <Toaster />
-          <FloatingNav />
+          <FirebaseClientProvider>
+            <div className="flex flex-col min-h-screen">
+              <Header />
+              <main className="flex-1">
+                {children}
+              </main>
+            </div>
+            <Toaster />
+            <FloatingNav />
+          </FirebaseClientProvider>
         </ThemeProvider>
       </body>
     </html>

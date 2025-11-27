@@ -1,334 +1,367 @@
-
 'use client';
 
-import { useState, useEffect, useMemo, useRef } from 'react';
-import { Button } from '@/components/ui/button';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { useUser, useFirestore, useFirebaseApp, useMemoFirebase } from '@/firebase';
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
+  collection,
+  doc,
+  writeBatch,
+  serverTimestamp,
+  onSnapshot,
+  query,
+  where,
+  orderBy,
+  getDocs,
+  Timestamp,
+  setDoc,
+  deleteDoc,
+  updateDoc
+} from 'firebase/firestore';
+import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { db } from '@/lib/db';
+import { v4 as uuidv4 } from 'uuid';
+import dayjs from 'dayjs';
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+} from 'recharts';
+
+import type { SessionEntry, Pose, PoseInSequence, SyncQueueItem } from '@/lib/types';
+import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/hooks/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { Play, Pause, RotateCcw, Plus, X as XIcon } from 'lucide-react';
-import { addDays, format, subDays, eachDayOfInterval } from 'date-fns';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
-const initialCategories = [
-  'Yoga', 'Stress', 'Mindfulness', 'Goals & Intentions', 'Meditation', 
-  'Daily Progress', 'Family Stress', 'Job Stress', 'Friends', 'Self Esteem', 
-  'Physical Health', 'Nutrition', 'Sleep', 'Emotions', 'Creativity', 'Balance'
-];
+// Helper for ISO timestamps
+const nowISO = () => new Date().toISOString();
 
-const moods = [
-  { emoji: "😀", label: "Happy" },
-  { emoji: "🙂", "label": "Okay" },
-  { emoji: "😐", label: "Neutral" },
-  { emoji: "😔", label: "Sad" },
-  { emoji: "😭", "label": "Crying" }
-];
+export default function JournalPage() {
+  const { user, isUserLoading } = useUser();
+  const firestore = useFirestore();
+  const auth = useFirebaseApp().auth();
+  const [activeSession, setActiveSession] = useState<SessionEntry | null>(null);
 
+  // --- LOCAL DATA (DEXIE) ---
+  const sessions = useLiveQuery(
+    () => (user ? db.sessions.where('userId').equals(user.uid).reverse().sortBy('date') : []),
+    [user]
+  );
+  const poses = defaultPoses();
 
-// MOCK HOOKS & DATA - Replace with actual Firebase data hooks
-const useJournalData = () => {
-  const [entries, setEntries] = useState<Record<string, any>>({});
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    try {
-      const savedEntries = JSON.parse(localStorage.getItem('journalEntries') || '{}');
-      setEntries(savedEntries);
-    } catch (e) {
-      console.error("Failed to parse journal entries from localStorage", e);
-    }
-    setLoading(false);
+  // --- SYNC LOGIC ---
+  const enqueueLocalOp = useCallback(async (userId: string, operation: SyncQueueItem['operation'], docId: string, payload?: any) => {
+    await db.syncQueue.add({
+      userId,
+      operation,
+      docId,
+      payload,
+      timestamp: Date.now(),
+    });
   }, []);
 
-  const saveEntry = (category: string, date: string, data: any) => {
-    setEntries(prev => {
-      const newEntries = { ...prev };
-      if (!newEntries[date]) newEntries[date] = {};
-      newEntries[date][category] = data;
-      localStorage.setItem('journalEntries', JSON.stringify(newEntries));
-      return newEntries;
+  const processSyncQueue = useCallback(async () => {
+    if (!user || !firestore) return;
+
+    const ops = await db.syncQueue.where('userId').equals(user.uid).toArray();
+    if (ops.length === 0) return;
+
+    const batch = writeBatch(firestore);
+    const processedIds: number[] = [];
+
+    for (const op of ops) {
+      if (typeof op.id !== 'number') continue;
+
+      const docRef = doc(firestore, 'users', user.uid, 'sessions', op.docId);
+
+      try {
+        switch (op.operation) {
+          case 'create':
+          case 'update':
+            batch.set(docRef, op.payload, { merge: true });
+            break;
+          case 'delete':
+            batch.delete(docRef);
+            break;
+        }
+        processedIds.push(op.id);
+      } catch (error) {
+        console.error(`Failed to process sync operation ${op.id}:`, error);
+      }
+    }
+
+    try {
+      await batch.commit();
+      await db.syncQueue.bulkDelete(processedIds);
+      console.log(`Processed and cleared ${processedIds.length} items from sync queue.`);
+    } catch (error) {
+      console.error('Failed to commit sync batch:', error);
+    }
+  }, [user, firestore]);
+
+  // Effect to periodically process the sync queue
+  useEffect(() => {
+    const interval = setInterval(() => {
+      processSyncQueue();
+    }, 10000); // Push updates every 10 seconds
+    return () => clearInterval(interval);
+  }, [processSyncQueue]);
+  
+  // Real-time listener for remote changes
+  const sessionsCollection = useMemoFirebase(
+    () => (user && firestore ? collection(firestore, 'users', user.uid, 'sessions') : null),
+    [user, firestore]
+  );
+
+  useEffect(() => {
+    if (!sessionsCollection) return;
+
+    const unsubscribe = onSnapshot(sessionsCollection, async (snapshot) => {
+      const remoteSessions: SessionEntry[] = [];
+      snapshot.forEach((doc) => {
+        remoteSessions.push(doc.data() as SessionEntry);
+      });
+
+      // Basic conflict resolution: last write wins
+      await db.sessions.bulkPut(remoteSessions);
     });
+
+    return () => unsubscribe();
+  }, [sessionsCollection]);
+
+  // --- UI HANDLERS ---
+  const doSignInGoogle = async () => {
+    try {
+      await signInWithPopup(auth, new GoogleAuthProvider());
+    } catch (error) {
+      console.error("Google sign-in failed:", error);
+    }
   };
 
-  return { entries, loading, saveEntry };
-};
+  const doSignOut = async () => {
+    await signOut(auth);
+    setActiveSession(null);
+  };
+  
+  const categories = [
+    "Yoga", "Stress", "Mindfulness", "Goals & Intentions", "Meditation",
+    "Daily Progress", "Family Stress", "Job Stress", "Friends", "Self Esteem",
+    "Physical Health", "Nutrition", "Sleep", "Emotions", "Creativity", "Balance"
+  ];
+  
+  return (
+    <div className="bg-background min-h-screen">
+      <div className="p-4 border-b flex justify-between items-center">
+        <h1 className="text-xl font-bold">Pranian Journal</h1>
+        {user && <Button onClick={doSignOut}>Sign Out</Button>}
+      </div>
 
-const CategoryEntryForm = ({ category, onSave }: { category: string, onSave: (data: any) => void }) => {
-  const [entry, setEntry] = useState('');
+      <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Left & Middle Column: Main Content */}
+        <div className="md:col-span-2 space-y-8">
+          {!user ? (
+            <Card>
+              <CardHeader>
+                <CardTitle>Sign in to your Journal</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground mb-4">
+                  Sign in to securely sync your journal across all your devices.
+                </p>
+                <Button className="w-full" onClick={doSignInGoogle}>
+                  Sign in with Google
+                </Button>
+              </CardContent>
+            </Card>
+          ) : (
+             <>
+              <DailyProgress categories={categories} />
+              <Card>
+                <CardHeader>
+                  <CardTitle>Journal Entries</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Accordion type="single" collapsible className="w-full">
+                    {categories.map((category, index) => (
+                      <AccordionItem value={`item-${index}`} key={index}>
+                        <AccordionTrigger>{category}</AccordionTrigger>
+                        <AccordionContent>
+                          <CategoryEntryForm category={category} />
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
+                </CardContent>
+              </Card>
+            </>
+          )}
+        </div>
+
+        {/* Right Column: Analytics & Tools */}
+        <div className="col-span-1 space-y-8">
+            <AnalyticsDashboard sessions={sessions || []} />
+            <MindfulnessTimer />
+            <div className="p-4 bg-card rounded-lg shadow">
+              <h4 className="font-bold">Sync & Status</h4>
+              <div className="text-sm text-muted-foreground">
+                Local queue: open console to inspect Dexie.
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function defaultPoses(): Pose[] {
+  return [
+    { id: 'p1', name: 'Downward Dog', difficulty: 'beginner', durationDefault: 30 },
+    { id: 'p2', name: 'Child\'s Pose', difficulty: 'beginner', durationDefault: 60 },
+    { id: 'p3', name: 'Warrior II', difficulty: 'intermediate', durationDefault: 45 },
+    { id: 'p4', name: 'Triangle Pose', difficulty: 'intermediate', durationDefault: 40 },
+    { id: 'p5', name: 'Tree Pose', difficulty: 'beginner', durationDefault: 50 },
+  ];
+}
+
+
+// --- COMPONENTS ---
+
+function CategoryEntryForm({ category }: { category: string }) {
+  const today = new Date().toISOString().split("T")[0];
+  const [entry, setEntry] = useState("");
   const [completedToday, setCompletedToday] = useState(false);
-  const [tags, setTags] = useState<string[]>([]);
-  const [tagInput, setTagInput] = useState("");
-  const [currentMood, setCurrentMood] = useState<string | null>(null);
 
-  const { toast } = useToast();
+  useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem(category) || "{}");
+    setEntry(saved.entry || "");
+    setCompletedToday(saved.completedDate === today);
+  }, [category, today]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const data = {
+    const payload = {
       entry,
-      completed: completedToday,
-      tags,
-      mood: currentMood
+      completedDate: completedToday ? today : null,
     };
-    onSave(data);
-    toast({
-      title: 'Entry Saved',
-      description: `Your journal entry for ${category} has been saved.`,
-    });
+    localStorage.setItem(category, JSON.stringify(payload));
+    alert(`Saved entry for ${category}`);
   };
-
-  const addTag = () => {
-    if (tagInput.trim() && !tags.includes(tagInput.trim())) {
-      setTags([...tags, tagInput.trim()]);
-      setTagInput("");
-    }
-  };
-
-  const removeTag = (tagToRemove: string) => {
-    setTags(tags.filter(tag => tag !== tagToRemove));
-  };
-
 
   return (
     <form onSubmit={handleSubmit}>
       <Textarea
         value={entry}
         onChange={(e) => setEntry(e.target.value)}
-        placeholder={`Write your thoughts for ${category}...`}
-        rows={5}
-        className="mb-4 bg-background/50"
+        placeholder={`Your notes for ${category}...`}
+        rows={4}
+        className="mb-3"
       />
-      
-      <div className="mb-4">
-        <label className="text-sm font-medium mb-2 block">Tags</label>
-        <div className="flex gap-2">
-          <Input 
-            value={tagInput}
-            onChange={(e) => setTagInput(e.target.value)}
-            placeholder="e.g., calm, work"
-          />
-          <Button type="button" onClick={addTag}>Add Tag</Button>
-        </div>
-        <div className="mt-2 flex flex-wrap gap-2">
-          {tags.map(tag => (
-            <Badge key={tag} variant="secondary" className="flex items-center gap-1">
-              {tag}
-              <button onClick={() => removeTag(tag)} className="ml-1 rounded-full hover:bg-muted-foreground/20">
-                <XIcon className="h-3 w-3" />
-              </button>
-            </Badge>
-          ))}
-        </div>
+      <div className="flex items-center space-x-2 mb-3">
+        <Checkbox
+          id={`completed-${category}`}
+          checked={completedToday}
+          onCheckedChange={(checked) => setCompletedToday(checked as boolean)}
+        />
+        <label
+          htmlFor={`completed-${category}`}
+          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        >
+          I completed this today
+        </label>
       </div>
-
-       <div className="mb-4">
-        <label className="text-sm font-medium mb-2 block">Mood</label>
-        <div className="flex gap-2">
-          {moods.map(mood => (
-             <Button 
-                key={mood.label} 
-                variant={currentMood === mood.emoji ? 'default' : 'outline'}
-                size="icon"
-                onClick={() => setCurrentMood(mood.emoji)}
-                type="button"
-                aria-label={mood.label}
-             >
-                {mood.emoji}
-             </Button>
-          ))}
-        </div>
-      </div>
-
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <Checkbox
-            id={`completed-${category}`}
-            checked={completedToday}
-            onCheckedChange={(checked) => setCompletedToday(checked as boolean)}
-          />
-          <label
-            htmlFor={`completed-${category}`}
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            I completed this today
-          </label>
-        </div>
-        <Button type="submit">Save Entry</Button>
-      </div>
+      <Button type="submit" className="w-full">
+        Save
+      </Button>
     </form>
   );
-};
+}
 
-const DailyProgress = ({ entries, categories }: { entries: Record<string, any>, categories: string[] }) => {
-  const [isClient, setIsClient] = useState(false);
-  useEffect(() => { setIsClient(true); }, []);
-  
-  const { completed, streak, categoryStatus } = useMemo(() => {
-    const todayStr = format(new Date(), 'yyyy-MM-dd');
-    const todayEntries = entries[todayStr] || {};
-    
-    let completedCount = 0;
-    const status: Record<string, boolean> = {};
-    categories.forEach(cat => {
-      const done = todayEntries[cat]?.completed || false;
-      status[cat] = done;
-      if (done) completedCount++;
-    });
+function DailyProgress({ categories }: { categories: string[] }) {
+    const today = new Date().toISOString().split("T")[0];
+    const [completed, setCompleted] = useState(0);
+    const [streak, setStreak] = useState(0);
+    const [categoryStatus, setCategoryStatus] = useState<Record<string, boolean>>({});
 
-    // Calculate streak
-    let currentStreak = 0;
-    if (isClient && localStorage.getItem('streakData')) {
-        const savedStreak = JSON.parse(localStorage.getItem('streakData')!);
-        const yesterday = format(subDays(new Date(), 1), 'yyyy-MM-dd');
-        if (completedCount > 0) {
-            if (savedStreak.lastDate === yesterday) {
-                currentStreak = savedStreak.streak + 1;
-            } else if (savedStreak.lastDate !== todayStr) {
-                currentStreak = 1;
+    useEffect(() => {
+        let count = 0;
+        let status: Record<string, boolean> = {};
+
+        categories.forEach((category) => {
+            const saved = JSON.parse(localStorage.getItem(category) || "{}");
+            const done = saved.completedDate === today;
+            status[category] = done;
+            if (done) count++;
+        });
+
+        setCategoryStatus(status);
+        setCompleted(count);
+
+        const savedStreak = JSON.parse(localStorage.getItem("streakData") || "{}");
+        let newStreak = savedStreak.streak || 0;
+
+        if (count > 0 && savedStreak.lastDate !== today) {
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yDate = yesterday.toISOString().split("T")[0];
+
+            if (savedStreak.lastDate === yDate) {
+                newStreak++;
             } else {
-                currentStreak = savedStreak.streak;
+                newStreak = 1;
             }
-             localStorage.setItem('streakData', JSON.stringify({ lastDate: todayStr, streak: currentStreak }));
-        } else {
-            currentStreak = savedStreak.lastDate === todayStr ? savedStreak.streak : (savedStreak.lastDate === yesterday ? savedStreak.streak : 0);
+            localStorage.setItem("streakData", JSON.stringify({ lastDate: today, streak: newStreak }));
+        } else if (count === 0 && savedStreak.lastDate === today) {
+            // User unchecked all for today, reset streak if needed
         }
-    } else if (isClient && completedCount > 0) {
-        currentStreak = 1;
-        localStorage.setItem('streakData', JSON.stringify({ lastDate: todayStr, streak: 1 }));
-    }
+        
+        setStreak(newStreak);
 
-    return { completed: completedCount, streak: currentStreak, categoryStatus: status };
-  }, [entries, categories, isClient]);
+    }, [categories, today]);
 
-  if (!isClient) return null;
+    const percent = categories.length > 0 ? Math.round((completed / categories.length) * 100) : 0;
 
-  const percent = categories.length > 0 ? Math.round((completed / categories.length) * 100) : 0;
-  
-  return (
-    <Card className="glass-card p-4 sm:p-6">
-      <CardHeader className="p-0 mb-4">
-        <CardTitle className="font-headline tracking-tight text-xl">Daily Progress</CardTitle>
-      </CardHeader>
-      <CardContent className="p-0">
-        <p className="text-muted-foreground mb-2"><strong>Completed today:</strong> {completed} / {categories.length}</p>
-        <Progress value={percent} className="mb-4" />
-        <p className="font-semibold"><strong>Streak:</strong> 🔥 {streak} days</p>
-
-        <h5 className="mt-6 mb-3 font-semibold font-headline text-lg">Category Breakdown</h5>
-        <ul className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm text-muted-foreground">
-          {Object.entries(categoryStatus).map(([cat, done]) => (
-            <li key={cat} className="flex items-center">
-              <span className="mr-2">{done ? "✅" : "⬜️"}</span> {cat}
-            </li>
-          ))}
-        </ul>
-      </CardContent>
-    </Card>
-  );
-};
-
-const CustomCategoryManager = ({ categories, setCategories }: { categories: string[], setCategories: (cats: string[]) => void }) => {
-  const [newCat, setNewCat] = useState("");
-
-  const addCategory = () => {
-    if (newCat.trim() && !categories.includes(newCat.trim())) {
-      const updatedCategories = [...categories, newCat.trim()];
-      setCategories(updatedCategories);
-      localStorage.setItem('journalCategories', JSON.stringify(updatedCategories));
-      setNewCat("");
-    }
-  };
-
-  return (
-    <Card className="glass-card p-4 sm:p-6">
-      <CardHeader className="p-0 mb-4">
-        <CardTitle className="font-headline tracking-tight text-xl">Add Custom Category</CardTitle>
-      </CardHeader>
-      <CardContent className="p-0">
-        <div className="flex gap-2">
-          <Input
-            placeholder="e.g., Gratitude, Hydration"
-            value={newCat}
-            onChange={(e) => setNewCat(e.target.value)}
-          />
-          <Button onClick={addCategory}><Plus className="h-4 w-4 mr-2" /> Add</Button>
-        </div>
-      </CardContent>
-    </Card>
-  );
-};
-
-
-const MoodTracker = ({ onMoodSelect }: { onMoodSelect: (mood: string) => void }) => {
-  const [selectedMood, setSelectedMood] = useState<string | null>(null);
-
-  const handleSelect = (mood: string) => {
-    setSelectedMood(mood);
-    onMoodSelect(mood);
-  }
-
-  return (
-    <Card className="glass-card p-4 sm:p-6">
-      <CardHeader className="p-0 mb-4">
-        <CardTitle className="font-headline tracking-tight text-xl">Today's Mood</CardTitle>
-      </CardHeader>
-      <CardContent className="p-0">
-        <div className="flex justify-around">
-          {moods.map(mood => (
-            <Button 
-              key={mood.label}
-              variant={selectedMood === mood.emoji ? "default" : "ghost"}
-              size="icon"
-              className="text-2xl h-12 w-12 rounded-full"
-              onClick={() => handleSelect(mood.emoji)}
-            >
-              {mood.emoji}
-            </Button>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
-  )
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>Daily Progress</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <p className="text-muted-foreground mb-2">
+                    <strong>Completed today:</strong> {completed} / {categories.length}
+                </p>
+                <Progress value={percent} className="mb-4" />
+                <p>
+                    <strong>Streak:</strong> 🔥 {streak} days
+                </p>
+                <Accordion type="single" collapsible className="w-full mt-4">
+                    <AccordionItem value="item-1">
+                        <AccordionTrigger>Category Breakdown</AccordionTrigger>
+                        <AccordionContent>
+                             <ul className="space-y-2">
+                                {Object.entries(categoryStatus).map(([cat, done]) => (
+                                    <li key={cat} className="flex items-center text-sm">
+                                        <span className="mr-2">{done ? "✅" : "⬜️"}</span>
+                                        {cat}
+                                    </li>
+                                ))}
+                            </ul>
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
+            </CardContent>
+        </Card>
+    );
 }
 
-const InsightAI = ({ entries }: { entries: Record<string, any> }) => {
-  const feedback = useMemo(() => {
-    const todayStr = format(new Date(), 'yyyy-MM-dd');
-    const todayEntries = entries[todayStr] || {};
-    const completedCount = Object.values(todayEntries).filter((e: any) => e.completed).length;
-    const moodsToday = Object.values(todayEntries).map((e: any) => e.mood).filter(Boolean);
-    const primaryMood = moodsToday.length > 0 ? moodsToday[0] : null;
-
-    if (completedCount >= 5) return "Amazing work! You're on fire and building strong momentum!";
-    if (completedCount >= 3) return "Great consistency! Keep up the effort, it's paying off.";
-    if (primaryMood === '😔' || primaryMood === '😭') return "It's okay to have tough days. Be gentle with yourself. Even one small step is a win.";
-    if (completedCount > 0) return "Well done for checking in today. Every entry is a step forward.";
-    return "Ready to start your day? Try to log one thing to get grounded and build momentum.";
-  }, [entries]);
-
-  return (
-    <Card className="glass-card p-4 sm:p-6 bg-primary/10 border-primary/20">
-      <CardHeader className="p-0 mb-2">
-        <CardTitle className="font-headline tracking-tight text-xl text-primary">Insight AI</CardTitle>
-      </CardHeader>
-      <CardContent className="p-0">
-        <p className="text-primary/90">{feedback}</p>
-      </CardContent>
-    </Card>
-  );
-}
-
-const MindfulnessTimer = () => {
+function MindfulnessTimer() {
     const [seconds, setSeconds] = useState(0);
     const [isRunning, setIsRunning] = useState(false);
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -339,175 +372,100 @@ const MindfulnessTimer = () => {
                 setSeconds(prev => prev + 1);
             }, 1000);
         } else {
-            if (intervalRef.current) clearInterval(intervalRef.current);
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+            }
         }
         return () => {
-            if (intervalRef.current) clearInterval(intervalRef.current);
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+            }
         };
     }, [isRunning]);
 
-    const formatTime = () => {
-        const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
-        const secs = (seconds % 60).toString().padStart(2, '0');
-        return `${mins}:${secs}`;
+    const handleStart = () => setIsRunning(true);
+    const handlePause = () => setIsRunning(false);
+    const handleReset = () => {
+        setIsRunning(false);
+        setSeconds(0);
+    };
+
+    const formatTime = (timeInSeconds: number) => {
+        const minutes = Math.floor(timeInSeconds / 60).toString().padStart(2, '0');
+        const seconds = (timeInSeconds % 60).toString().padStart(2, '0');
+        return `${minutes}:${seconds}`;
     };
 
     return (
-         <Card className="glass-card p-4 sm:p-6">
-            <CardHeader className="p-0 mb-4">
-                <CardTitle className="font-headline tracking-tight text-xl">Mindfulness Timer</CardTitle>
+        <Card>
+            <CardHeader>
+                <CardTitle>Mindfulness Timer</CardTitle>
             </CardHeader>
-            <CardContent className="p-0 text-center">
-                <p className="text-6xl font-mono font-bold mb-4">{formatTime()}</p>
-                <div className="flex justify-center gap-4">
-                    <Button onClick={() => setIsRunning(!isRunning)} className="w-24">
-                        {isRunning ? <Pause className="h-5 w-5 mr-2"/> : <Play className="h-5 w-5 mr-2"/>}
-                        {isRunning ? 'Pause' : 'Start'}
-                    </Button>
-                    <Button variant="outline" onClick={() => { setIsRunning(false); setSeconds(0); }}>
-                        <RotateCcw className="h-5 w-5 mr-2"/>
-                        Reset
-                    </Button>
+            <CardContent className="text-center">
+                <p className="text-5xl font-mono font-bold mb-4">{formatTime(seconds)}</p>
+                <div className="flex gap-2 justify-center">
+                    {!isRunning ? (
+                        <Button onClick={handleStart}>Start</Button>
+                    ) : (
+                        <Button onClick={handlePause} variant="outline">Pause</Button>
+                    )}
+                    <Button onClick={handleReset} variant="ghost">Reset</Button>
                 </div>
             </CardContent>
         </Card>
-    )
+    );
 }
 
-const ChartsDisplay = ({ entries, categories }: { entries: Record<string, any>, categories: string[] }) => {
-    const { progressData, categoryData } = useMemo(() => {
-        const endDate = new Date();
-        const startDate = subDays(endDate, 30);
-        const dateInterval = eachDayOfInterval({ start: startDate, end: endDate });
+const moods = ["😀", "🙂", "😐", "😔", "😭"];
 
-        const progressData = dateInterval.map(date => {
-            const dateStr = format(date, 'yyyy-MM-dd');
-            const dayEntries = entries[dateStr] || {};
-            const completedCount = Object.values(dayEntries).filter((e: any) => e.completed).length;
-            return { date: format(date, 'MMM d'), completed: completedCount };
-        });
+function MoodTracker({ onMoodSelect }: { onMoodSelect: (mood: string) => void }) {
+    const [selectedMood, setSelectedMood] = useState<string | null>(null);
 
-        const categoryData: Record<string, number> = {};
-         categories.forEach(cat => categoryData[cat] = 0);
-
-        Object.values(entries).forEach(dayEntries => {
-            Object.entries(dayEntries).forEach(([cat, entry]: [string, any]) => {
-                if(entry.completed && categoryData.hasOwnProperty(cat)) {
-                    categoryData[cat]++;
-                }
-            });
-        });
-        
-        const formattedCategoryData = Object.entries(categoryData).map(([name, completions]) => ({ name, completions }));
-
-
-        return { progressData, categoryData: formattedCategoryData };
-    }, [entries, categories]);
+    const handleSelect = (mood: string) => {
+        setSelectedMood(mood);
+        onMoodSelect(mood);
+    }
     
     return (
-        <div className="space-y-8">
-            <Card className="glass-card p-4 sm:p-6">
-                <CardHeader className="p-0 mb-4">
-                    <CardTitle>Progress Over Time</CardTitle>
-                    <CardDescription>Completed items in the last 30 days.</CardDescription>
-                </CardHeader>
-                <CardContent className="p-0 h-64">
-                    <ResponsiveContainer width="100%" height="100%">
-                        <LineChart data={progressData}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                            <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" fontSize={12} />
-                            <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} allowDecimals={false} />
-                            <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))' }}/>
-                            <Line type="monotone" dataKey="completed" stroke="hsl(var(--primary))" activeDot={{ r: 8 }} />
-                        </LineChart>
-                    </ResponsiveContainer>
-                </CardContent>
-            </Card>
-            <Card className="glass-card p-4 sm:p-6">
-                <CardHeader className="p-0 mb-4">
-                    <CardTitle>Category Completion</CardTitle>
-                     <CardDescription>Total completions per category.</CardDescription>
-                </CardHeader>
-                <CardContent className="p-0 h-64">
-                     <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={categoryData}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                            <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} tick={false} />
-                            <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} allowDecimals={false} />
-                             <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))' }}/>
-                            <Legend />
-                            <Bar dataKey="completions" fill="hsl(var(--primary))" />
-                        </BarChart>
-                    </ResponsiveContainer>
-                </CardContent>
-            </Card>
-        </div>
-    )
+        <Card>
+            <CardHeader>
+                <CardTitle>Today's Mood</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <div className="flex justify-around">
+                    {moods.map(mood => (
+                        <button
+                            key={mood}
+                            onClick={() => handleSelect(mood)}
+                            className={`text-3xl p-2 rounded-full transition-transform duration-200 ${selectedMood === mood ? 'bg-primary/20 scale-125' : 'hover:scale-110'}`}
+                        >
+                            {mood}
+                        </button>
+                    ))}
+                </div>
+            </CardContent>
+        </Card>
+    );
 }
 
-export default function JournalPage() {
-  const { entries, loading, saveEntry } = useJournalData();
-  const [categories, setCategories] = useState(initialCategories);
-  const [currentMood, setCurrentMood] = useState<string | null>(null);
-
-  useEffect(() => {
-    try {
-      const savedCategories = JSON.parse(localStorage.getItem('journalCategories') || 'null');
-      if (savedCategories) {
-        setCategories(savedCategories);
-      }
-    } catch(e) {
-      console.error("Failed to load categories from localStorage", e);
-    }
-  }, []);
-
-  const handleSave = (category: string) => (data: any) => {
-    const todayStr = format(new Date(), 'yyyy-MM-dd');
-    saveEntry(category, todayStr, data);
-  };
-  
-  if (loading) {
-      return <div>Loading...</div>
-  }
-
-  return (
-    <div className="container mx-auto px-4 py-8 sm:py-16">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-extrabold font-headline tracking-tight">Your Wellness Journal</h1>
-        <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-          A private space to track your journey, one day at a time.
-        </p>
-      </div>
-      
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left Column */}
-        <div className="lg:col-span-2 space-y-8">
-            <Accordion type="single" collapsible className="w-full glass-card p-4 sm:p-6 rounded-lg">
-                {categories.map((category) => (
-                    <AccordionItem value={category} key={category}>
-                        <AccordionTrigger className="text-lg font-semibold font-headline">
-                            {category}
-                        </AccordionTrigger>
-                        <AccordionContent>
-                            <CategoryEntryForm category={category} onSave={handleSave(category)} />
-                        </AccordionContent>
-                    </AccordionItem>
-                ))}
-            </Accordion>
-            
-            <ChartsDisplay entries={entries} categories={categories} />
-
-        </div>
-
-        {/* Right Column */}
-        <div className="space-y-8">
-            <DailyProgress entries={entries} categories={categories} />
-            <InsightAI entries={entries} />
-            <MoodTracker onMoodSelect={setCurrentMood} />
-            <MindfulnessTimer />
-            <CustomCategoryManager categories={categories} setCategories={setCategories} />
-        </div>
-      </div>
-    </div>
-  );
+function AnalyticsDashboard({ sessions }: { sessions: SessionEntry[] }) {
+    // This is a placeholder for a more complex analytics dashboard.
+    // We will build this out with charts and summaries in the next steps.
+    
+    const totalMinutes = sessions.reduce((acc, s) => acc + (s.duration / 60), 0);
+    
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>Analytics</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <p>Total Sessions: {sessions.length}</p>
+                <p>Total Minutes: {totalMinutes.toFixed(0)}</p>
+                <div className="h-48 border-2 border-dashed rounded-md flex items-center justify-center mt-4">
+                  <p className="text-muted-foreground">Charts coming soon</p>
+               </div>
+            </CardContent>
+        </Card>
+    );
 }
