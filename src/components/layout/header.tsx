@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { UserCircle, Menu } from 'lucide-react';
+import { UserCircle, Menu, BookOpen, Store, Calendar, DollarSign, BookText, Music4, Heart, Headphones, Video, Podcast, Clapperboard, Brain, Sparkles, Feed as FeedIcon } from 'lucide-react';
 import * as React from "react"
 import { signOut } from 'firebase/auth';
 
@@ -29,16 +29,17 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useUser, useAuth } from '@/firebase';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { GlassNavLink } from './glass-nav-link';
 
 
 const navLinks = [
-  { href: '/feed', label: 'Feed' },
-  { href: '/library', label: 'Library' },
-  { href: '/store', label: 'Store' },
-  { href: '/events', label: 'Events' },
-  { href: '/pricing', label: 'Pricing' },
-  { href: '/journal', label: 'Journal' },
-  { href: '/class-vibes', label: 'Class Vibes' },
+  { href: '/feed', label: 'Feed', icon: FeedIcon },
+  { href: '/library', label: 'Library', icon: BookOpen },
+  { href: '/store', label: 'Store', icon: Store },
+  { href: '/events', label: 'Events', icon: Calendar },
+  { href: '/pricing', label: 'Pricing', icon: DollarSign },
+  { href: '/journal', label: 'Journal', icon: BookText },
+  { href: '/class-vibes', label: 'Class Vibes', icon: Music4 },
 ];
 
 export default function Header() {
@@ -151,9 +152,16 @@ export default function Header() {
                           Navigate through the Pranian app.
                         </SheetDescription>
                       </SheetHeader>
-                      <div className="flex flex-col gap-4">
+                      <div className="flex flex-col gap-2">
                         {navLinks.map((link) => (
-                           <NavLink key={link.href} {...link} className="text-lg" />
+                           <GlassNavLink 
+                             key={link.href} 
+                             href={link.href} 
+                             label={link.label}
+                             icon={link.icon} 
+                             active={pathname === link.href}
+                             onClick={() => setOpen(false)}
+                           />
                         ))}
                       </div>
                   </SheetContent>
