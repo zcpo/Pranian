@@ -16,6 +16,7 @@ import {
   Sparkles,
   BookText,
   X,
+  Camera,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -23,6 +24,7 @@ const navItems = [
   { href: '/', label: 'Home', icon: Home },
   { href: '/library', label: 'Library', icon: BookOpen },
   { href: '/journal', label: 'Journal', icon: BookText },
+  { href: '/camera', label: 'Camera', icon: Camera },
   { href: '/library/yoga', label: 'Yoga', icon: Heart },
   { href: '/library/meditation', label: 'Audio Meditations', icon: Headphones },
   { href: '/library/video-meditation', label: 'Video Meditations', icon: Video },

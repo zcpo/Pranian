@@ -17,7 +17,8 @@ import {
   Timestamp,
   setDoc,
   deleteDoc,
-  updateDoc
+  updateDoc,
+  addDoc
 } from 'firebase/firestore';
 import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 import { useLiveQuery } from 'dexie-react-hooks';
@@ -43,6 +44,8 @@ import { Progress } from '@/components/ui/progress';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { useAuth } from '@/firebase';
+import { Camera } from 'lucide-react';
+import Image from 'next/image';
 
 // Helper for ISO timestamps
 const nowISO = () => new Date().toISOString();
@@ -200,7 +203,7 @@ export default function JournalPage() {
                         <AccordionItem value={`item-${index}`} key={index}>
                           <AccordionTrigger>{category}</AccordionTrigger>
                           <AccordionContent>
-                            <CategoryEntryForm category={category} />
+                            <CategoryEntryForm category={category} userId={user.uid} />
                           </AccordionContent>
                         </AccordionItem>
                       ))}
@@ -241,25 +244,56 @@ function defaultPoses(): Pose[] {
 
 // --- COMPONENTS ---
 
-function CategoryEntryForm({ category }: { category: string }) {
+function CategoryEntryForm({ category, userId }: { category: string, userId: string }) {
+  const firestore = useFirestore();
   const today = new Date().toISOString().split("T")[0];
   const [entry, setEntry] = useState("");
+  const [mediaUrl, setMediaUrl] = useState<string | null>(null);
   const [completedToday, setCompletedToday] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
+  // This is a bit of a hack for the demo. In a real app, you'd fetch this from Firestore.
+  const entryId = `${category.replace(/\s+/g, '-')}-${today}`;
 
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem(category) || "{}");
-    setEntry(saved.entry || "");
-    setCompletedToday(saved.completedDate === today);
-  }, [category, today]);
+    if (typeof window !== 'undefined') {
+      const lastCapturedImage = localStorage.getItem('lastCapturedImage');
+      if (lastCapturedImage) {
+        setMediaUrl(lastCapturedImage);
+        localStorage.removeItem('lastCapturedImage');
+      }
+    }
+  }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const payload = {
-      entry,
-      completedDate: completedToday ? today : null,
+    if (!firestore) return;
+    setIsSaving(true);
+    
+    const sessionData: Partial<SessionEntry> = {
+      id: entryId,
+      userId: userId,
+      title: category,
+      notes: entry,
+      date: today,
+      duration: 0, // Not a timed session
+      style: 'Journal',
+      mediaUrl: mediaUrl || undefined,
+      completed: completedToday,
+      createdAt: new Date().toISOString(),
+      modifiedAt: new Date().toISOString(),
     };
-    localStorage.setItem(category, JSON.stringify(payload));
-    alert(`Saved entry for ${category}`);
+
+    try {
+      const docRef = doc(firestore, 'users', userId, 'sessions', entryId);
+      await setDoc(docRef, sessionData, { merge: true });
+      alert(`Saved entry for ${category}`);
+    } catch (error) {
+      console.error("Error saving journal entry:", error);
+      alert(`Failed to save entry for ${category}`);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -271,7 +305,15 @@ function CategoryEntryForm({ category }: { category: string }) {
         rows={4}
         className="mb-3"
       />
-      <div className="flex items-center space-x-2 mb-3">
+      {mediaUrl && (
+        <div className="my-3">
+          <p className="text-sm text-muted-foreground mb-2">Attached Media:</p>
+          <div className="relative w-full max-w-sm h-48 rounded-md overflow-hidden">
+            <Image src={mediaUrl} alt="Journal entry media" layout="fill" objectFit="cover" />
+          </div>
+        </div>
+      )}
+      <div className="flex items-center space-x-2 my-3">
         <Checkbox
           id={`completed-${category}`}
           checked={completedToday}
@@ -284,12 +326,20 @@ function CategoryEntryForm({ category }: { category: string }) {
           I completed this today
         </label>
       </div>
-      <Button type="submit" className="w-full">
-        Save
-      </Button>
+      <div className="flex gap-2">
+         <Button asChild variant="outline">
+          <a href="/camera">
+            <Camera className="mr-2 h-4 w-4" /> Add Media
+          </a>
+        </Button>
+        <Button type="submit" className="w-full" disabled={isSaving}>
+          {isSaving ? 'Saving...' : 'Save'}
+        </Button>
+      </div>
     </form>
   );
 }
+
 
 function DailyProgress({ categories }: { categories: string[] }) {
     const today = new Date().toISOString().split("T")[0];

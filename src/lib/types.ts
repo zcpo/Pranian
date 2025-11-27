@@ -21,7 +21,7 @@ export interface SessionEntry {
   duration: number; // total seconds
   style?: string;
   intensity?: number; // 1-5
-  poseSequence: PoseInSequence[];
+  poseSequence?: PoseInSequence[];
   instructor?: string;
   location?: string;
   mediaUrl?: string;
@@ -32,6 +32,7 @@ export interface SessionEntry {
   endAt?: string; // ISO8601
   createdAt: string; // ISO8601
   modifiedAt: string; // ISO8601
+  completed?: boolean;
 }
 
 export interface SyncQueueItem {
