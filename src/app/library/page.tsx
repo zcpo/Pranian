@@ -1,91 +1,112 @@
-
 'use client';
 
-import { ArrowRight, Book, Clapperboard, Headphones, Shirt, BookOpen, Video, Music } from 'lucide-react';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import React, { useEffect } from 'react';
+import './library.css';
 import Link from 'next/link';
-import { ContentCard } from '@/components/content-card';
 
-const sections = [
-  { 
-    id: 'yoga-1',
-    title: 'Yoga', 
-    description: 'Flow with our collection of yoga classes for all levels.',
-    icon: null,
-    href: '/library/yoga',
-    imageHint: 'yoga pose'
-  },
-  {
-    id: 'meditation-1',
-    title: 'Audio Meditations', 
-    description: 'Find your center with guided audio meditations.',
-    icon: Headphones,
-    href: '/library/meditation',
-    imageHint: 'meditation serene'
-  },
-  { 
-    id: 'video-meditation-1',
-    title: 'Video Meditations', 
-    description: 'Visual guides to deepen your meditation practice.',
-    icon: Video,
-    href: '/library/video-meditation',
-    imageHint: 'video meditation'
-  },
-  { 
-    id: 'product-podcast',
-    title: 'Podcast', 
-    description: 'Listen to insightful conversations on wellness.',
-    icon: Headphones,
-    href: '/library/podcast',
-    imageHint: 'podcast audio'
-  },
-  { 
-    id: 'product-video',
-    title: 'Video', 
-    description: 'Watch workshops, tutorials, and more.',
-    icon: Clapperboard,
-    href: '/library/video',
-    imageHint: 'video lesson'
-  },
-  { 
-    id: 'class-vibes-1',
-    title: 'Class Vibes', 
-    description: 'Find music to match your mood and practice.',
-    icon: Music,
-    href: '/class-vibes',
-    imageHint: 'music vibes'
-  },
+const musicListItems = [
+    { title: 'Just Go', creator: 'The Goes' },
+    { title: 'Fanboy', creator: 'Young Joe' },
+    { title: 'Fly', creator: '20 Cent' },
+    { title: 'Jill', creator: 'Don\'t Even' },
+    { title: 'Home and Country', creator: 'Wandering Ants' },
+    { title: 'Victor Knows', creator: 'The Creatives' },
+    { title: 'Roadtrippin\'', creator: 'The Wayfarers' },
+    { title: 'However You Want', creator: 'The Shilts' },
+    { title: 'Just Say Yes', creator: 'The Tweeters' },
+    { title: 'New York', creator: 'V2' },
+    { title: 'Hallowed Grounds', creator: 'Paper and Pencil' },
+    { title: 'Fanboy', creator: 'Young Joe' },
+    { title: 'Roadtrippin\'', creator: 'The Wayfarers' },
+    { title: 'Victor Knows', creator: 'The Creatives' },
+    { title: 'Home and Country', creator: 'Wandering Ants' },
+    { title: 'Hallowed Grounds', creator: 'Paper and Pencil' },
+    { title: 'Springtime Forever', creator: 'Near and Far' },
+    { title: 'Love Song', creator: 'The Sprints' },
+    { title: 'Say It Ain\'t So', creator: 'The Three Beards' },
+    { title: 'She Goes', creator: 'The Kilts' },
 ];
 
-export default function LibraryPage() {
-  return (
-    <div className="container mx-auto px-4 py-8 sm:py-16">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-extrabold font-headline tracking-tight">Content Library</h1>
-        <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-          Explore our collection of guided meditations, yoga classes, and more.
-        </p>
-      </div>
+const MusicListItem = ({ item, index }: { item: { title: string, creator: string }, index: number }) => {
+    const [bgImage, setBgImage] = React.useState('');
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {sections.map((section, index) => {
-           const imageData = PlaceHolderImages.find(img => img.id === section.id);
-           const imageUrl = imageData?.imageUrl.replace(/seed\/[^/]+/, `seed/${section.id}${index}`) || 'https://picsum.photos/600/400';
-           const imageHint = section.imageHint || 'yoga meditation';
-          return (
-            <ContentCard
-              key={index}
-              href={section.href}
-              imageUrl={imageUrl}
-              imageHint={imageHint}
-              category={section.title}
-              title={section.title}
-              description={section.description}
-            />
-          );
-        })}
-      </div>
-    </div>
-  );
+    useEffect(() => {
+        const imageUrl = `https://picsum.photos/300/300?sig=${index}`;
+        setBgImage(`linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url('${imageUrl}')`);
+    }, [index]);
+
+    return (
+        <li className="music__list-item" style={{ backgroundImage: bgImage, opacity: 0.8 }}>
+            <span className="song__title">{item.title}</span>
+            <span className="song__creator">{item.creator}</span>
+        </li>
+    );
+};
+
+export default function LibraryPage() {
+    return (
+        <div className="wrapper">
+            <aside className="sidebar">
+                <ul className="sidebar__main-links">
+                    <li>Browse</li>
+                    <li>Radio</li>
+                </ul>
+                <ul className="sidebar__music">
+                    <h2 className="sidebar__header">Your Music</h2>
+                    <li>Your Daily Mix</li>
+                    <li>Songs</li>
+                    <li>Albums</li>
+                    <li>Artists</li>
+                    <li>Stations</li>
+                    <li>Local Files</li>
+                </ul>
+                <ul className="sidebar__playlists">
+                    <h2 className="sidebar__header">Playlists</h2>
+                    <li>Liked from Radio</li>
+                    <li>Indie Pop</li>
+                    <li>Roadtrip</li>
+                    <li>Release Radar</li>
+                    <li>Focus</li>
+                    <li>Piano Mood</li>
+                    <li>Your Summer Rewind</li>
+                    <li>Inspire</li>
+                    <li>Alternative Faves</li>
+                </ul>
+            </aside>
+            <main>
+                <header className="main__header">
+                    <h1>Browse</h1>
+                </header>
+                <nav className="main__nav">
+                    <Link href="#" className="link is-active">Overview</Link>
+                    <Link href="#" className="link">Charts</Link>
+                    <Link href="#" className="link">Genres and Moods</Link>
+                    <Link href="#" className="link">New Releases</Link>
+                    <Link href="#" className="link">Discover</Link>
+                    <Link href="#" className="link">More</Link>
+                </nav>
+                <section className="main__playlists">
+                    <h2>Featured Lists</h2>
+                    <ul className="music__list">
+                        {musicListItems.map((item, i) => (
+                            <MusicListItem key={i} item={item} index={i} />
+                        ))}
+                    </ul>
+                </section>
+            </main>
+            <aside className="activity">
+                <h2>Friend Activity</h2>
+                <button className="button">Find Friends</button>
+            </aside>
+            <footer className="footer">
+                <div className="now-playing">
+                    <img className="album__image" src="https://images.unsplash.com/photo-1515233451477-90d9cd4d57ed?ixlib=rb-0.3.5&q=85&fm=jpg&crop=entropy&cs=srgb&ixid=eyJhcHBfaWQiOjE0NTg5fQ&s=cade564aeff757d648625aaac06e837c" alt="Album cover" />
+                    <div className="album__info">
+                        <span className="album__title">Stay There Now</span>
+                        <span className="album__musician">The Harmonics</span>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    );
 }

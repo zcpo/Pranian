@@ -29,6 +29,15 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+
+    --main-bg-color: hsl(0 0% 5.5%);
+    --main-font-color: hsl(0 0% 72.5%);
+    --main-highlight-color: hsl(0 0% 100%);
+    --main-link-active-color: hsl(0 0% 100%);
+    --main-border-color: hsla(0 0% 50.2%/0.3);
+    --activity-bg-color: hsl(0 0% 0%);
+    --footer-height: 100px;
+    --main-bg-color-dark: hsl(0 0% 12.5%);
   }
  
   .dark {
