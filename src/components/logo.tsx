@@ -8,7 +8,7 @@ interface LogoProps {
 
 const Logo: FC<LogoProps> = ({ className }) => {
   return (
-    <Link href="/" className={cn('text-2xl font-bold font-headline text-foreground tracking-tight', className)}>
+    <Link href="/" className={cn('text-2xl font-bold font-headline tracking-tight', className)}>
       Pranian
     </Link>
   );
