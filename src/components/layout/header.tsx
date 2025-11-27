@@ -23,8 +23,8 @@ export default function Header() {
     <Link
       href={href}
       className={cn(
-        "text-sm font-medium transition-colors hover:text-white",
-        pathname === href ? "text-white" : "text-primary-foreground/80"
+        "text-sm font-medium transition-colors hover:text-white/90",
+        pathname === href ? "text-white" : "text-white/80"
       )}
     >
       {label}
@@ -32,10 +32,10 @@ export default function Header() {
   );
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-primary-foreground/20 bg-primary text-primary-foreground">
+    <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-primary text-white">
       <div className="container flex h-14 max-w-screen-2xl items-center">
         <div className="mr-4 flex">
-          <Logo className="text-primary-foreground" />
+          <Logo className="text-white" />
         </div>
         
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
@@ -49,7 +49,7 @@ export default function Header() {
           </div>
           <div className="flex items-center gap-2">
              <ThemeToggle />
-             <Button variant="ghost" size="icon" asChild className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground">
+             <Button variant="ghost" size="icon" asChild className="text-white hover:bg-white/10 hover:text-white">
                 <Link href="/login">
                     <UserCircle className="h-5 w-5" />
                     <span className="sr-only">Login</span>
