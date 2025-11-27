@@ -38,10 +38,10 @@ function escapeHtml(s: string): string {
   });
 }
 
-function appleIcon() {
+function PranianIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="h-4 w-4">
-      <path d="M16.365 1.43c0 1.14-.467 2.25-1.29 3.09-.882.894-2.32 1.59-3.536 1.49-.093-1.09.52-2.27 1.314-3.04.89-.86 2.4-1.49 3.512-1.54zm5.457 17.15c-.395.895-.86 1.72-1.4 2.47-.74 1.05-1.343 1.78-1.81 2.19-.73.67-1.516 1.01-2.355 1.03-.6.01-1.325-.17-2.177-.54-.855-.36-1.64-.54-2.352-.54-.74 0-1.545.18-2.417.54-.87.37-1.563.56-2.075.58-.82.04-1.62-.31-2.4-1.05-.51-.44-1.14-1.19-1.893-2.25-.81-1.12-1.478-2.42-2.003-3.9-.56-1.6-.843-3.14-.85-4.62-.01-1.52.33-2.82 1.02-3.9.535-.86 1.247-1.53 2.14-2 .894-.47 1.86-.71 2.897-.73.57-.01 1.317.2 2.24.62.922.41 1.515.62 1.78.62.205 0 .85-.24 1.936-.72 1.038-.45 1.914-.64 2.63-.58 1.944.157 3.404.92 4.378 2.29-1.737 1.054-2.6 2.53-2.59 4.43.01 1.48.55 2.72 1.63 3.72.486.46 1.03.8 1.64 1.02-.13.38-.27.74-.42 1.06z" />
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
     </svg>
   );
 }
@@ -206,8 +206,8 @@ export default function ClassVibesPage() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    {appleIcon()}
-                    Listen on Apple Music
+                    <PranianIcon />
+                    Listen on Pranian Music
                   </a>
                 </div>
             </Card>
@@ -217,7 +217,7 @@ export default function ClassVibesPage() {
 
       <footer className="text-muted-foreground text-xs mt-8 opacity-70">
         <small>
-          Previews & links are provided via the iTunes Search API. Audio is streamed directly from Apple servers and is not re-hosted. “Listen on Apple Music” links open the official Apple Music page.
+          Previews & links are provided via the iTunes Search API. Audio is streamed directly from Apple servers and is not re-hosted. “Listen on Pranian Music” links open the official Apple Music page.
         </small>
       </footer>
     </div>

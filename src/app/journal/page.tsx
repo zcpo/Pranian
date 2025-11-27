@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useEffect, useState, useCallback, useRef } from 'react';
-import { useUser, useFirestore, useFirebaseApp, useMemoFirebase } from '@/firebase';
+import { useUser, useFirestore, useMemoFirebase } from '@/firebase';
 import {
   collection,
   doc,
@@ -41,6 +41,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Progress } from '@/components/ui/progress';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { useAuth } from '@/firebase';
 
 // Helper for ISO timestamps
 const nowISO = () => new Date().toISOString();
@@ -48,7 +49,7 @@ const nowISO = () => new Date().toISOString();
 export default function JournalPage() {
   const { user, isUserLoading } = useUser();
   const firestore = useFirestore();
-  const auth = useFirebaseApp()?.auth;
+  const auth = useAuth();
   const [activeSession, setActiveSession] = useState<SessionEntry | null>(null);
 
   // --- LOCAL DATA (DEXIE) ---
