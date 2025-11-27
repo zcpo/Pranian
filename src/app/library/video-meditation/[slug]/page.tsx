@@ -1,7 +1,9 @@
-import { Separator } from '@/components/ui/separator';
-import VideoPlayer from '@/components/video-player';
+
 import { videoMeditations } from '@/lib/video-meditations';
 import { notFound } from 'next/navigation';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { MediaDetailsPage, MediaDetailsPlayer } from '@/components/media-details-page';
+import VideoPlayer from '@/components/video-player';
 
 export default function VideoMeditationPlayerPage({ params }: { params: { slug: string } }) {
   const meditation = videoMeditations.find(m => m.slug === params.slug);
@@ -9,34 +11,28 @@ export default function VideoMeditationPlayerPage({ params }: { params: { slug: 
   if (!meditation) {
     notFound();
   }
+  
+  const meditationImage = PlaceHolderImages.find(img => img.id === meditation.imageId);
+  const imageUrl = meditation.posterUrl || meditationImage?.imageUrl.replace(/seed\/[^/]+/, `seed/${meditation.slug}`) || 'https://picsum.photos/1920/1080';
+
+  const player: MediaDetailsPlayer = {
+    type: 'video',
+    component: <VideoPlayer source={meditation.videoUrl} poster={imageUrl} />,
+  };
 
   return (
-    <div className="bg-background">
-      <div className="container mx-auto px-4 py-8 sm:py-16">
-        <div className="flex flex-col items-center">
-          
-          <VideoPlayer source={meditation.videoUrl} poster={meditation.posterUrl} />
-          
-          <div className="prose prose-lg dark:prose-invert max-w-4xl w-full mt-12">
-              <h1 className="text-4xl font-extrabold font-headline tracking-tight text-center">{meditation.title}</h1>
-              <p className="text-lg text-muted-foreground mt-2 text-center">{meditation.description}</p>
-              
-              <Separator className="my-8" />
-
-              <h2 className="font-headline text-2xl font-semibold">About This Meditation</h2>
-              <p>
-                {meditation.longDescription}
-              </p>
-              
-              <ul className="list-disc pl-5">
-                {meditation.bullets.map((bullet, index) => (
-                    <li key={index}>{bullet}</li>
-                ))}
-              </ul>
-            </div>
-        </div>
-      </div>
-    </div>
+    <MediaDetailsPage
+      title={meditation.title}
+      imageUrl={imageUrl}
+      description={meditation.longDescription}
+      player={player}
+      metadata={{
+        duration: meditation.duration,
+        author: meditation.author,
+        genres: ['Video Meditation', 'Mindfulness'],
+        year: new Date().getFullYear().toString(),
+      }}
+    />
   );
 }
 

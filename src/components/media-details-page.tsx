@@ -1,0 +1,103 @@
+
+import React from 'react';
+import './media-details-page.css';
+import { Button } from './ui/button';
+import { Plus, Play, PartyPopper } from 'lucide-react';
+
+type MediaMetadata = {
+  duration: string;
+  year: string;
+  author: string;
+  genres: string[];
+};
+
+export type MediaDetailsPlayer = {
+  type: 'audio' | 'video';
+  component: React.ReactNode;
+}
+
+type MediaDetailsPageProps = {
+  title: string;
+  imageUrl: string;
+  description: string;
+  metadata: MediaMetadata;
+  player?: MediaDetailsPlayer;
+};
+
+export function MediaDetailsPage({ title, imageUrl, description, metadata, player }: MediaDetailsPageProps) {
+  return (
+    <div
+      className="w-full bg-no-repeat min-h-screen lg:bg-center bg-cover bg-top text-white relative flex items-center"
+      style={{
+        backgroundImage: `linear-gradient(to right, #0f171e 40%, transparent), url('${imageUrl}')`,
+      }}
+    >
+      <div className="w-full lg:w-7/12 mt-10" style={{ padding: '5% 3%' }}>
+        
+        {player?.type === 'audio' && (
+          <div className="mb-8">
+            {player.component}
+          </div>
+        )}
+        
+        <h1 className="text-4xl lg:text-5xl font-bold font-headline">{title}</h1>
+
+        <div className="mt-5 flex text-slate-300 items-center text-md flex-wrap">
+          <span className="ml-3">{metadata.duration}</span>
+          <span className="ml-3">{metadata.year}</span>
+          <span className="border border-slate-400 text-xs px-1 rounded-sm font-bold mx-3">
+            U/A 13+
+          </span>
+          <span className="border border-slate-400 text-xs px-1 rounded-sm font-bold">
+            4K
+          </span>
+        </div>
+
+        <p className="mt-4 text-lg max-w-2xl">{description}</p>
+        
+        {player?.type === 'video' && (
+          <div className="mt-8 max-w-3xl">
+            {player.component}
+          </div>
+        )}
+
+        <div className="flex flex-wrap lg:flex-nowrap items-center mt-8">
+          <Button size="lg" className="bg-white text-black hover:bg-white/90 mr-2.5 mb-3">
+            <Play className="mr-2 h-5 w-5 fill-black" />
+            Play
+          </Button>
+
+          <Button variant="outline" className="bg-slate-700/50 border-slate-600 hover:bg-slate-700 py-3 flex flex-col px-5 rounded-sm shadow-sm mr-2.5 mb-3 h-auto">
+            <span className="truncate">Watch with Prime</span>
+            <span className="truncate text-xs">Start your 30-day free trial</span>
+          </Button>
+
+          <Button variant="ghost" size="icon" className="bg-slate-700/50 hover:bg-slate-700 p-3 rounded-full shadow-sm mr-2.5 text-gray-300 mb-3 h-12 w-12">
+            <Plus />
+          </Button>
+          
+          <Button variant="ghost" size="icon" className="bg-slate-700/50 hover:bg-slate-700 p-3 rounded-full shadow-sm mr-2.5 text-gray-300 mb-3 h-12 w-12">
+            <PartyPopper />
+          </Button>
+        </div>
+
+        <div className="text-slate-300 mt-6 text-md max-w-xl">
+          <div className="flex">
+            <p className="w-36 font-bold">Starring</p>
+            <p className="text-blue-300 truncate">{metadata.author}</p>
+          </div>
+
+          <div className="flex">
+            <p className="w-36 font-bold">Genres</p>
+            <p className="text-blue-300 truncate">{metadata.genres.join(', ')}</p>
+          </div>
+
+          <div className="flex">
+            <p className="w-36 font-bold">Subtitles</p>
+            <p className="text-blue-300 truncate">English</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
