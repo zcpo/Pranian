@@ -169,17 +169,15 @@ main {
 
 .main__nav .link.is-active {
   color: var(--main-link-active-color);
-  border-bottom: 3px solid #1db954; /* Spotify green, good accent */
+  border-bottom: 3px solid hsl(var(--primary));
 }
 
-.main__nav .link:nth-of-type(2),
 .main__nav .link:nth-of-type(3),
 .main__nav .link:nth-of-type(4),
 .main__nav .link:nth-of-type(5) {
   display: none;
 }
 @media (min-width: 800px) {
-  .main__nav .link:nth-of-type(2),
   .main__nav .link:nth-of-type(3),
   .main__nav .link:nth-of-type(4),
   .main__nav .link:nth-of-type(5) {
@@ -188,7 +186,7 @@ main {
 }
 
 
-.main__playlists h2 {
+.main__playlists .section__title {
   font-size: 20px;
   margin-bottom: 20px;
   padding-bottom: 10px;
@@ -202,7 +200,7 @@ main {
   gap: 20px;
   width: 100%;
   padding: 0;
-  margin: 0;
+  margin: 0 0 40px 0;
 }
 @media (min-width: 800px) {
   .music__list {

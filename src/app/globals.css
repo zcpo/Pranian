@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -30,14 +31,14 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
 
-    --main-bg-color: hsl(0 0% 5.5%);
-    --main-font-color: hsl(0 0% 72.5%);
-    --main-highlight-color: hsl(0 0% 100%);
-    --main-link-active-color: hsl(0 0% 100%);
-    --main-border-color: hsla(0 0% 50.2%/0.3);
-    --activity-bg-color: hsl(0 0% 0%);
+    --main-bg-color: hsl(0 0% 100%);
+    --main-font-color: hsl(0 0% 45.1%);
+    --main-highlight-color: hsl(0 0% 9%);
+    --main-link-active-color: hsl(var(--primary));
+    --main-border-color: hsl(0 0% 89.8%);
+    --activity-bg-color: hsl(0 0% 96.1%);
     --footer-height: 100px;
-    --main-bg-color-dark: hsl(0 0% 12.5%);
+    --main-bg-color-dark: hsl(0 0% 14.9%);
   }
  
   .dark {
@@ -65,6 +66,15 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+
+    --main-bg-color: hsl(0 0% 5.5%);
+    --main-font-color: hsl(0 0% 72.5%);
+    --main-highlight-color: hsl(0 0% 100%);
+    --main-link-active-color: hsl(var(--primary));
+    --main-border-color: hsla(0 0% 50.2%/0.3);
+    --activity-bg-color: hsl(0 0% 0%);
+    --footer-height: 100px;
+    --main-bg-color-dark: hsl(0 0% 12.5%);
   }
 }
 

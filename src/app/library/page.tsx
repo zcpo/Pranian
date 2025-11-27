@@ -1,64 +1,35 @@
+
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import './library.css';
 import Link from 'next/link';
-
-const musicListItems = [
-    { title: 'Just Go', creator: 'The Goes' },
-    { title: 'Fanboy', creator: 'Young Joe' },
-    { title: 'Fly', creator: '20 Cent' },
-    { title: 'Jill', creator: 'Don\'t Even' },
-    { title: 'Home and Country', creator: 'Wandering Ants' },
-    { title: 'Victor Knows', creator: 'The Creatives' },
-    { title: 'Roadtrippin\'', creator: 'The Wayfarers' },
-    { title: 'However You Want', creator: 'The Shilts' },
-    { title: 'Just Say Yes', creator: 'The Tweeters' },
-    { title: 'New York', creator: 'V2' },
-    { title: 'Hallowed Grounds', creator: 'Paper and Pencil' },
-    { title: 'Fanboy', creator: 'Young Joe' },
-    { title: 'Roadtrippin\'', creator: 'The Wayfarers' },
-    { title: 'Victor Knows', creator: 'The Creatives' },
-    { title: 'Home and Country', creator: 'Wandering Ants' },
-    { title: 'Hallowed Grounds', creator: 'Paper and Pencil' },
-    { title: 'Springtime Forever', creator: 'Near and Far' },
-    { title: 'Love Song', creator: 'The Sprints' },
-    { title: 'Say It Ain\'t So', creator: 'The Three Beards' },
-    { title: 'She Goes', creator: 'The Kilts' },
-];
-
-const MusicListItem = ({ item, index }: { item: { title: string, creator: string }, index: number }) => {
-    const [bgImage, setBgImage] = React.useState('');
-
-    useEffect(() => {
-        const imageUrl = `https://picsum.photos/300/300?sig=${index}`;
-        setBgImage(`linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url('${imageUrl}')`);
-    }, [index]);
-
-    return (
-        <li className="music__list-item" style={{ backgroundImage: bgImage, opacity: 0.8 }}>
-            <span className="song__title">{item.title}</span>
-            <span className="song__creator">{item.creator}</span>
-        </li>
-    );
-};
+import { ContentCard } from '@/components/content-card';
+import { meditations } from '@/lib/meditations';
+import { videoMeditations } from '@/lib/video-meditations';
+import { videos } from '@/lib/videos';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 export default function LibraryPage() {
+    // Get a few items from each category to feature
+    const featuredMeditations = meditations.slice(0, 4);
+    const featuredVideoMeditations = videoMeditations.slice(0, 4);
+    const featuredVideos = videos.slice(0, 4);
+
     return (
         <div className="wrapper">
             <aside className="sidebar">
                 <ul className="sidebar__main-links">
-                    <li>Browse</li>
-                    <li>Radio</li>
+                    <li><Link href="/library" className="link is-active">Browse</Link></li>
+                    <li><Link href="/class-vibes" className="link">Radio</Link></li>
                 </ul>
                 <ul className="sidebar__music">
                     <h2 className="sidebar__header">Your Music</h2>
-                    <li>Your Daily Mix</li>
-                    <li>Songs</li>
-                    <li>Albums</li>
-                    <li>Artists</li>
-                    <li>Stations</li>
-                    <li>Local Files</li>
+                     <li><Link href="/library/yoga" className="link">Yoga</Link></li>
+                    <li><Link href="/library/meditation" className="link">Audio Meditations</Link></li>
+                    <li><Link href="/library/video-meditation" className="link">Video Meditations</Link></li>
+                    <li><Link href="/library/podcast" className="link">Podcasts</Link></li>
+                    <li><Link href="/library/video" className="link">Videos</Link></li>
                 </ul>
                 <ul className="sidebar__playlists">
                     <h2 className="sidebar__header">Playlists</h2>
@@ -78,21 +49,80 @@ export default function LibraryPage() {
                     <h1>Browse</h1>
                 </header>
                 <nav className="main__nav">
-                    <Link href="#" className="link is-active">Overview</Link>
+                    <Link href="/library" className="link is-active">Overview</Link>
                     <Link href="#" className="link">Charts</Link>
-                    <Link href="#" className="link">Genres and Moods</Link>
-                    <Link href="#" className="link">New Releases</Link>
+                    <Link href="/library/yoga/styles" className="link">Genres and Moods</Link>
+                    <Link href="/feed" className="link">New Releases</Link>
                     <Link href="#" className="link">Discover</Link>
-                    <Link href="#" className="link">More</Link>
                 </nav>
+                
                 <section className="main__playlists">
-                    <h2>Featured Lists</h2>
+                    <h2 className="section__title">Featured Audio Meditations</h2>
                     <ul className="music__list">
-                        {musicListItems.map((item, i) => (
-                            <MusicListItem key={i} item={item} index={i} />
-                        ))}
+                        {featuredMeditations.map((item) => {
+                            const imageData = PlaceHolderImages.find(img => img.id === item.imageId);
+                            const imageUrl = imageData?.imageUrl.replace(/seed\/[^/]+/, `seed/${item.slug}`) || 'https://picsum.photos/600/400';
+                            return (
+                                <li key={item.slug}>
+                                    <ContentCard
+                                      href={`/library/meditation/${item.slug}`}
+                                      imageUrl={imageUrl}
+                                      imageHint={imageData?.imageHint || 'meditation serene'}
+                                      category="Audio Meditation"
+                                      title={item.title}
+                                      description={item.description}
+                                    />
+                                </li>
+                            );
+                        })}
                     </ul>
                 </section>
+
+                <section className="main__playlists">
+                    <h2 className="section__title">Featured Video Meditations</h2>
+                    <ul className="music__list">
+                         {featuredVideoMeditations.map((item) => {
+                            const imageData = PlaceHolderImages.find(img => img.id === item.imageId);
+                             const imageUrl = item.posterUrl || imageData?.imageUrl.replace(/seed\/[^/]+/, `seed/${item.slug}`) || 'https://picsum.photos/600/400';
+                            return (
+                                <li key={item.slug}>
+                                    <ContentCard
+                                      href={`/library/video-meditation/${item.slug}`}
+                                      imageUrl={imageUrl}
+                                      imageHint={imageData?.imageHint || 'video meditation'}
+                                      category="Video Meditation"
+                                      title={item.title}
+                                      description={item.description}
+                                    />
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </section>
+
+                <section className="main__playlists">
+                    <h2 className="section__title">Featured Videos</h2>
+                    <ul className="music__list">
+                        {featuredVideos.map((item, index) => {
+                            const imageData = PlaceHolderImages.find(img => img.id === item.imageId);
+                            const imageUrl = item.posterUrl || imageData?.imageUrl.replace(/seed\/[^/]+/, `seed/${item.slug}${index}`) || 'https://picsum.photos/600/400';
+                            const imageHint = imageData?.imageHint || 'video lesson';
+                            return (
+                                 <li key={item.slug}>
+                                    <ContentCard
+                                      href={`/library/video/${item.slug}`}
+                                      imageUrl={imageUrl}
+                                      imageHint={imageHint}
+                                      category="Video"
+                                      title={item.title}
+                                      description={item.description}
+                                    />
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </section>
+
             </main>
             <aside className="activity">
                 <h2>Friend Activity</h2>
