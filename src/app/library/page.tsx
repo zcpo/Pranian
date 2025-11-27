@@ -1,9 +1,11 @@
+
 'use client';
 
 import { ArrowRight, Book, Clapperboard, Headphones, Shirt, BookOpen, Video } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import Link from 'next/link';
+import { ContentCard } from '@/components/content-card';
 
 const sections = [
   { 
@@ -64,25 +66,15 @@ export default function LibraryPage() {
            const imageUrl = imageData?.imageUrl.replace(/seed\/[^/]+/, `seed/${section.id}${index}`) || 'https://picsum.photos/600/400';
            const imageHint = section.imageHint || 'yoga meditation';
           return (
-            <Link href={section.href} className="group block" key={section.title}>
-              <Card className="h-full transition-all duration-300 ease-in-out group-hover:border-primary/50 group-hover:shadow-lg group-hover:shadow-primary/10 flex flex-col">
-                <CardHeader>
-                  <div className="flex items-center gap-4">
-                    {section.icon && <section.icon className="h-8 w-8 text-primary" />}
-                    <h3 className="text-2xl font-semibold font-headline text-foreground">{section.title}</h3>
-                  </div>
-                </CardHeader>
-                <CardContent className="flex-grow">
-                  <p className="text-muted-foreground">{section.description}</p>
-                </CardContent>
-                <CardContent>
-                   <div className="flex items-center text-sm font-medium text-primary">
-                      View Section
-                      <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 ease-in-out group-hover:translate-x-1" />
-                    </div>
-                </CardContent>
-              </Card>
-            </Link>
+            <ContentCard
+              key={index}
+              href={section.href}
+              imageUrl={imageUrl}
+              imageHint={imageHint}
+              category={section.title}
+              title={section.title}
+              description={section.description}
+            />
           );
         })}
       </div>
