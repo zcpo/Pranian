@@ -1,5 +1,4 @@
 
-'use client';
 import { videos } from '@/lib/videos';
 import { notFound } from 'next/navigation';
 import { PlaceHolderImages } from '@/lib/placeholder-images';

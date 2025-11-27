@@ -1,5 +1,4 @@
 
-'use client';
 import { videoMeditations } from '@/lib/video-meditations';
 import { notFound } from 'next/navigation';
 import { PlaceHolderImages } from '@/lib/placeholder-images';

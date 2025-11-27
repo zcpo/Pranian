@@ -1,5 +1,4 @@
 
-'use client';
 import { meditations } from '@/lib/meditations';
 import { notFound } from 'next/navigation';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
