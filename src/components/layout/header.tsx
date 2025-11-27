@@ -10,7 +10,6 @@ import { signOut } from 'firebase/auth';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import Logo from '@/components/logo';
-import { ThemeToggle } from '@/components/theme-toggle';
 import {
   Sheet,
   SheetContent,
@@ -86,7 +85,6 @@ export default function Header() {
           </nav>
           
           <div className="flex items-center gap-2 md:ml-4">
-             <ThemeToggle />
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon">
