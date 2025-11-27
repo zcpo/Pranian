@@ -14,39 +14,25 @@ export function GenericCard({ item }: { item: FeedItem }) {
   const cardType = item.type === 'user_post' ? 'Post' : (item.type || 'Update');
 
   return (
-    <Card className="flex flex-col overflow-hidden transition-all duration-300 ease-in-out hover:shadow-lg">
+    <>
       {item.image && (
-        <CardHeader className="p-0">
-          <div className="relative aspect-[16/9] w-full">
-            <Image src={item.image} alt={item.title} fill className="object-cover" />
-             <Badge className="absolute top-2 right-2 flex items-center gap-1.5" variant="secondary">
-              {item.type === 'user_post' ? <User className="h-3.5 w-3.5" /> : <Bell className="h-3.5 w-3.5" />}
-              <span className="capitalize">{cardType}</span>
-            </Badge>
-          </div>
-        </CardHeader>
+        <Image src={item.image} alt={item.title || 'Feed item image'} fill className="object-cover -z-10" />
       )}
-      <CardContent className="p-6 flex-grow">
-         {!item.image && (
-            <Badge className="mb-2 flex items-center gap-1.5 w-fit" variant="secondary">
-                 {item.type === 'user_post' ? <User className="h-3.5 w-3.5" /> : <Bell className="h-3.5 w-3.5" />}
-                <span className="capitalize">{cardType}</span>
-            </Badge>
-        )}
-        <h3 className="text-xl font-semibold font-headline text-foreground">{item.title}</h3>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent -z-10" />
+      
+      <div className="p-6 flex flex-col justify-end h-full">
+        <div className="flex items-center gap-3 mb-4">
+            <Avatar className="h-10 w-10 border-2 border-white/50">
+                <AvatarImage src={item.userAvatar} />
+                <AvatarFallback>{item.userName?.charAt(0).toUpperCase()}</AvatarFallback>
+            </Avatar>
+            <span className="text-base font-semibold text-white">{item.userName || 'User'}</span>
+        </div>
+        <h3 className="text-2xl font-bold font-headline text-white drop-shadow-md">{item.title}</h3>
         {item.subtitle && (
-          <p className="mt-2 text-muted-foreground text-sm">{item.subtitle}</p>
+          <p className="mt-2 text-white/90 text-base drop-shadow-sm">{item.subtitle}</p>
         )}
-      </CardContent>
-        {item.type === 'user_post' && (
-            <div className="flex items-center gap-3 p-6 pt-0">
-                <Avatar className="h-8 w-8">
-                    <AvatarImage src={item.userAvatar} />
-                    <AvatarFallback>{item.userName?.charAt(0).toUpperCase()}</AvatarFallback>
-                </Avatar>
-                <span className="text-sm font-medium text-muted-foreground">{item.userName || 'User'}</span>
-            </div>
-        )}
-    </Card>
+      </div>
+    </>
   );
 }
