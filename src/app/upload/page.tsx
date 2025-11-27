@@ -115,12 +115,22 @@ export default function UploadPage() {
       });
       return;
     }
+    
+    if (uploadMode === 'file' && !file) {
+      toast({ variant: 'destructive', title: 'No file selected', description: 'Please upload an image to create a post.' });
+      return;
+    }
+    if (uploadMode === 'url' && !data.mediaUrl) {
+        toast({ variant: 'destructive', title: 'No URL provided', description: 'Please provide a media URL to create a post.' });
+        return;
+    }
+
 
     setIsSubmitting(true);
     let finalMediaUrl = data.mediaUrl || undefined;
     const localId = `local_${uuidv4()}`;
 
-    // Create optimistic post in Dexie
+    // Create optimistic post in Dexie and redirect immediately
     await db.feed.add({
       id: localId,
       title: data.title,
@@ -139,30 +149,35 @@ export default function UploadPage() {
     toast({ title: "Your post is being uploaded!", description: "It will appear at the top of the feed." });
 
     try {
-      // 1. Upload image thumbnail if it exists
-      if (file && storage) {
-        const thumb = await createThumbnail(file);
-        const filename = `feed_images/${user.uid}/${Date.now()}-${file.name.replace(/\s+/g, '_')}`;
-        const storageRef = ref(storage, filename);
-        const uploadTask = uploadBytesResumable(storageRef, thumb);
-        
-        await new Promise<void>((resolve, reject) => {
-            uploadTask.on('state_changed',
-                (snapshot) => {
-                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    setUploadProgress(progress); // For potential future use
-                    db.feed.update(localId, { uploadProgress: progress });
-                },
-                (error) => reject(error),
-                async () => {
-                    finalMediaUrl = await getDownloadURL(uploadTask.snapshot.ref);
-                    resolve();
-                }
-            );
-        });
+      // 1. Handle image upload if a file is selected
+      if (uploadMode === 'file' && file && storage) {
+        try {
+            const thumb = await createThumbnail(file);
+            const filename = `feed_images/${user.uid}/${Date.now()}-${file.name.replace(/\s+/g, '_')}`;
+            const storageRef = ref(storage, filename);
+            const uploadTask = uploadBytesResumable(storageRef, thumb);
+            
+            finalMediaUrl = await new Promise<string>((resolve, reject) => {
+                uploadTask.on('state_changed',
+                    (snapshot) => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        db.feed.update(localId, { uploadProgress: progress });
+                    },
+                    (error) => reject(error),
+                    async () => {
+                        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                        resolve(downloadURL);
+                    }
+                );
+            });
+        } catch (uploadError) {
+            console.error('Image upload failed:', uploadError);
+            // Don't throw, allow text post to proceed without image
+            finalMediaUrl = undefined;
+        }
       }
 
-      // 2. Create Firestore document
+      // 2. Create the final Firestore document
       const feedCollection = collection(firestore, 'feed_items');
       const docRef = await addDoc(feedCollection, {
         title: data.title,
@@ -175,8 +190,12 @@ export default function UploadPage() {
         createdAt: serverTimestamp(),
       });
       
-      // Update local item with final data
-      await db.feed.update(localId, { id: docRef.id, status: 'complete', image: finalMediaUrl, uploadProgress: 100 });
+      // Update local item with final data and remove it (or update its status)
+      const finalItem = (await db.feed.get(localId)) as FeedItem;
+      await db.feed.delete(localId); // Remove the temp local item
+      // Add the final, confirmed item to Dexie to avoid UI flicker
+      await db.feed.add({ ...finalItem, id: docRef.id, status: 'complete', image: finalMediaUrl });
+
 
     } catch (error) {
       console.error('Error creating post:', error);

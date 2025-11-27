@@ -104,29 +104,41 @@ export default function FeedClient({ initialItems }: { initialItems: FeedItem[] 
     );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
+      const newItems: FeedItem[] = [];
       snapshot.docChanges().forEach(change => {
         if (change.type === 'added') {
-          const newItem = docToFeedItem(change.doc);
-          // See if there's a local version to remove
-          db.feed.where('id').startsWith('local_').delete();
-          setItems(prev => [newItem, ...prev]);
+            const newItem = docToFeedItem(change.doc);
+            // This is a new item from firestore, check if we have a local version
+            const localIdToDelete = localItems?.find(
+              (localItem) =>
+                localItem.title === newItem.title &&
+                localItem.subtitle === newItem.subtitle &&
+                localItem.status === 'uploading'
+            )?.id;
+            if (localIdToDelete) {
+              db.feed.delete(localIdToDelete);
+            }
+            newItems.push(newItem);
         }
       });
+      if (newItems.length > 0) {
+        setItems(prev => [...newItems, ...prev]);
+      }
     });
 
     return () => unsubscribe();
-  }, [firestore, user, items]);
+  }, [firestore, user, items, localItems]);
 
   return (
     <div className="container mx-auto px-4 py-8">
       {user && (
-        <div className="mb-8">
+        <div className="mb-8 max-w-7xl mx-auto">
           <Button asChild>
             <a href="/upload">Create Post</a>
           </Button>
         </div>
       )}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
         {combinedItems.map((item) => {
           if (item.status === 'uploading' || item.status === 'error') {
             return <FeedCardPlaceholder key={item.id} item={item} />;
