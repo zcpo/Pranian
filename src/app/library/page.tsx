@@ -1,7 +1,7 @@
 
 'use client';
 
-import { ArrowRight, Book, Clapperboard, Headphones, Shirt, BookOpen, Video } from 'lucide-react';
+import { ArrowRight, Book, Clapperboard, Headphones, Shirt, BookOpen, Video, Music } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import Link from 'next/link';
@@ -47,6 +47,14 @@ const sections = [
     icon: Clapperboard,
     href: '/library/video',
     imageHint: 'video lesson'
+  },
+  { 
+    id: 'class-vibes-1',
+    title: 'Class Vibes', 
+    description: 'Find music to match your mood and practice.',
+    icon: Music,
+    href: '/class-vibes',
+    imageHint: 'music vibes'
   },
 ];
 
