@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 export default function QuickNavLayout({
@@ -6,5 +5,5 @@ export default function QuickNavLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return <div className="h-screen w-screen">{children}</div>;
 }
