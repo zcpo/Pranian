@@ -1,3 +1,4 @@
+
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
@@ -140,16 +141,17 @@ service cloud.firestore {
     }
 
     /**
-     * @description Feed items are public for all to read, but only admins can manage them.
+     * @description Feed items are public for all to read. Signed-in users can create posts.
      * @path /feed_items/{feedItemId}
      * @allow (get, list) any user, authenticated or not, can view the feed.
-     * @deny (create, update, delete) for non-admins.
-     * @principle Allows a public, curated feed managed by administrators.
+     * @allow (create) any authenticated user can create a new post.
+     * @deny (update, delete) for non-admins.
+     * @principle Allows a public, curated feed managed by administrators, with contributions from the community.
      */
     match /feed_items/{feedItemId} {
       allow get: if true;
       allow list: if true;
-      allow create: if isAdmin();
+      allow create: if isSignedIn();
       allow update: if isAdmin();
       allow delete: if isAdmin();
     }
@@ -174,3 +176,5 @@ service cloud.firestore {
     }
   }
 }
+
+    
