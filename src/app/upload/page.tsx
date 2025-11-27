@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -50,7 +50,10 @@ async function createThumbnail(file: File, maxSize = 1080): Promise<Blob> {
         URL.revokeObjectURL(url);
       }, 'image/jpeg', 0.85); // 85% quality
     };
-    img.onerror = (e) => reject(e);
+    img.onerror = (e) => {
+        URL.revokeObjectURL(url);
+        reject(e)
+    };
     img.src = url;
   });
 }
@@ -64,6 +67,7 @@ export default function UploadPage() {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const { control, handleSubmit, formState: { errors } } = useForm<FeedFormValues>({
     resolver: zodResolver(feedSchema),
@@ -73,9 +77,17 @@ export default function UploadPage() {
     if (acceptedFiles[0]) {
       const file = acceptedFiles[0];
       setFile(file);
-      setPreview(URL.createObjectURL(file));
+      const previewUrl = URL.createObjectURL(file);
+      setPreview(previewUrl);
     }
   }, []);
+  
+  useEffect(() => {
+    // Revoke object URL on unmount
+    return () => {
+        if(preview) URL.revokeObjectURL(preview);
+    }
+  }, [preview]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -101,14 +113,17 @@ export default function UploadPage() {
       if (file) {
         const storage = getStorage();
         const thumb = await createThumbnail(file);
-        const filename = `feed_images/${user.uid}/${Date.now()}-${file.name}`;
+        const filename = `feed_images/${user.uid}/${Date.now()}-${file.name.replace(/\s+/g, '_')}`;
         const storageRef = ref(storage, filename);
         
         const uploadTask = uploadBytesResumable(storageRef, thumb);
         
         await new Promise<void>((resolve, reject) => {
             uploadTask.on('state_changed',
-                (snapshot) => { /* Optional: track progress */ },
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    setUploadProgress(progress);
+                },
                 (error) => reject(error),
                 async () => {
                     imageUrl = await getDownloadURL(uploadTask.snapshot.ref);
@@ -238,7 +253,7 @@ export default function UploadPage() {
             <div className="flex justify-end">
               <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {isSubmitting ? 'Posting...' : 'Create Post'}
+                {isSubmitting ? `Uploading... ${Math.round(uploadProgress)}%` : 'Create Post'}
               </Button>
             </div>
 
