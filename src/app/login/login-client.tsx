@@ -18,8 +18,7 @@ const LoginClientPage: React.FC = () => {
     let emailSpan = document.getElementById('for-email');
     let signUp = document.querySelector('.form.signup');
     let signIn = document.querySelector('.form.signin');
-    let ba3 = document.getElementById('ba3');
-
+    
     // Add dark theme by default if none is saved
     if (!savedTheme) {
         body.classList.add('dark');
@@ -121,39 +120,10 @@ const LoginClientPage: React.FC = () => {
             }
         });
     }
-
-    if (navigator.getBattery && ba3) {
-      navigator.getBattery().then((battery) => {
-        let ba3Percent = battery.level;
-        battery.addEventListener('chargingchange', () => {
-          ba3Percent = battery.level;
-        });
-        let start = 0;
-        let num = ba3Percent * 100;
-        let interval = setInterval(() => {
-          start++;
-          if (start >= num) {
-            clearInterval(interval);
-          }
-          ba3.textContent = start + '%';
-        }, 10); // Reduced interval for faster animation
-      });
-    }
   }, []);
 
   return (
     <>
-      <div className="battery">
-        <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M2.5 8C2.5 7.17157 3.17157 6.5 4 6.5H18C18.8284 6.5 19.5 7.17157 19.5 8V9C19.5 9.27614 19.7239 9.5 20 9.5C20.8284 9.5 21.5 10.1716 21.5 11V13C21.5 13.8284 20.8284 14.5 20 14.5C19.7239 14.5 19.5 14.7239 19.5 15V16C19.5 16.8284 18.8284 17.5 18 17.5H4C3.17157 17.5 2.5 16.8284 2.5 16V14C2.5 13.7239 2.72386 13.5 3 13.5C3.27614 13.5 3.5 13.7239 3.5 14V16C3.5 16.2761 3.72386 16.5 4 16.5H18C18.2761 16.5 18.5 16.2761 18.5 16V15C18.5 14.1716 19.1716 13.5 20 13.5C20.2761 13.5 20.5 13.2761 20.5 13V11C20.5 10.7239 20.2761 10.5 20 10.5C19.1716 10.5 18.5 9.82843 18.5 9V8C18.5 7.72386 18.2761 7.5 18 7.5H4C3.72386 7.5 3.5 7.72386 3.5 8V10C3.5 10.2761 3.27614 10.5 3 10.5C2.72386 10.5 2.5 10.2761 2.5 10V8Z"
-          />
-        </svg>
-        <span id="ba3">0%</span>
-      </div>
-
       <div className="theme" id="themeButton">
         <div className="theme-btn">
           <span className="theme-text">THEMIFY</span>
@@ -196,7 +166,7 @@ const LoginClientPage: React.FC = () => {
               <input type="submit" value="Create Account" />
             </div>
             <p className="p-text">
-              Already a slayer? <a href="#" className="login">login in</a>
+              Already a member? <a href="#" className="login">login in</a>
             </p>
           </div>
           <div className="form signin " id="signin">
@@ -215,7 +185,7 @@ const LoginClientPage: React.FC = () => {
               <input type="submit" value="Login" />
             </div>
             <p className="p-text">
-              Not yet a slayer? <a href="#" className="create">Sign up</a>
+              Not yet a member? <a href="#" className="create">Sign up</a>
             </p>
           </div>
         </div>

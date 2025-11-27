@@ -24,14 +24,14 @@
 .lightsOut {
   --bg: rgb(0, 0, 0);
   --text: #fff;
-  --icon: rgb(255, 0, 106);
-  --submit: rgb(255, 0, 98);
+  --icon: #9333ea;
+  --submit: #9333ea;
   --span: rgba(255, 255, 255, 0.464);
   --input-border: rgba(0, 0, 0, 0.1);
   --shadow1: rgba(187, 187, 187, 0.218);
   --shadow2: rgba(0, 0, 0, 0.35);
   --submit-shadow: rgba(0, 0, 0, 0.365);
-  --gradient: linear-gradient(70deg, #fd05c7, #068bff, #00fff7);
+  --gradient: linear-gradient(70deg, #9333ea, #068bff, #00fff7);
 }
 
 .light {
@@ -69,31 +69,6 @@
   width: 87px;
   text-align: right;
   font-weight: 600;
-  background: var(--gradient);
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  -webkit-background-clip: text;
-}
-
-.battery {
-  position: fixed;
-  top: 0;
-}
-.battery svg {
-  position: absolute;
-  width: 80px;
-  height: fit-content;
-  top: -0.6rem;
-  fill: var(--icon);
-  margin-left: 10px;
-}
-.battery span {
-  position: absolute;
-  left: 1.5rem;
-  top: 1rem;
-  font-size: 1.2rem;
-  font-weight: 600;
-  filter: brightness(1.4);
   background: var(--gradient);
   -webkit-text-fill-color: transparent;
   background-clip: text;
