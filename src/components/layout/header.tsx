@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { UserCircle, Menu } from 'lucide-react';
 import * as React from "react"
+import { signOut } from 'firebase/auth';
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -26,7 +27,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useUser } from '@/firebase';
+import { useUser, useAuth } from '@/firebase';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 
 
@@ -44,7 +45,13 @@ export default function Header() {
   const pathname = usePathname();
   const [open, setOpen] = React.useState(false);
   const { user } = useUser();
+  const auth = useAuth();
 
+  const handleSignOut = () => {
+    if (auth) {
+      signOut(auth);
+    }
+  };
 
   const NavLink = ({ href, label, className }: { href: string; label: string; className?: string }) => (
     <Link
@@ -103,10 +110,13 @@ export default function Header() {
                       <DropdownMenuItem asChild>
                         <Link href="/profile">Profile</Link>
                       </DropdownMenuItem>
+                       <DropdownMenuItem asChild>
+                        <Link href="/journal">Journal</Link>
+                      </DropdownMenuItem>
                       <DropdownMenuItem>Billing</DropdownMenuItem>
                       <DropdownMenuItem>Settings</DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem>Log out</DropdownMenuItem>
+                      <DropdownMenuItem onClick={handleSignOut}>Log out</DropdownMenuItem>
                     </>
                   ) : (
                     <>

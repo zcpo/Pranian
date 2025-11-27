@@ -61,7 +61,7 @@ export default function ProfilePage() {
             email: user.email || '',
         });
     }
-  }, [userProfile, user, reset]);
+  }, [userProfile, user]);
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     if (!user || !firestore) return;
