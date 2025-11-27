@@ -34,7 +34,7 @@ const LoginClientPage: React.FC = () => {
     }
     
 
-    let themes = ['light', 'dark', 'lightsOut'];
+    let themes = ['light', 'dark'];
     
     var count = 0;
     if (savedTheme === null) {

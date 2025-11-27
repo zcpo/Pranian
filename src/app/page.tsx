@@ -3,14 +3,13 @@ import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import Footer from '@/components/layout/footer';
 
 export default function Home() {
   const heroImage = PlaceHolderImages.find(img => img.id === 'hero-background');
 
   return (
     <>
-      <div className="flex flex-col h-[calc(100vh-3.5rem)]">
+      <div className="flex flex-col h-[calc(100vh-14rem)]">
         {/* Hero Section */}
         <section className="relative flex-1 flex items-center justify-center text-center text-white">
           {heroImage && (
@@ -42,7 +41,6 @@ export default function Home() {
           </div>
         </section>
       </div>
-      <Footer />
     </>
   );
 }

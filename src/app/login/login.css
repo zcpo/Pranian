@@ -21,19 +21,6 @@
   --gradient: linear-gradient(70deg, #fff, #414141, #fff, #606060);
 }
 
-.lightsOut {
-  --bg: rgb(0, 0, 0);
-  --text: #fff;
-  --icon: #9333ea;
-  --submit: #9333ea;
-  --span: rgba(255, 255, 255, 0.464);
-  --input-border: rgba(0, 0, 0, 0.1);
-  --shadow1: rgba(187, 187, 187, 0.218);
-  --shadow2: rgba(0, 0, 0, 0.35);
-  --submit-shadow: rgba(0, 0, 0, 0.365);
-  --gradient: linear-gradient(70deg, #9333ea, #068bff, #00fff7);
-}
-
 .light {
   --bg: #e6e9ec;
   --text: #232323;

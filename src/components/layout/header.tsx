@@ -32,7 +32,7 @@ export default function Header() {
   );
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-primary text-white">
+    <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-transparent text-white glass-card">
       <div className="container flex h-14 max-w-screen-2xl items-center">
         <div className="mr-4 flex">
           <Logo className="text-white" />

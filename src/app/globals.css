@@ -67,6 +67,28 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    background: linear-gradient(to bottom, #5d326c, #350048);
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.05) !important;
+    box-shadow: 0 15px 15px rgba(0, 0, 0, 0.3) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(15px) !important;
+    border: none !important;
+    color: white !important;
+  }
+
+  .glass-card .text-muted-foreground {
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
+   .glass-card .text-foreground {
+    color: white !important;
+  }
+
+  .dark .glass-card {
+     background: rgba(0, 0, 0, 0.2) !important;
   }
 }
