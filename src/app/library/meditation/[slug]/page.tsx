@@ -7,7 +7,7 @@ import { meditations } from '@/lib/meditations';
 import { notFound } from 'next/navigation';
 
 export default function MeditationPlayerPage({ params }: { params: { slug: string } }) {
-  const meditation = meditations.find(m => m.slug === params.slug);
+  const meditation = meditations.find(m => m && m.slug === params.slug);
 
   if (!meditation) {
     notFound();
