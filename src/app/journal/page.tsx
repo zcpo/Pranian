@@ -56,6 +56,7 @@ export default function JournalPage() {
   const { user, isUserLoading } = useUser();
   const firestore = useFirestore();
   const [activeSession, setActiveSession] = useState<SessionEntry | null>(null);
+  const auth = useAuth();
 
   // --- LOCAL DATA (DEXIE) ---
   const sessions = useLiveQuery(
@@ -516,10 +517,10 @@ const AnalyticsDashboard = ({ sessions }: { sessions: SessionEntry[] }) => {
     }))
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-  const totalMinutes = sessions.reduce((acc, s) => acc + s.duration, 0) / 60;
+  const totalMinutes = sessions.reduce((acc, s) => acc + (s.duration || 0), 0) / 60;
   const totalSessions = sessions.length;
   const avgDuration = totalSessions > 0 ? totalMinutes / totalSessions : 0;
-  const longestSession = Math.max(...sessions.map(s => s.duration), 0) / 60;
+  const longestSession = Math.max(...sessions.map(s => s.duration || 0), 0) / 60;
 
   return (
     <Card>
