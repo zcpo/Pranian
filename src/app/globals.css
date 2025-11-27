@@ -68,22 +68,25 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  .dark body {
     background: linear-gradient(to bottom, #5d326c, #350048);
   }
 
-  .glass-card {
+  .dark .glass-card {
     background: transparent;
     border: 2px solid rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(13px);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
 
-  .glass-card .text-muted-foreground {
+  .dark .glass-card .text-muted-foreground {
     color: rgba(255, 255, 255, 0.8);
   }
 
-  .dark .glass-card {
-     background: transparent;
-     border: 2px solid rgba(255, 255, 255, 0.1);
+  .glass-card {
+    @apply bg-card border-border; /* Defaults for light mode */
   }
+
 }
