@@ -47,7 +47,7 @@ const nowISO = () => new Date().toISOString();
 export default function JournalPage() {
   const { user, isUserLoading } = useUser();
   const firestore = useFirestore();
-  const auth = useFirebaseApp().auth();
+  const auth = useFirebaseApp()?.auth;
   const [activeSession, setActiveSession] = useState<SessionEntry | null>(null);
 
   // --- LOCAL DATA (DEXIE) ---
@@ -139,6 +139,7 @@ export default function JournalPage() {
 
   // --- UI HANDLERS ---
   const doSignInGoogle = async () => {
+    if (!auth) return;
     try {
       await signInWithPopup(auth, new GoogleAuthProvider());
     } catch (error) {
@@ -147,6 +148,7 @@ export default function JournalPage() {
   };
 
   const doSignOut = async () => {
+    if (!auth) return;
     await signOut(auth);
     setActiveSession(null);
   };
