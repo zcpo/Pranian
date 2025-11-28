@@ -1,0 +1,41 @@
+
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Helper function to check if the user is signed in.
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Helper function to check if the user is the owner of the file path.
+    // This allows them to write to their own "folder" but not others'.
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // --- Profile Pictures ---
+    // Users can create, update, and delete their own profile pictures.
+    // Anyone can read profile pictures (as they are public).
+    match /avatars/{userId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if isOwner(userId);
+    }
+
+    // --- General User Uploads (e.g., from the camera for journal entries) ---
+    // Users can create, update, and delete their own uploaded files.
+    // Reading is restricted to the owner to keep journal media private.
+    match /uploads/{userId}/{allPaths=**} {
+      allow read, write: if isOwner(userId);
+    }
+    
+    // --- Feed Post Images ---
+    // Users can create, update, and delete images for their own feed posts.
+    // Anyone can read feed images, as the feed is public.
+    match /feed_images/{userId}/{allPaths=**} {
+        allow read: if true;
+        allow write: if isOwner(userId);
+    }
+  }
+}
