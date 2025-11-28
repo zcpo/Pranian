@@ -16,7 +16,6 @@ export function GlassNavLink({ href, label, icon: Icon, active, onClick }: Glass
   return (
     <Link href={href} className={cn("glass-nav-link", { 'glass-item--active': active })} onClick={onClick}>
         <div className="glass-nav-link__filter"></div>
-        <div className="glass-nav-link__overlay"></div>
         <div className="glass-nav-link__specular"></div>
         <div className="glass-nav-link__content">
             <Icon />
