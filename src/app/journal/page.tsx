@@ -357,12 +357,12 @@ function CategoryEntryForm({ category, userId }: { category: string, userId: str
 
 
 function DailyProgress({ categories }: { categories: string[] }) {
-    const today = new Date().toISOString().split("T")[0];
     const [completed, setCompleted] = useState(0);
     const [streak, setStreak] = useState(0);
     const [categoryStatus, setCategoryStatus] = useState<Record<string, boolean>>({});
 
     useEffect(() => {
+        const today = new Date().toISOString().split("T")[0];
         let count = 0;
         let status: Record<string, boolean> = {};
 
@@ -395,8 +395,7 @@ function DailyProgress({ categories }: { categories: string[] }) {
         }
         
         setStreak(newStreak);
-
-    }, [categories, today]);
+    }, [categories]);
 
     const percent = categories.length > 0 ? Math.round((completed / categories.length) * 100) : 0;
 
@@ -652,5 +651,7 @@ function IntensityChart({ sessions }: { sessions: {date: Date, intensity?: numbe
     </Card>
   );
 }
+
+    
 
     
