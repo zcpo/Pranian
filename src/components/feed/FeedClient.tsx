@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useEffect, useState, useCallback, useRef } from 'react';
@@ -41,7 +42,7 @@ export default function FeedClient({ initialItems }: { initialItems: FeedItem[] 
   const firestore = useFirestore();
   const [items, setItems] = useState<FeedItem[]>(initialItems);
   const lastDocRef = useRef<QueryDocumentSnapshot | null>(null);
-  const [loading, setLoading] = useState(initialItems.length === 0);
+  const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
@@ -52,35 +53,6 @@ export default function FeedClient({ initialItems }: { initialItems: FeedItem[] 
     const uniqueItems = Array.from(new Map(allItems.map(item => [item.id, item])).values());
     return uniqueItems.sort((a, b) => toDate(b.createdAt).getTime() - toDate(a.createdAt).getTime());
   }, [localItems, items]);
-
-  const loadInitialPage = useCallback(async () => {
-    if (!firestore) return;
-    setLoading(true);
-
-    const q = query(collection(firestore, 'feed_items'), orderBy('createdAt', 'desc'), limit(PAGE_SIZE));
-
-    try {
-      const querySnapshot = await getDocs(q);
-      if (querySnapshot.docs.length > 0) {
-        lastDocRef.current = querySnapshot.docs[querySnapshot.docs.length - 1];
-      }
-      
-      const newItems = querySnapshot.docs.map(docToFeedItem);
-      setHasMore(newItems.length === PAGE_SIZE);
-      setItems(newItems);
-    } catch (error) {
-      console.error("Error fetching initial page:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [firestore]);
-  
-  useEffect(() => {
-    if (items.length === 0) {
-        loadInitialPage();
-    }
-  }, [items.length, loadInitialPage]);
-
 
   const loadNextPage = useCallback(async () => {
     if (!firestore || !hasMore || loadingMore) return;
