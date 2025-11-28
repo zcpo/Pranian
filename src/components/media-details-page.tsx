@@ -32,16 +32,16 @@ export function MediaDetailsPage({ title, imageUrl, description, metadata }: Med
   
   return (
     <div
-      className="w-full bg-no-repeat min-h-screen lg:bg-center bg-cover bg-top text-white relative flex items-center"
+      className="w-full bg-no-repeat min-h-screen bg-cover bg-center text-white relative flex items-center"
       style={{
         backgroundImage: `linear-gradient(to right, #0f171e 40%, transparent), url('${imageUrl}')`,
       }}
     >
-      <div className="w-full lg:w-7/12 mt-10" style={{ padding: '5% 3%' }}>
+      <div className="w-full lg:w-7/12 p-6 sm:p-8 md:p-12 lg:p-20">
         
-        <h1 className="text-4xl lg:text-5xl font-bold font-headline">{title}</h1>
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-headline">{title}</h1>
 
-        <div className="mt-5 flex text-slate-300 items-center text-md flex-wrap">
+        <div className="mt-5 flex text-slate-300 items-center text-sm sm:text-md flex-wrap">
           <span className="ml-3">{metadata.duration}</span>
           <span className="ml-3">{metadata.year}</span>
           <span className="border border-slate-400 text-xs px-1 rounded-sm font-bold mx-3">
@@ -52,9 +52,9 @@ export function MediaDetailsPage({ title, imageUrl, description, metadata }: Med
           </span>
         </div>
 
-        <p className="mt-4 text-lg max-w-2xl">{description}</p>
+        <p className="mt-4 text-base sm:text-lg max-w-2xl">{description}</p>
 
-        <div className="flex flex-wrap lg:flex-nowrap items-center mt-8">
+        <div className="flex flex-wrap items-center mt-8">
           <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 mr-2.5 mb-3" asChild>
             <Link href={`${pathname}/player`}>
               <Play className="mr-2 h-5 w-5 fill-current" />
@@ -71,19 +71,19 @@ export function MediaDetailsPage({ title, imageUrl, description, metadata }: Med
           </Button>
         </div>
 
-        <div className="text-slate-300 mt-6 text-md max-w-xl">
-          <div className="flex">
-            <p className="w-36 font-bold">Starring</p>
+        <div className="text-slate-300 mt-6 text-sm sm:text-md max-w-xl">
+          <div className="flex flex-col sm:flex-row">
+            <p className="w-36 font-bold shrink-0">Starring</p>
             <p className="text-blue-300 truncate">{metadata.author}</p>
           </div>
 
-          <div className="flex">
-            <p className="w-36 font-bold">Genres</p>
+          <div className="flex flex-col sm:flex-row">
+            <p className="w-36 font-bold shrink-0">Genres</p>
             <p className="text-blue-300 truncate">{metadata.genres.join(', ')}</p>
           </div>
 
-          <div className="flex">
-            <p className="w-36 font-bold">Subtitles</p>
+          <div className="flex flex-col sm:flex-row">
+            <p className="w-36 font-bold shrink-0">Subtitles</p>
             <p className="text-blue-300 truncate">English</p>
           </div>
         </div>

@@ -3,6 +3,9 @@
 
 import { useEffect, useRef } from 'react';
 import './video-player.css';
+import { useRouter } from 'next/navigation';
+import { Button } from './ui/button';
+import { X } from 'lucide-react';
 
 declare const Plyr: any;
 declare const Hls: any;
@@ -15,6 +18,7 @@ type VideoPlayerProps = {
 const VideoPlayer = ({ source, poster }: VideoPlayerProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
     if (typeof window === 'undefined' || !videoRef.current) {
@@ -44,8 +48,6 @@ const VideoPlayer = ({ source, poster }: VideoPlayerProps) => {
           'settings', 'pip', 'airplay', 'fullscreen'
         ],
         loop: { active: true },
-        // Casting requires additional setup with the Google Cast SDK
-        // but we enable the button in the UI.
         googleCast: { active: true }, 
       };
 
@@ -81,7 +83,10 @@ const VideoPlayer = ({ source, poster }: VideoPlayerProps) => {
   }, [source]);
 
   return (
-    <div ref={containerRef} className="player-container w-full h-screen">
+    <div ref={containerRef} className="player-container w-full h-screen relative">
+      <Button variant="ghost" size="icon" onClick={() => router.back()} className="absolute top-4 right-4 z-50 text-white bg-black/30 hover:bg-black/50">
+        <X className="h-6 w-6" />
+      </Button>
       <video ref={videoRef} controls crossOrigin="" playsInline poster={poster}></video>
     </div>
   );

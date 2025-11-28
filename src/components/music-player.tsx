@@ -5,6 +5,9 @@ import { useState, useRef, useEffect, FC } from 'react';
 import Image from 'next/image';
 import './music-player.css';
 import { cn } from '@/lib/utils';
+import { useRouter } from 'next/navigation';
+import { Button } from './ui/button';
+import { X } from 'lucide-react';
 
 type Track = {
     title: string;
@@ -61,6 +64,7 @@ const RepeatIcon = () => (
 export const MusicPlayer: FC<MusicPlayerProps> = ({ track }) => {
     const audioRef = useRef<HTMLAudioElement>(null);
     const progressBarRef = useRef<HTMLDivElement>(null);
+    const router = useRouter();
     
     const [isPlaying, setIsPlaying] = useState(false);
     const [isLooping, setIsLooping] = useState(false);
@@ -148,6 +152,10 @@ export const MusicPlayer: FC<MusicPlayerProps> = ({ track }) => {
         <div className="music-player-container">
              <audio ref={audioRef} src={track.audioSrc} preload="metadata"></audio>
              <div className="music-player-bg" style={{ backgroundImage: `url(${track.albumArt})`}}></div>
+
+            <Button variant="ghost" size="icon" onClick={() => router.back()} className="absolute top-4 right-4 z-10 text-white hover:bg-white/20">
+                <X className="h-6 w-6" />
+            </Button>
 
             <div className="music-card">
                  <Image src={track.albumArt} alt="Album Cover" width={400} height={400} className="album-art-main" />
