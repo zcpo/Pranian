@@ -5,25 +5,25 @@
 
 @layer base {
   .dark {
-    --background: 0 0% 0%;
-    --foreground: 0 0% 100%;
-    --card: 0 0% 4%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 4%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 256 100% 73%;
-    --primary-foreground: 256 100% 15%;
-    --secondary: 0 0% 10%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 10%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 256 100% 73%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 256 100% 73%;
+    --background: 224 71% 4%;
+    --foreground: 210 40% 98%;
+    --card: 224 71% 6%;
+    --card-foreground: 210 40% 98%;
+    --popover: 224 71% 4%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 198 93% 60%;
+    --primary-foreground: 198 93% 10%;
+    --secondary: 217 33% 18%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 33% 18%;
+    --muted-foreground: 215 28% 65%;
+    --accent: 198 93% 60%;
+    --accent-foreground: 198 93% 10%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217 33% 18%;
+    --input: 217 33% 18%;
+    --ring: 198 93% 60%;
     --radius: 0.5rem;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
@@ -31,65 +31,17 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
 
-    --main-bg-color: hsl(0 0% 0%);
-    --main-font-color: hsl(0 0% 80%);
-    --main-highlight-color: hsl(0 0% 100%);
-    --main-link-active-color: hsl(var(--primary));
-    --main-border-color: hsla(0 0% 50.2%/0.3);
-    --activity-bg-color: hsl(0 0% 5%);
-    --footer-height: 100px;
-    --main-bg-color-dark: hsl(0 0% 8%);
+    color-scheme: dark;
   }
 }
 
 @layer base {
-  html {
-    overflow-y: scroll;
-  }
   * {
     @apply border-border;
   }
   body {
     @apply bg-background text-foreground;
+    background: linear-gradient(180deg, hsl(222, 84%, 6%), hsl(222, 84%, 8%));
+    min-height: 100vh;
   }
-
-  .dark body {
-    background-color: hsl(var(--background));
-  }
-
-  .dark .glass-card {
-    background: rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-  }
-
-  .dark .glass-card .text-muted-foreground {
-    color: rgba(255, 255, 255, 0.8);
-  }
-
-  .dark .glass-card .glass-input {
-    background-color: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.2);
-    color: white;
-  }
-  
-  .dark .glass-card .glass-input::placeholder {
-    color: rgba(255, 255, 255, 0.5);
-  }
-  
-  .dark .glass-card .glass-button {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
-    color: white;
-  }
-
-  .dark .glass-card .glass-button:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-  }
-
-  .glass-card {
-    @apply bg-card border-border;
-  }
-
 }
