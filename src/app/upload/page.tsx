@@ -8,7 +8,7 @@ import { z } from 'zod';
 import { useDropzone } from 'react-dropzone';
 import { useUser, useDatabase } from '@/firebase';
 import { ref as dbRef, push, set, serverTimestamp } from 'firebase/database';
-import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, uploadBytesResumable, UploadTask } from 'firebase/storage';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -99,13 +99,10 @@ export default function UploadPage() {
       if (uploadMode === 'file' && file && storage) {
         const filename = `feed_images/${user.uid}/${Date.now()}-${file.name.replace(/\s+/g, '_')}`;
         const fileRef = storageRef(storage, filename);
-        const uploadTask = uploadBytesResumable(fileRef, file);
-
-        // Await the completion of the upload
-        await uploadTask;
-
-        // Get the download URL
-        finalMediaUrl = await getDownloadURL(fileRef);
+        
+        // Use the simpler uploadBytes which returns a promise that resolves on completion
+        const snapshot = await uploadBytes(fileRef, file);
+        finalMediaUrl = await getDownloadURL(snapshot.ref);
       }
 
       // 2. Create the final Realtime Database entry
