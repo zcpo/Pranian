@@ -36,14 +36,25 @@ const VideoPlayer = ({ source, poster }: VideoPlayerProps) => {
     let hls: any;
 
     if (video) {
+      const plyrOptions = {
+        captions: { active: true, update: true, language: 'en' },
+        controls: [
+          'play-large', 'rewind', 'play', 'fast-forward', 'progress', 
+          'current-time', 'duration', 'mute', 'volume', 'captions', 
+          'settings', 'pip', 'airplay', 'fullscreen'
+        ],
+        loop: { active: true },
+        // Casting requires additional setup with the Google Cast SDK
+        // but we enable the button in the UI.
+        googleCast: { active: true }, 
+      };
+
       if (Hls.isSupported()) {
         hls = new Hls();
         hls.loadSource(source);
         hls.attachMedia(video);
         
-        player = new Plyr(video, {
-          captions: { active: true, update: true, language: 'en' },
-        });
+        player = new Plyr(video, plyrOptions);
 
         player.on('languagechange', () => {
           setTimeout(() => {
@@ -55,9 +66,7 @@ const VideoPlayer = ({ source, poster }: VideoPlayerProps) => {
 
       } else {
         video.src = source;
-        player = new Plyr(video, {
-            captions: { active: true, update: true, language: 'en' },
-        });
+        player = new Plyr(video, plyrOptions);
       }
     }
 

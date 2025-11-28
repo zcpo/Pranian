@@ -4,6 +4,7 @@
 import { useState, useRef, useEffect, FC } from 'react';
 import Image from 'next/image';
 import './music-player.css';
+import { cn } from '@/lib/utils';
 
 type Track = {
     title: string;
@@ -32,12 +33,37 @@ const parseTime = (txt: string) => {
     return m ? (+m[1] * 60) + (+m[2]) : 0;
 };
 
+const PlayIcon = () => (
+    <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M8 5v14l11-7z" />
+    </svg>
+);
+
+const PauseIcon = () => (
+    <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+    </svg>
+);
+
+const RewindIcon = () => (
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6 8.5 6V6l-8.5 6z"/></svg>
+);
+
+const FastForwardIcon = () => (
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="m4 18 8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/></svg>
+);
+
+const RepeatIcon = () => (
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
+);
+
+
 export const MusicPlayer: FC<MusicPlayerProps> = ({ track }) => {
     const audioRef = useRef<HTMLAudioElement>(null);
     const progressBarRef = useRef<HTMLDivElement>(null);
-    const progressFillRef = useRef<HTMLDivElement>(null);
     
     const [isPlaying, setIsPlaying] = useState(false);
+    const [isLooping, setIsLooping] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(parseTime(track.duration));
 
@@ -51,18 +77,10 @@ export const MusicPlayer: FC<MusicPlayerProps> = ({ track }) => {
               setDuration(newDuration);
             }
         };
-        const handleCanPlay = () => {
-          if (!isPlaying) {
-             // Optional: auto-play when ready
-             // handlePlayPause();
-          }
-        }
 
         audio.addEventListener('loadedmetadata', setAudioData);
-        audio.addEventListener('canplay', handleCanPlay);
         return () => {
             audio.removeEventListener('loadedmetadata', setAudioData);
-            audio.removeEventListener('canplay', handleCanPlay);
         }
     }, [track.audioSrc]);
 
@@ -75,7 +93,11 @@ export const MusicPlayer: FC<MusicPlayerProps> = ({ track }) => {
             setCurrentTime(audio.currentTime);
         };
         
-        const handleEnded = () => setIsPlaying(false);
+        const handleEnded = () => {
+            if (!isLooping) {
+                setIsPlaying(false);
+            }
+        };
 
         audio.addEventListener('timeupdate', updateProgress);
         audio.addEventListener('ended', handleEnded);
@@ -84,7 +106,14 @@ export const MusicPlayer: FC<MusicPlayerProps> = ({ track }) => {
             audio.removeEventListener('timeupdate', updateProgress);
             audio.removeEventListener('ended', handleEnded);
         };
-    }, []);
+    }, [isLooping]);
+
+    useEffect(() => {
+        const audio = audioRef.current;
+        if (audio) {
+            audio.loop = isLooping;
+        }
+    }, [isLooping]);
 
     const handlePlayPause = () => {
         const audio = audioRef.current;
@@ -115,24 +144,6 @@ export const MusicPlayer: FC<MusicPlayerProps> = ({ track }) => {
         audio.currentTime = clamp(audio.currentTime + seconds, 0, duration);
     };
 
-    const PlayIcon = () => (
-        <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M8 5v14l11-7z" />
-        </svg>
-    );
-
-    const PauseIcon = () => (
-        <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-        </svg>
-    );
-    
-    const SkipIcon = () => (
-        <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
-        </svg>
-    );
-
     return (
         <div className="music-player-container">
              <audio ref={audioRef} src={track.audioSrc} preload="metadata"></audio>
@@ -156,14 +167,17 @@ export const MusicPlayer: FC<MusicPlayerProps> = ({ track }) => {
                 </div>
 
                 <div className="player-controls">
-                    <button className="control-btn" onClick={() => skip(-15)} style={{ transform: 'scaleX(-1)'}}>
-                        <SkipIcon />
+                    <button className="control-btn" onClick={() => skip(-15)} aria-label="Rewind 15 seconds">
+                        <RewindIcon />
                     </button>
-                    <button className="control-btn play-pause-btn" onClick={handlePlayPause}>
+                    <button className="control-btn play-pause-btn" onClick={handlePlayPause} aria-label={isPlaying ? 'Pause' : 'Play'}>
                         {isPlaying ? <PauseIcon /> : <PlayIcon />}
                     </button>
-                    <button className="control-btn" onClick={() => skip(15)}>
-                        <SkipIcon />
+                    <button className="control-btn" onClick={() => skip(15)} aria-label="Fast-forward 15 seconds">
+                        <FastForwardIcon />
+                    </button>
+                    <button className={cn("control-btn", isLooping && "text-primary")} onClick={() => setIsLooping(!isLooping)} aria-label="Toggle loop">
+                        <RepeatIcon />
                     </button>
                 </div>
             </div>
