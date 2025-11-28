@@ -280,6 +280,42 @@
         "userId",
         "createdAt"
       ]
+    },
+    "Like": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Like",
+      "type": "object",
+      "description": "Represents a like on a feed item.",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of the user who liked the item."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp of when the like occurred.",
+          "format": "date-time"
+        }
+      },
+      "required": ["userId", "createdAt"]
+    },
+    "Follow": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Follow",
+      "type": "object",
+      "description": "Represents a follow relationship between users.",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "ID of the user being followed or the follower."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp of when the follow occurred.",
+          "format": "date-time"
+        }
+      },
+      "required": ["userId", "createdAt"]
     }
   },
   "auth": {
@@ -368,6 +404,54 @@
         }
       },
       {
+        "path": "/users/{userId}/following/{followingId}",
+        "definition": {
+          "entityName": "Follow",
+          "schema": { "$ref": "#/backend/entities/Follow" },
+          "description": "A list of users that {userId} is following.",
+          "params": [
+            { "name": "userId", "description": "The follower." },
+            { "name": "followingId", "description": "The user being followed." }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/followers/{followerId}",
+        "definition": {
+          "entityName": "Follow",
+          "schema": { "$ref": "#/backend/entities/Follow" },
+          "description": "A list of users who are followers of {userId}.",
+          "params": [
+            { "name": "userId", "description": "The user being followed." },
+            { "name": "followerId", "description": "The follower." }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/likes/{likeId}",
+        "definition": {
+          "entityName": "Like",
+          "schema": { "$ref": "#/backend/entities/Like" },
+          "description": "A list of posts liked by {userId}.",
+          "params": [
+            { "name": "userId", "description": "The user who liked the post." },
+            { "name": "likeId", "description": "The ID of the liked post." }
+          ]
+        }
+      },
+      {
+        "path": "/feed_items/{itemId}/likes/{userId}",
+        "definition": {
+          "entityName": "Like",
+          "schema": { "$ref": "#/backend/entities/Like" },
+          "description": "A list of users who liked the post {itemId}.",
+          "params": [
+            { "name": "itemId", "description": "The ID of the post." },
+            { "name": "userId", "description": "The user who liked the post." }
+          ]
+        }
+      },
+      {
         "path": "/subscriptionTiers/{subscriptionTierId}",
         "definition": {
           "entityName": "SubscriptionTier",
@@ -451,4 +535,3 @@
     "reasoning": "This Firestore structure is designed to support the Pranian application's core features, including content library, free tier trial, subscription management, and e-commerce store, while adhering to the principles of Authorization Independence, Clarity of Intent, DBAC (Database-Based Access Control), QAPs (Queries are not Filters), and Invariants. The structure leverages structural segregation to maintain homogeneous security postures within collections, avoiding the mixing of data with differing access requirements. Authorization independence is achieved through denormalization, copying relevant authorization data (such as subscription status) where needed to eliminate the need for `get()` calls in security rules, ensuring atomic operations and simplified debugging.  \n\nThe structure employs path-based ownership for user-specific data (e.g., `/users/{userId}/subscriptions/{subscriptionId}`).\n\n**Authorization Independence:** Denormalization is applied to the `Content` documents. The `Subscription.subscriptionTierId` is copied into the content document via `content.subscriptionTierId` during creation. \n\n**QAPs (Queries are not Filters):** The structure enables secure list operations:\n*   The segregation of user data under `/users/{userId}` ensures that listing operations within a user's scope are always authorized by path-based rules.\n*   The denormalized `content.subscriptionTierId` field allows listing content that matches the users current subscription tier."
   }
 }
-    

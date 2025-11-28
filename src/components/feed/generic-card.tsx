@@ -1,21 +1,57 @@
+
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { FeedItem } from '@/lib/feed-items';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { CardContent, CardHeader, CardFooter, CardTitle } from '../ui/card';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Heart, MessageCircle, Repeat2 } from 'lucide-react';
+import { Heart, MessageCircle, Repeat2, UserPlus, Bookmark } from 'lucide-react';
 import { Button } from '../ui/button';
+import { useUser, useFirestore } from '@/firebase';
+import { doc, setDoc, deleteDoc } from 'firebase/firestore';
 
 dayjs.extend(relativeTime);
 
 export function GenericCard({ item }: { item: FeedItem }) {
+  const { user } = useUser();
+  const firestore = useFirestore();
   const timeAgo = dayjs(item.createdAt).fromNow();
-
   const isVideo = item.image && (item.image.includes('youtube.com') || item.image.includes('vimeo.com'));
+
+  // Placeholder states
+  const [isLiked, setIsLiked] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+
+  const handleLike = async () => {
+    if (!user || !firestore || !item.userId) return;
+    const likeRef = doc(firestore, 'users', user.uid, 'likes', item.id);
+    const postLikesRef = doc(firestore, 'users', item.userId, 'feed_items', item.id, 'likes', user.uid);
+    
+    if (isLiked) {
+      await deleteDoc(likeRef);
+      await deleteDoc(postLikesRef);
+    } else {
+      const likeData = { userId: user.uid, createdAt: new Date().toISOString() };
+      await setDoc(likeRef, { postId: item.id, postOwnerId: item.userId, createdAt: new Date().toISOString() });
+      await setDoc(postLikesRef, likeData);
+    }
+    setIsLiked(!isLiked);
+  };
+  
+  const handleFollow = async () => {
+    if (!user || !firestore || !item.userId || user.uid === item.userId) return;
+
+    const followingRef = doc(firestore, 'users', user.uid, 'following', item.userId);
+    const followerRef = doc(firestore, 'users', item.userId, 'followers', user.uid);
+
+    // In a real app, you'd check if the user is already followed
+    await setDoc(followingRef, { userId: item.userId, createdAt: new Date().toISOString() });
+    await setDoc(followerRef, { userId: user.uid, createdAt: new Date().toISOString() });
+    alert(`You are now following ${item.userName}`);
+  };
 
   return (
     <>
@@ -40,10 +76,15 @@ export function GenericCard({ item }: { item: FeedItem }) {
                 <AvatarImage src={item.userAvatar} />
                 <AvatarFallback>{item.userName?.charAt(0).toUpperCase()}</AvatarFallback>
             </Avatar>
-            <div>
+            <div className="flex-grow">
               <CardTitle className="text-base">{item.userName || 'User'}</CardTitle>
               <p className="text-xs text-muted-foreground">{timeAgo}</p>
             </div>
+            {user && item.userId && user.uid !== item.userId && (
+                 <Button size="sm" variant="outline" onClick={handleFollow}>
+                    <UserPlus className="h-4 w-4" />
+                </Button>
+            )}
         </div>
       </CardHeader>
       <CardContent className="flex-grow">
@@ -53,19 +94,21 @@ export function GenericCard({ item }: { item: FeedItem }) {
         )}
       </CardContent>
       <CardFooter className="flex justify-between items-center gap-2 border-t pt-4">
-          <Button variant="ghost" size="sm" className="text-muted-foreground">
-            <Heart className="mr-2 h-4 w-4" /> 
-            Like
-          </Button>
-          <Button variant="ghost" size="sm" className="text-muted-foreground">
-            <MessageCircle className="mr-2 h-4 w-4" />
-            Comment
-          </Button>
-          <Button variant="ghost" size="sm" className="text-muted-foreground">
-            <Repeat2 className="mr-2 h-4 w-4" />
-            Repost
+          <div className="flex gap-1">
+            <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={handleLike}>
+                <Heart className={`mr-2 h-4 w-4 ${isLiked ? 'fill-red-500 text-red-500' : ''}`} /> 
+                Like
+            </Button>
+            <Button variant="ghost" size="sm" className="text-muted-foreground">
+                <MessageCircle className="mr-2 h-4 w-4" />
+                Comment
+            </Button>
+          </div>
+          <Button variant="ghost" size="icon" className="text-muted-foreground" onClick={() => setIsSaved(!isSaved)}>
+              <Bookmark className={`h-5 w-5 ${isSaved ? 'fill-foreground' : ''}`} />
           </Button>
       </CardFooter>
     </>
   );
 }
+

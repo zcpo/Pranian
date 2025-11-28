@@ -3,26 +3,25 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { useUser, useFirestore, useMemoFirebase } from '@/firebase';
-import { doc, updateDoc, collection, query, where, orderBy } from 'firebase/firestore';
+import { doc, updateDoc, collection, query, orderBy, setDoc, deleteDoc, getDocs, getDoc } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { updateProfile } from 'firebase/auth';
 import { useDropzone } from 'react-dropzone';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import dayjs from 'dayjs';
-
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, UserCircle, Edit, Image as ImageIcon } from 'lucide-react';
+import { Loader2, UserCircle, Edit, Heart, Bookmark, UserPlus } from 'lucide-react';
 import { useDoc, useCollection } from '@/firebase/firestore/use-doc';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import Image from 'next/image';
-import Link from 'next/link';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { GenericCard } from '@/components/feed/generic-card';
+import type { FeedItem } from '@/lib/feed-items';
 
 const profileSchema = z.object({
   displayName: z.string().min(1, 'Display name is required'),
@@ -31,89 +30,66 @@ const profileSchema = z.object({
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
-function UserActivity({ userId }: { userId: string }) {
+function ProfileSocialStats({ userId }: { userId: string }) {
   const firestore = useFirestore();
-
-  const sessionsQuery = useMemoFirebase(
-    () => (firestore ? query(collection(firestore, 'users', userId, 'sessions'), orderBy('date', 'desc')) : null),
-    [firestore, userId]
-  );
-  const { data: sessions, isLoading: isLoadingSessions } = useCollection(sessionsQuery);
-
-  const postsQuery = useMemoFirebase(
-    () => (firestore ? query(collection(firestore, 'users', userId, 'feed_items'), orderBy('createdAt', 'desc')) : null),
-    [firestore, userId]
-  );
-  const { data: posts, isLoading: isLoadingPosts } = useCollection(postsQuery);
-
-  if (isLoadingSessions || isLoadingPosts) {
-    return (
-      <div className="flex justify-center mt-8">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
+  const followingQuery = useMemoFirebase(() => firestore ? collection(firestore, 'users', userId, 'following') : null, [firestore, userId]);
+  const followersQuery = useMemoFirebase(() => firestore ? collection(firestore, 'users', userId, 'followers') : null, [firestore, userId]);
+  
+  const { data: following } = useCollection(followingQuery);
+  const { data: followers } = useCollection(followersQuery);
 
   return (
-    <div className="space-y-8 mt-8">
-      {sessions && sessions.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>My Journal Entries</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Accordion type="single" collapsible className="w-full">
-              {sessions.map((session) => (
-                <AccordionItem value={session.id} key={session.id}>
-                  <AccordionTrigger>
-                    <div className="flex justify-between w-full pr-4">
-                      <span>{session.title}</span>
-                      <span className="text-sm text-muted-foreground">
-                        {dayjs(session.date).format('MMMM D, YYYY')}
-                      </span>
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    {session.notes && <p className="mb-4 text-muted-foreground">{session.notes}</p>}
-                    {session.mediaUrl && (
-                      <div className="relative w-full max-w-xs h-40 rounded-md overflow-hidden">
-                        <Image src={session.mediaUrl} alt="Journal media" layout="fill" objectFit="cover" />
-                      </div>
-                    )}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </CardContent>
-        </Card>
-      )}
-
-      {posts && posts.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>My Feed Posts</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {posts.map((post) => (
-              <Link href="/feed" key={post.id}>
-                <div className="flex items-start gap-4 p-3 -m-3 rounded-lg hover:bg-muted/50 transition-colors">
-                  {post.image && (
-                    <div className="relative w-16 h-16 rounded-md overflow-hidden flex-shrink-0 bg-muted">
-                       <Image src={post.image} alt={post.title} layout="fill" objectFit="cover" />
-                    </div>
-                  )}
-                  <div>
-                    <p className="font-semibold">{post.title}</p>
-                    <p className="text-sm text-muted-foreground line-clamp-2">{post.subtitle}</p>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </CardContent>
-        </Card>
-      )}
+    <div className="flex gap-4 text-center">
+      <div>
+        <p className="font-bold text-lg">{followers?.length ?? 0}</p>
+        <p className="text-sm text-muted-foreground">Followers</p>
+      </div>
+      <div>
+        <p className="font-bold text-lg">{following?.length ?? 0}</p>
+        <p className="text-sm text-muted-foreground">Following</p>
+      </div>
     </div>
   );
+}
+
+function ProfileContentTabs({ userId }: { userId: string }) {
+    const firestore = useFirestore();
+
+    const postsQuery = useMemoFirebase(
+        () => firestore ? query(collection(firestore, 'users', userId, 'feed_items'), orderBy('createdAt', 'desc')) : null,
+        [firestore, userId]
+    );
+    const { data: posts, isLoading: isLoadingPosts } = useCollection<FeedItem>(postsQuery);
+
+    // This is a placeholder for liked posts. A real implementation would be more complex.
+    const [likedPosts, setLikedPosts] = useState<FeedItem[]>([]);
+    const [savedPosts, setSavedPosts] = useState<FeedItem[]>([]);
+
+    return (
+        <Tabs defaultValue="posts" className="w-full mt-8">
+            <TabsList className="grid w-full grid-cols-3">
+                <TabsTrigger value="posts">My Posts</TabsTrigger>
+                <TabsTrigger value="likes">Likes</TabsTrigger>
+                <TabsTrigger value="saved">Saved</TabsTrigger>
+            </TabsList>
+            <TabsContent value="posts" className="mt-6">
+                {isLoadingPosts && <Loader2 className="mx-auto my-8 h-8 w-8 animate-spin" />}
+                {posts && posts.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                       {posts.map(post => <GenericCard key={post.id} item={post} />)}
+                    </div>
+                ) : (
+                    <p className="text-center text-muted-foreground py-8">No posts yet.</p>
+                )}
+            </TabsContent>
+            <TabsContent value="likes" className="mt-6">
+                <p className="text-center text-muted-foreground py-8">Liked posts will appear here.</p>
+            </TabsContent>
+            <TabsContent value="saved" className="mt-6">
+                <p className="text-center text-muted-foreground py-8">Saved posts will appear here.</p>
+            </TabsContent>
+        </Tabs>
+    );
 }
 
 
@@ -188,7 +164,7 @@ export default function ProfilePage() {
     }
   }, [user, firestore, toast]);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: { 'image/*': [] },
     multiple: false,
@@ -226,6 +202,12 @@ export default function ProfilePage() {
     }
   };
 
+  const handleFollow = async () => {
+      // This is a placeholder for following another user.
+      // In a real app, you'd pass the target user's ID here.
+      toast({ title: "Follow clicked!" });
+  }
+
   if (isUserLoading || isProfileLoading) {
     return (
       <div className="container mx-auto px-4 py-8 sm:py-16 flex justify-center">
@@ -246,80 +228,48 @@ export default function ProfilePage() {
   const userInitial = userProfile?.firstName?.charAt(0) || user.displayName?.charAt(0) || '';
 
   return (
-    <div className="container mx-auto max-w-3xl px-4 py-8 sm:py-16">
+    <div className="container mx-auto max-w-4xl px-4 py-8 sm:py-16">
       <Card>
-        <CardHeader>
-          <CardTitle>My Profile</CardTitle>
-          <CardDescription>Manage your personal information and preferences.</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="flex items-center gap-6">
+        <CardContent className="pt-6">
+          <div className="flex flex-col sm:flex-row items-center gap-6">
             <div
               {...getRootProps()}
               className="relative group cursor-pointer"
             >
               <input {...getInputProps()} />
-              <Avatar className="h-24 w-24">
+              <Avatar className="h-28 w-28 border-4 border-background ring-2 ring-primary/50">
                 <AvatarImage src={user.photoURL || userProfile?.avatarUrl} alt={user.displayName || ''} className="object-cover" />
-                <AvatarFallback className="text-3xl">
-                  {isUploading ? <Loader2 className="h-8 w-8 animate-spin" /> : (userInitial ? userInitial.toUpperCase() : <UserCircle className="h-12 w-12" />)}
+                <AvatarFallback className="text-4xl">
+                  {isUploading ? <Loader2 className="h-10 w-10 animate-spin" /> : (userInitial ? userInitial.toUpperCase() : <UserCircle className="h-14 w-14" />)}
                 </AvatarFallback>
               </Avatar>
-              <div className="absolute inset-0 bg-black/50 rounded-full flex flex-col items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="absolute inset-0 bg-black/60 rounded-full flex flex-col items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity">
                  <Edit className="h-6 w-6 mb-1" />
                  <span className="text-xs font-semibold">Change</span>
               </div>
             </div>
-            <div>
-                 <h2 className="text-2xl font-bold">{userProfile?.firstName ? `${userProfile.firstName} ${userProfile.lastName}` : user.displayName}</h2>
+            <div className="flex-grow text-center sm:text-left">
+                 <h2 className="text-3xl font-bold font-headline">{userProfile?.firstName ? `${userProfile.firstName} ${userProfile.lastName}` : user.displayName}</h2>
                  <p className="text-muted-foreground">{user.email}</p>
+                 <div className="mt-4 flex justify-center sm:justify-start gap-4">
+                    <ProfileSocialStats userId={user.uid} />
+                 </div>
+            </div>
+             <div className="flex flex-col gap-2">
+                <Button onClick={handleFollow}>
+                  <UserPlus className="mr-2 h-4 w-4" /> Follow
+                </Button>
+                 <Button variant="outline">
+                  Message
+                </Button>
             </div>
           </div>
-          <Accordion type="single" collapsible>
-            <AccordionItem value="edit-profile">
-              <AccordionTrigger>
-                <h3 className="font-semibold">Edit Profile Information</h3>
-              </AccordionTrigger>
-              <AccordionContent>
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 pt-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="displayName">Full Name</Label>
-                    <Controller
-                      name="displayName"
-                      control={control}
-                      render={({ field }) => (
-                        <Input id="displayName" {...field} />
-                      )}
-                    />
-                    {errors.displayName && <p className="text-sm text-destructive">{errors.displayName.message}</p>}
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Controller
-                      name="email"
-                      control={control}
-                      render={({ field }) => (
-                        <Input id="email" type="email" {...field} disabled />
-                      )}
-                    />
-                    {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
-                  </div>
-                  <div className="flex justify-end">
-                    <Button type="submit" disabled={isSaving}>
-                      {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                      Save Changes
-                    </Button>
-                  </div>
-                </form>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
         </CardContent>
       </Card>
 
-      <UserActivity userId={user.uid} />
+      <ProfileContentTabs userId={user.uid} />
+
     </div>
   );
 }
 
-    

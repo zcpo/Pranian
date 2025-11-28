@@ -17,6 +17,22 @@ service cloud.firestore {
       match /feed_items/{itemId} {
         allow read, write: if request.auth.uid == userId;
       }
+
+      // Rules for following/followers
+      match /following/{followingId} {
+        allow read: if true;
+        allow write: if request.auth.uid == userId;
+      }
+      match /followers/{followerId} {
+        allow read: if true;
+        allow write: if request.auth.uid == followerId;
+      }
+
+      // Rule for posts a user has liked
+      match /likes/{likeId} {
+        allow read: if request.auth.uid == userId;
+        allow write: if request.auth.uid == userId;
+      }
     }
 
     match /content/{contentId} {
@@ -41,4 +57,3 @@ service cloud.firestore {
   }
 }
 
-    
