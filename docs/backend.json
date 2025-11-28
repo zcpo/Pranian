@@ -15,23 +15,24 @@
           "description": "User's email address.",
           "format": "email"
         },
-        "displayName": {
+        "firstName": {
           "type": "string",
-          "description": "User's display name."
+          "description": "User's first name."
         },
-        "avatarUrl": {
+        "lastName": {
           "type": "string",
-          "description": "URL of the user's avatar image.",
-          "format": "uri"
+          "description": "User's last name."
         },
         "subscriptionId": {
           "type": "string",
-          "description": "Reference to the Subscription. (Relationship: User 1:1 Subscription)"
+          "description": "Reference to Subscription. (Relationship: User 1:1 Subscription)"
         }
       },
       "required": [
         "id",
-        "email"
+        "email",
+        "firstName",
+        "lastName"
       ]
     },
     "Subscription": {
@@ -44,134 +45,68 @@
           "type": "string",
           "description": "Unique identifier for the subscription."
         },
-        "userId": {
-          "type": "string",
-          "description": "Reference to the User. (Relationship: User 1:1 Subscription)"
-        },
         "startDate": {
           "type": "string",
-          "description": "Date when the subscription started.",
+          "description": "The date and time the subscription started.",
           "format": "date-time"
         },
         "endDate": {
           "type": "string",
-          "description": "Date when the subscription ends.",
+          "description": "The date and time the subscription ends.",
           "format": "date-time"
         },
-        "tier": {
+        "subscriptionTierId": {
           "type": "string",
-          "description": "Subscription tier (e.g., 'free_trial', 'paid')."
+          "description": "Reference to SubscriptionTier. (Relationship: Subscription 1:1 SubscriptionTier)"
         },
-        "isAutoRenewing": {
+        "isTrial": {
           "type": "boolean",
-          "description": "Indicates whether the subscription is set to auto-renew."
+          "description": "Indicates if the current subscription is a free trial."
         }
       },
       "required": [
         "id",
-        "userId",
         "startDate",
         "endDate",
-        "tier"
+        "subscriptionTierId",
+        "isTrial"
       ]
     },
-    "SessionEntry": {
+    "SubscriptionTier": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "SessionEntry",
+      "title": "SubscriptionTier",
       "type": "object",
-      "description": "Represents a single yoga or meditation session.",
+      "description": "Represents the different subscription tiers available (e.g., Free Trial, Paid).",
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the session entry."
+          "description": "Unique identifier for the subscription tier."
         },
-        "userId": {
+        "name": {
           "type": "string",
-          "description": "Reference to the User. (Relationship: User 1:N SessionEntry)"
+          "description": "Name of the subscription tier (e.g., Free Trial, Paid)."
         },
-        "title": {
-          "type": "string",
-          "description": "Title of the session."
-        },
-        "date": {
-          "type": "string",
-          "description": "Date of the session.",
-          "format": "date"
-        },
-        "duration": {
+        "price": {
           "type": "number",
-          "description": "Duration of the session in seconds."
+          "description": "Price of the subscription tier per month.",
+          "format": "number"
         },
-        "style": {
-          "type": "string",
-          "description": "Style of yoga or meditation (e.g., Vinyasa, Hatha)."
-        },
-        "intensity": {
+        "trialLengthDays": {
           "type": "number",
-          "description": "Intensity level of the session (e.g., 1-5)."
-        },
-        "poseSequence": {
-          "type": "array",
-          "description": "Sequence of poses in the session.",
-          "items": {
-            "type": "string"
-          }
-        },
-        "instructor": {
-          "type": "string",
-          "description": "Name of the instructor."
-        },
-        "location": {
-          "type": "string",
-          "description": "Location where the session took place."
-        },
-        "mediaUrl": {
-          "type": "string",
-          "description": "URL of any media associated with the session.",
-          "format": "uri"
-        },
-        "caloriesBurned": {
-          "type": "number",
-          "description": "Estimated calories burned during the session."
-        },
-        "mood": {
-          "type": "string",
-          "description": "User's mood after the session."
-        },
-        "startAt": {
-          "type": "string",
-          "description": "Timestamp when the session started.",
-          "format": "date-time"
-        },
-        "endAt": {
-          "type": "string",
-          "description": "Timestamp when the session ended.",
-          "format": "date-time"
-        },
-        "createdAt": {
-          "type": "string",
-          "description": "Timestamp when the session was created.",
-          "format": "date-time"
-        },
-        "modifiedAt": {
-          "type": "string",
-          "description": "Timestamp when the session was last modified.",
-          "format": "date-time"
+          "description": "The trial period in days."
         }
       },
       "required": [
         "id",
-        "userId",
-        "date",
-        "duration",
-        "style"
+        "name",
+        "price"
       ]
     },
     "Product": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Product",
       "type": "object",
-      "description": "Represents a product in the e-commerce store.",
+      "description": "Represents a product sold in the Pranian store.",
       "properties": {
         "id": {
           "type": "string",
@@ -185,128 +120,104 @@
           "type": "string",
           "description": "Description of the product."
         },
-        "imageUrl": {
-          "type": "string",
-          "description": "URL of the product image.",
-          "format": "uri"
-        },
         "price": {
           "type": "number",
           "description": "Price of the product."
         },
-        "type": {
+        "productCategoryId": {
           "type": "string",
-          "description": "Type of product (e.g., 'podcast', 'merchandise', 'book')."
+          "description": "Reference to ProductCategory. (Relationship: Product 1:1 ProductCategory)"
         }
       },
       "required": [
         "id",
         "name",
         "description",
-        "imageUrl",
         "price",
-        "type"
+        "productCategoryId"
       ]
     },
-    "Pose": {
+    "ProductCategory": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Pose",
+      "title": "ProductCategory",
       "type": "object",
-      "description": "Represents a yoga pose.",
+      "description": "Represents a category of products (e.g., Podcasts, Merchandise, Events, Books, Videos, Online Learning).",
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the yoga pose."
+          "description": "Unique identifier for the product category."
         },
         "name": {
           "type": "string",
-          "description": "Name of the yoga pose."
-        },
-        "difficulty": {
+          "description": "Name of the product category."
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "Content": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Content",
+      "type": "object",
+      "description": "Represents a piece of yoga or meditation content in the library.",
+      "properties": {
+        "id": {
           "type": "string",
-          "description": "Difficulty level of the pose (e.g., beginner, intermediate, advanced)."
+          "description": "Unique identifier for the content."
         },
-        "durationDefault": {
-          "type": "number",
-          "description": "Default duration of the pose in seconds."
+        "title": {
+          "type": "string",
+          "description": "Title of the content."
         },
         "description": {
           "type": "string",
-          "description": "Desription of the yoga pose"
+          "description": "Description of the content."
         },
-        "imageUrl": {
+        "contentTypeId": {
           "type": "string",
-          "description": "URL of the yoga pose image.",
+          "description": "Reference to ContentType. (Relationship: Content 1:1 ContentType)"
+        },
+        "url": {
+          "type": "string",
+          "description": "URL of the content.",
           "format": "uri"
         }
       },
       "required": [
         "id",
-        "name",
-        "difficulty"
+        "title",
+        "description",
+        "contentTypeId",
+        "url"
       ]
     },
-    "FeedItem": {
+    "ContentType": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "FeedItem",
+      "title": "ContentType",
       "type": "object",
-      "description": "Represents a single item in the user's feed.",
+      "description": "Represents the type of content (e.g., Article, Video, Audio).",
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the feed item."
+          "description": "Unique identifier for the content type."
         },
-        "type": {
+        "name": {
           "type": "string",
-          "description": "The type of feed item.",
-          "enum": ["song", "event", "promo", "reward"]
-        },
-        "title": {
-          "type": "string",
-          "description": "The main title of the feed card."
-        },
-        "subtitle": {
-          "type": "string",
-          "description": "The subtitle or description of the feed card."
-        },
-        "image": {
-          "type": "string",
-          "description": "URL for the card's banner or cover image.",
-          "format": "uri"
-        },
-        "action": {
-          "type": "object",
-          "description": "Defines the action taken when the user interacts with the card.",
-          "properties": {
-            "type": {
-              "type": "string",
-              "description": "The type of action to perform.",
-              "enum": ["open_song", "open_event", "open_store", "claim_reward"]
-            },
-            "songId": {
-              "type": "string",
-              "description": "The ID of the song/meditation to open."
-            },
-            "eventId": {
-              "type": "string",
-              "description": "The ID of the event to open."
-            }
-          }
-        },
-        "createdAt": {
-          "type": "string",
-          "description": "Timestamp when the feed item was created.",
-          "format": "date-time"
+          "description": "Name of the content type."
         }
       },
-      "required": ["id", "type", "title", "createdAt"]
+      "required": [
+        "id",
+        "name"
+      ]
     }
   },
   "auth": {
     "providers": [
       "password",
-      "anonymous",
-      "google.com"
+      "anonymous"
     ]
   },
   "firestore": {
@@ -318,31 +229,47 @@
           "schema": {
             "$ref": "#/backend/entities/User"
           },
-          "description": "Stores user profile information.  Authorization is based on the user's unique ID.",
+          "description": "Stores user profile information.  Uses path-based ownership for private user data.",
           "params": [
             {
               "name": "userId",
-              "description": "The unique identifier of the user."
+              "description": "The unique identifier for the user.  Corresponds to Firebase auth uid."
             }
           ]
         }
       },
       {
-        "path": "/users/{userId}/sessions/{sessionId}",
+        "path": "/users/{userId}/subscriptions/{subscriptionId}",
         "definition": {
-          "entityName": "SessionEntry",
+          "entityName": "Subscription",
           "schema": {
-            "$ref": "#/backend/entities/SessionEntry"
+            "$ref": "#/backend/entities/Subscription"
           },
-          "description": "Stores user-specific yoga and meditation session data. Includes denormalized 'userId' for authorization independence.",
+          "description": "Stores subscription details for each user. Uses path-based ownership.",
           "params": [
             {
               "name": "userId",
-              "description": "The unique identifier of the user."
+              "description": "The unique identifier for the user."
             },
             {
-              "name": "sessionId",
-              "description": "The unique identifier of the session."
+              "name": "subscriptionId",
+              "description": "The unique identifier for the user's subscription."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/subscriptionTiers/{subscriptionTierId}",
+        "definition": {
+          "entityName": "SubscriptionTier",
+          "schema": {
+            "$ref": "#/backend/entities/SubscriptionTier"
+          },
+          "description": "Stores different subscription tiers available (e.g., Free Trial, Paid).",
+          "params": [
+            {
+              "name": "subscriptionTierId",
+              "description": "The unique identifier for the subscription tier."
             }
           ]
         }
@@ -358,61 +285,60 @@
           "params": [
             {
               "name": "productId",
-              "description": "The unique identifier of the product."
+              "description": "The unique identifier for the product."
             }
           ]
         }
       },
       {
-        "path": "/subscriptions/{subscriptionId}",
+        "path": "/productCategories/{productCategoryId}",
         "definition": {
-          "entityName": "Subscription",
+          "entityName": "ProductCategory",
           "schema": {
-            "$ref": "#/backend/entities/Subscription"
+            "$ref": "#/backend/entities/ProductCategory"
           },
-          "description": "Stores subscription details for users. Includes denormalized 'userId' for authorization independence.",
+          "description": "Stores product categories (e.g., Podcasts, Merchandise, Events).",
           "params": [
             {
-              "name": "subscriptionId",
-              "description": "The unique identifier of the subscription."
+              "name": "productCategoryId",
+              "description": "The unique identifier for the product category."
             }
           ]
         }
       },
       {
-        "path": "/roles_admin/{uid}",
+        "path": "/content/{contentId}",
         "definition": {
-          "entityName": "roles_admin",
+          "entityName": "Content",
           "schema": {
-            "$ref": "#/backend/entities/User"
+            "$ref": "#/backend/entities/Content"
           },
-          "description": "Existence determines admin role. (DBAC - Existence over Content).",
+          "description": "Stores yoga and meditation content. Includes denormalized 'subscriptionTierId' field for authorization independence.",
           "params": [
             {
-              "name": "uid",
-              "description": "The unique identifier of the user."
+              "name": "contentId",
+              "description": "The unique identifier for the content."
             }
           ]
         }
       },
       {
-        "path": "/feed_items/{feedItemId}",
+        "path": "/contentTypes/{contentTypeId}",
         "definition": {
-          "entityName": "FeedItem",
+          "entityName": "ContentType",
           "schema": {
-            "$ref": "#/backend/entities/FeedItem"
+            "$ref": "#/backend/entities/ContentType"
           },
-          "description": "Stores items that appear in the user's activity feed. These are public and sorted by creation date.",
+          "description": "Stores content types (e.g., Article, Video, Audio).",
           "params": [
             {
-              "name": "feedItemId",
-              "description": "The unique identifier of the feed item."
+              "name": "contentTypeId",
+              "description": "The unique identifier for the content type."
             }
           ]
         }
       }
     ],
-    "reasoning": "The Firestore structure is designed to support a yoga and meditation PWA (Pranian) with a focus on user-owned session data, products, and subscription management. The core principle is Authorization Independence, achieved through denormalization. This approach avoids `get()` calls in security rules, enabling atomic operations and easier debugging. Segregation is used to isolate data with different security needs (e.g., user sessions vs. global products).  Access modeling follows a consistent pattern: private data is stored under user-specific paths, while global data (products, feed_items) reside in root-level collections.\n\nSpecifically:\n\n*   `/users/{userId}`: Stores user profiles.\n*   `/users/{userId}/sessions/{sessionId}`: Stores user-specific yoga/meditation session data. The `userId` is denormalized into each `session` document to ensure authorization independence.\n*   `/products/{productId}`: Stores product information for the e-commerce store. These are globally accessible.\n*   `/subscriptions/{subscriptionId}`: Stores subscription details. The `userId` is stored in each `subscription` document to enable rules to verify the requesting user owns the subscription.\n*   `/roles_admin/{uid}`: Allows the application to determine admin privileges based on the existance of a document with the users UID. \n*   `/feed_items/{feedItemId}`: Stores chronological, public feed content for all users.\n\nThis structure supports the required QAPs:\n\n*   **Secure List Operations:**  Since session data is segregated under user-specific paths (`/users/{userId}/sessions/{sessionId}`), listing sessions is secure. Rules can easily enforce that only the logged-in user can list their own sessions. Similarly, public collections like products and feed_items can be listed securely.\n*   **Authorization Independence:** The denormalization of `userId` into the `sessions` collection is critical for authorization independence. Security rules can validate that `request.auth.uid == resource.data.userId` without needing to perform a `get()` operation on the parent `/users/{userId}` document. This allows atomic creation and modification of sessions."
+    "reasoning": "This Firestore structure is designed to support the Pranian application's core features, including content library, free tier trial, subscription management, and e-commerce store, while adhering to the principles of Authorization Independence, Clarity of Intent, DBAC (Database-Based Access Control), QAPs (Queries are not Filters), and Invariants. The structure leverages structural segregation to maintain homogeneous security postures within collections, avoiding the mixing of data with differing access requirements. Authorization independence is achieved through denormalization, copying relevant authorization data (such as subscription status) where needed to eliminate the need for `get()` calls in security rules, ensuring atomic operations and simplified debugging.  \n\nThe structure employs path-based ownership for user-specific data (e.g., `/users/{userId}/subscriptions/{subscriptionId}`).\n\n**Authorization Independence:** Denormalization is applied to the `Content` documents. The `Subscription.subscriptionTierId` is copied into the content document via `content.subscriptionTierId` during creation. \n\n**QAPs (Queries are not Filters):** The structure enables secure list operations:\n*   The segregation of user data under `/users/{userId}` ensures that listing operations within a user's scope are always authorized by path-based rules.\n*   The denormalized `content.subscriptionTierId` field allows listing content that matches the users current subscription tier."
   }
 }
-    

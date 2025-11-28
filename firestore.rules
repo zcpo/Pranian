@@ -1,175 +1,196 @@
-
+/**
+ * Core Philosophy:
+ * This ruleset enforces a strict user-ownership model for all private data,
+ * ensuring users can only access their own information. All user-specific data,
+ * such as profiles and subscriptions, is nested under a `/users/{userId}` path.
+ *
+ * Data Structure:
+ * - /users/{userId}: Private user profile.
+ * - /users/{userId}/subscriptions/{subscriptionId}: User's private subscription info.
+ * - /subscriptionTiers, /products, /productCategories, /contentTypes: Publicly
+ *   readable collections containing catalog-style data. These are read-only for
+ *   clients, intended to be managed via a trusted backend/admin process.
+ * - /content: A semi-public collection. Listing is available to any signed-in
+ *   user, but reading individual content documents is restricted to users with
+ *   an active subscription.
+ *
+ * Key Security Decisions:
+ * - Strict User Data Segregation: All user data is locked down to the owner via
+ *   path-based security (`isOwner()`). Listing all users is explicitly forbidden.
+ * - Read-Only Public Data: Top-level collections that store shared application
+ *   data (like product categories or subscription tiers) are configured to be
+ *   publicly readable but not writable by any client. This provides a secure
+ *   default, preventing unauthorized modification of shared app state.
+ * - Subscription-Gated Content: Access to individual documents in the `/content`
+ *   collection is protected. A user must be signed-in and have an active
+ *   subscription to read a specific piece of content. This requires performing
+ *   a check against the user's subscription document.
+ * - Prototyping Flexibility: Data shape and type validation are intentionally
+ *   omitted to allow for rapid development. Security focuses solely on
+ *   authorization (who can access what) and relational integrity (e.g., ensuring
+ *   a user's ID is correctly stored on documents they create).
+ *
+ * Denormalization for Authorization:
+ * To secure the `/content` collection, rules must verify a user's subscription
+ * status. This is achieved by first reading the user's profile to find their
+ * `subscriptionId`, then reading the corresponding subscription document to check
+ * its `endDate`. While this involves two `get()` calls, it is necessary to
+ * enforce this security requirement with the current data structure.
+ */
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // ------------------------------------------------------------------------
+    // --------------------------------
     // Helper Functions
-    // ------------------------------------------------------------------------
+    // --------------------------------
 
     /**
-     * Returns true if the user is authenticated.
+     * Checks if the user is authenticated.
      */
     function isSignedIn() {
       return request.auth != null;
     }
 
     /**
-     * Returns true if the requesting user's UID matches the provided userId.
-     * This is the primary function for establishing document ownership.
+     * Checks if the authenticated user's UID matches the provided userId.
+     * This is the foundation of the user-ownership model.
+     * @param userId The UID to check against the request's auth token.
      */
     function isOwner(userId) {
       return isSignedIn() && request.auth.uid == userId;
     }
-
+    
     /**
-     * Returns true if a document already exists and the requesting user is the owner.
-     * CRITICAL: Used for all update and delete operations to prevent modifying
-     * non-existent data and to enforce ownership.
+     * Checks if a document exists and if the requester is the owner.
+     * Used for safe update and delete operations.
+     * @param userId The UID of the document owner.
      */
     function isExistingOwner(userId) {
-      return isOwner(userId) && exists(path);
+      return isOwner(userId) && resource != null;
     }
-    
+
     /**
-     * Returns true if the requesting user has an admin role document.
-     * The role is granted by the existence of a document in the /roles_admin collection.
+     * Checks if the requesting user has an active subscription.
+     * NOTE: This function performs two 'get' operations, which increases cost
+     * and latency. It first reads the user's profile to find their subscriptionId,
+     * then reads the subscription document to check its end date. This is
+     * necessary for securely gating content based on the provided data model.
+     * @param userId The UID of the user to check.
      */
-    function isAdmin() {
-      return isSignedIn() && exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
+    function isSubscribed(userId) {
+      // Get the user's profile to find their subscriptionId.
+      let userProfile = get(/databases/$(database)/documents/users/$(userId)).data;
+      // Get the user's subscription document using the ID from their profile.
+      let subscription = get(/databases/$(database)/documents/users/$(userId)/subscriptions/$(userProfile.subscriptionId)).data;
+      // An active subscription must have an endDate in the future.
+      return subscription.endDate > request.time;
     }
 
-    /**
-     * Validates that the ID in a new user profile document matches the user's auth UID.
-     * Enforces relational integrity on creation.
-     */
-    function isCreatingOwnProfile(userId) {
-      return isOwner(userId) && request.resource.data.id == userId;
-    }
+    // --------------------------------
+    // Collection Rules
+    // --------------------------------
 
     /**
-     * Validates that the ID in a user profile document is immutable upon update.
-     */
-    function isUpdatingOwnProfile() {
-      return request.resource.data.id == resource.data.id;
-    }
-
-    /**
-     * Validates that a new session document contains a `userId` field
-     * that matches the user path parameter, enforcing relational integrity.
-     */
-    function isValidNewSession(userId) {
-      return isOwner(userId) && request.resource.data.userId == userId;
-    }
-    
-    /**
-     * Validates that the `userId` field on a session document is immutable.
-     */
-    function isImmutableSessionOwner() {
-      return request.resource.data.userId == resource.data.userId;
-    }
-
-
-    // ------------------------------------------------------------------------
-    // User Data Rules
-    // ------------------------------------------------------------------------
-
-    /**
-     * @description Users can create, read, and update their own profile document.
+     * @description Manages user profile data.
      * @path /users/{userId}
-     * @allow (create) a new user creating their own profile: auth.uid == 'user_abc', path == /users/user_abc
-     * @deny (get) one user trying to read another's profile: auth.uid == 'user_xyz', path == /users/user_abc
-     * @deny (list) any user trying to list all user profiles.
-     * @principle Restricts access to a user's own data tree and prevents user enumeration.
+     * @allow (create) A new user creating their own profile document. `auth.uid` must match `userId`.
+     * @deny (list) An authenticated user trying to list all user profiles in the database.
+     * @principle Restricts access to a user's own data tree and enforces self-creation.
      */
     match /users/{userId} {
       allow get: if isOwner(userId);
-      allow list: if false;
-      allow create: if isOwner(userId);
-      allow update: if isExistingOwner(userId) && isUpdatingOwnProfile();
+      allow list: if false; // CRITICAL: Prevents listing all users.
+      allow create: if isOwner(userId) && request.resource.data.id == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id;
       allow delete: if isExistingOwner(userId);
-
-      /**
-       * @description A user can manage their own collection of yoga sessions.
-       * @path /users/{userId}/sessions/{sessionId}
-       * @allow (create) an authenticated user creating a session in their own space: auth.uid == 'user_abc', path == /users/user_abc/sessions/session_123
-       * @deny (update) one user trying to modify another's session: auth.uid == 'user_xyz', path == /users/user_abc/sessions/session_123
-       * @principle Enforces strict document ownership within a user's private subcollection.
-       */
-      match /sessions/{sessionId} {
-        allow get: if isOwner(userId);
-        allow list: if isOwner(userId);
-        allow create: if isValidNewSession(userId);
-        allow update: if isExistingOwner(userId) && isImmutableSessionOwner();
-        allow delete: if isExistingOwner(userId);
-      }
     }
 
-    // ------------------------------------------------------------------------
-    // Global Data Rules
-    // ------------------------------------------------------------------------
+    /**
+     * @description Manages a user's subscription records.
+     * @path /users/{userId}/subscriptions/{subscriptionId}
+     * @allow (get) An authenticated user reading their own subscription details.
+     * @deny (update) An authenticated user trying to modify another user's subscription.
+     * @principle Enforces path-based ownership for a user's private subcollections.
+     */
+    match /users/{userId}/subscriptions/{subscriptionId} {
+      allow get: if isOwner(userId);
+      allow list: if isOwner(userId);
+      allow create: if isOwner(userId) && request.resource.data.id == subscriptionId;
+      allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id;
+      allow delete: if isExistingOwner(userId);
+    }
 
     /**
-     * @description Product data is public for all to read, but only admins can manage it.
-     * @path /products/{productId}
-     * @allow (get) any anonymous or authenticated user reading a product.
-     * @deny (create) a non-admin user trying to add a new product.
-     * @principle Segregates public read-only data from privileged write operations.
+     * @description Stores the available subscription tiers (e.g., Free, Paid).
+     * @path /subscriptionTiers/{subscriptionTierId}
+     * @allow (list) Any client (authenticated or not) listing the available tiers.
+     * @deny (create) Any client trying to create a new subscription tier.
+     * @principle Provides public read access for catalog data, with writes disabled for clients.
      */
-    match /products/{productId} {
+    match /subscriptionTiers/{subscriptionTierId} {
       allow get: if true;
       allow list: if true;
-      allow create: if isAdmin();
-      allow update: if isAdmin();
-      allow delete: if isAdmin();
-    }
-    
-    /**
-     * @description A user can read their own subscription, but cannot modify it.
-     * @path /subscriptions/{subscriptionId}
-     * @allow (get) an authenticated user reading their own subscription document by its ID.
-     * @deny (list) any user listing all subscriptions in the database.
-     * @deny (create, update, delete) any user trying to modify a subscription.
-     * @principle Protects sensitive financial data. Assumes a backend service manages writes.
-     */
-    match /subscriptions/{subscriptionId} {
-      allow get: if isSignedIn() && resource.data.userId == request.auth.uid;
-      allow list: if false;
       allow create: if false;
       allow update: if false;
       allow delete: if false;
     }
 
     /**
-     * @description Feed items are public for all to read. Signed-in users can create posts.
-     * @path /feed_items/{feedItemId}
-     * @allow (get, list) any user, authenticated or not, can view the feed.
-     * @allow (create) any authenticated user can create a new post.
-     * @deny (update, delete) for non-admins.
-     * @principle Allows a public, curated feed managed by administrators, with contributions from the community.
+     * @description Stores product information for the e-commerce store.
+     * @path /products/{productId}
+     * @allow (get) Any client reading the details of a single product.
+     * @deny (update) Any client trying to change the price of a product.
+     * @principle Provides public read access for catalog data, with writes disabled for clients.
      */
-    match /feed_items/{feedItemId} {
+    match /products/{productId} {
       allow get: if true;
       allow list: if true;
-      allow create: if isSignedIn();
-      allow update: if isAdmin();
-      allow delete: if isAdmin();
+      allow create: if false;
+      allow update: if false;
+      allow delete: if false;
     }
 
-    // ------------------------------------------------------------------------
-    // Administrative Rules
-    // ------------------------------------------------------------------------
+    /**
+     * @description Stores product categories (e.g., Merchandise, Events).
+     * @path /productCategories/{productCategoryId}
+     * @allow (list) Any client listing all available product categories.
+     * @deny (delete) Any client trying to delete a category.
+     * @principle Provides public read access for catalog data, with writes disabled for clients.
+     */
+    match /productCategories/{productCategoryId} {
+      allow get: if true;
+      allow list: if true;
+      allow create: if false;
+      allow update: if false;
+      allow delete: if false;
+    }
 
     /**
-     * @description This collection is private and used for authorization checks. No client access is allowed.
-     * @path /roles_admin/{uid}
-     * @allow None. All operations are denied.
-     * @deny (get, list, create, update, delete) any user trying to access this collection.
-     * @principle Secures the role-based access control mechanism.
+     * @description Stores yoga and meditation content.
+     * @path /content/{contentId}
+     * @allow (get) A signed-in user with an active subscription reading a piece of content.
+     * @deny (get) A signed-in user without an active subscription trying to read content.
+     * @principle Enforces complex business logic (subscription status) for read access.
      */
-    match /roles_admin/{uid} {
-      allow get: if false;
-      allow list: if false;
+    match /content/{contentId} {
+      allow get: if isSignedIn() && isSubscribed(request.auth.uid);
+      allow list: if isSignedIn();
+      allow create: if false;
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    /**
+     * @description Stores content types (e.g., Article, Video, Audio).
+     * @path /contentTypes/{contentTypeId}
+     * @allow (get) Any client reading a content type document.
+     * @deny (create) Any client trying to create a new content type.
+     * @principle Provides public read access for catalog data, with writes disabled for clients.
+     */
+    match /contentTypes/{contentTypeId} {
+      allow get: if true;
+      allow list: if true;
       allow create: if false;
       allow update: if false;
       allow delete: if false;
