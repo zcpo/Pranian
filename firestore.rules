@@ -22,6 +22,7 @@
  * - Read-Only Public Data: Top-level collections that store shared application
  *   data (like product categories or subscription tiers) are configured to be
  *   publicly readable but not writable by any client. This provides a secure
+
  *   default, preventing unauthorized modification of shared app state.
  * - Subscription-Gated Content: Access to individual documents in the `/content`
  *   collection is protected. A user must be signed-in and have an active
@@ -206,6 +207,19 @@ service cloud.firestore {
       allow create: if false;
       allow update: if false;
       allow delete: if false;
+    }
+
+    /**
+     * @description Public feed items visible to all signed-in users.
+     * @path /feed_items/{itemId}
+     * @allow (read) Any signed-in user can view the feed.
+     * @allow (create) Any signed-in user can create a post.
+     * @allow (update, delete) Users can only update or delete their own posts.
+     */
+    match /feed_items/{itemId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isSignedIn() && resource.data.userId == request.auth.uid;
     }
   }
 }
