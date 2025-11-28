@@ -139,8 +139,8 @@ export default function Header() {
                       <span className="sr-only">Open menu</span>
                     </Button>
                   </SheetTrigger>
-                  <SheetContent side="right">
-                      <SheetHeader className="border-b pb-4 mb-4">
+                  <SheetContent side="right" className="bg-black">
+                      <SheetHeader className="border-b border-white/10 pb-4 mb-4">
                         <SheetTitle>
                            <Link href="/" onClick={() => setOpen(false)}>
                                 <Logo />
@@ -150,7 +150,7 @@ export default function Header() {
                           Navigate through the Pranian app.
                         </SheetDescription>
                       </SheetHeader>
-                      <div className="flex flex-col gap-2">
+                      <div className="grid grid-cols-2 gap-4">
                         {navLinks.map((link) => (
                            <GlassNavLink 
                              key={link.href} 

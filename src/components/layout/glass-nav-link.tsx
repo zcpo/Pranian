@@ -14,13 +14,13 @@ type GlassNavLinkProps = {
 
 export function GlassNavLink({ href, label, icon: Icon, active, onClick }: GlassNavLinkProps) {
   return (
-    <Link href={href} className={cn("glass-nav-link", { 'glass-item--active': active })} onClick={onClick}>
-        <div className="glass-nav-link__filter"></div>
-        <div className="glass-nav-link__specular"></div>
-        <div className="glass-nav-link__content">
-            <Icon />
-            <span>{label}</span>
-        </div>
+    <Link href={href} className={cn("glass-nav-item", { 'glass-item--active': active })} onClick={onClick}>
+      <div className="glass-nav-item__bg"></div>
+      <div className="glass-nav-item__border"></div>
+      <div className="glass-nav-item__content">
+        <Icon className="h-7 w-7" />
+        <span className="text-xs mt-1">{label}</span>
+      </div>
     </Link>
   );
 }
