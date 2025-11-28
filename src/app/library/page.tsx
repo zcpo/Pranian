@@ -8,6 +8,7 @@ import { meditations } from '@/lib/meditations';
 import { videoMeditations } from '@/lib/video-meditations';
 import { videos } from '@/lib/videos';
 import { PlayCircle } from 'lucide-react';
+import Image from 'next/image';
 
 export default function LibraryPage() {
     const featuredMeditations = meditations.slice(0, 4);
@@ -126,3 +127,4 @@ export default function LibraryPage() {
         </div>
     );
 }
+
