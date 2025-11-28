@@ -279,7 +279,7 @@ function CategoryEntryForm({ category, userId }: { category: string, userId: str
         notes: entry,
         mediaUrl: mediaUrl || null,
         completed: completedToday,
-        date: serverTimestamp(), // backend timestamp
+        date: new Date(), // Use client-side date for Dexie compatibility
         duration: 0, // Not a timed session
         style: 'Journal',
       });
@@ -633,4 +633,3 @@ function IntensityChart({ sessions }: { sessions: {date: Date, intensity?: numbe
     </Card>
   );
 }
-
