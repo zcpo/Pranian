@@ -23,7 +23,7 @@ import { db } from '@/lib/db';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { FeedCardPlaceholder } from './feed-card-placeholder';
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 10;
 
 const toDate = (timestamp: any): Date => {
   if (!timestamp) return new Date(0);
@@ -47,14 +47,10 @@ export default function FeedClient({ initialItems }: { initialItems: FeedItem[] 
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
-  const localItems = useLiveQuery(() => db.feed.reverse().sortBy('createdAt'), []);
+  // 1. Get local optimistic posts from Dexie
+  const localItems = useLiveQuery(() => db.feed.where('status').equals('uploading').reverse().sortBy('createdAt'), []);
 
-  const combinedItems = useMemo(() => {
-    const allItems = [...(localItems || []), ...items];
-    const uniqueItems = Array.from(new Map(allItems.map(item => [item.id, item])).values());
-    return uniqueItems.sort((a, b) => toDate(b.createdAt).getTime() - toDate(a.createdAt).getTime());
-  }, [localItems, items]);
-
+  // 2. Setup the real-time listener for the main feed
   const feedCollectionQuery = useMemoFirebase(
     () => firestore ? query(collection(firestore, 'feed_items'), orderBy('createdAt', 'desc'), limit(PAGE_SIZE)) : null,
     [firestore]
@@ -68,13 +64,14 @@ export default function FeedClient({ initialItems }: { initialItems: FeedItem[] 
 
     setLoading(true);
 
+    // This listener will provide real-time updates for the first page
     const unsubscribe = onSnapshot(feedCollectionQuery, (querySnapshot) => {
         if (querySnapshot.docs.length > 0) {
             lastDocRef.current = querySnapshot.docs[querySnapshot.docs.length - 1];
         }
         const newItems = querySnapshot.docs.map(docToFeedItem);
         setHasMore(newItems.length === PAGE_SIZE);
-        setItems(newItems);
+        setItems(newItems); // This is our base set of live data
         setLoading(false);
     }, (error) => {
         console.error("Error fetching initial feed:", error);
@@ -83,6 +80,31 @@ export default function FeedClient({ initialItems }: { initialItems: FeedItem[] 
 
     return () => unsubscribe();
   }, [feedCollectionQuery]);
+
+
+  // 3. Combine local optimistic posts and live Firestore posts
+  const combinedItems = useMemo(() => {
+    // All items from Firestore + local optimistic items
+    const allItems = [...(localItems || []), ...items];
+    
+    // Create a map to remove duplicates, preferring the Firestore version if it exists
+    const uniqueItemsMap = new Map<string, FeedItem>();
+
+    for (const item of allItems) {
+      // If we have a local item whose final version has not arrived from Firestore, keep it.
+      if (item.status === 'uploading') {
+          uniqueItemsMap.set(item.id, item);
+      } else {
+        // If an item from firestore arrives, it will overwrite any local version.
+        uniqueItemsMap.set(item.id, item);
+      }
+    }
+    
+    const uniqueItems = Array.from(uniqueItemsMap.values());
+    
+    // Sort everything by date to ensure correct order
+    return uniqueItems.sort((a, b) => toDate(b.createdAt).getTime() - toDate(a.createdAt).getTime());
+  }, [localItems, items]);
 
 
   const loadNextPage = useCallback(async () => {
@@ -106,6 +128,7 @@ export default function FeedClient({ initialItems }: { initialItems: FeedItem[] 
       setHasMore(newItems.length === PAGE_SIZE);
 
       if (newItems.length > 0) {
+        // Append paginated items to the existing list
         setItems(prev => [...prev, ...newItems]);
       }
     } catch (error) {
@@ -126,7 +149,7 @@ export default function FeedClient({ initialItems }: { initialItems: FeedItem[] 
         </div>
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-        {loading ? (
+        {loading && combinedItems.length === 0 ? (
             Array.from({ length: 3 }).map((_, i) => <FeedCardPlaceholder key={i} item={{ id: `p${i}`, type: 'user_post', title: '', createdAt: new Date().toISOString() }} />)
         ) : (
             combinedItems.map((item) => {
