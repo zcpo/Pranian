@@ -118,35 +118,37 @@ export default function UploadPage() {
     setUploadProgress(0);
 
     try {
-      if (uploadMode === 'url') {
-        await createPostInDb(data, data.mediaUrl || undefined);
-      } else if (uploadMode === 'file' && file && storage) {
+      let finalMediaUrl: string | undefined = data.mediaUrl || undefined;
+
+      if (uploadMode === 'file' && file) {
         const filename = `feed_images/${user.uid}/${Date.now()}-${file.name.replace(/\s+/g, '_')}`;
         const fileRef = storageRef(storage, filename);
         
-        const uploadTask = uploadBytesResumable(fileRef, file);
-
-        uploadTask.on('state_changed',
-          (snapshot) => { // Progress
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            setUploadProgress(progress);
-          },
-          (error) => { // Error
-            console.error('Upload failed:', error);
-            toast({
-              variant: 'destructive',
-              title: 'Upload Failed',
-              description: 'There was a problem creating your post. Please try again.',
-            });
-            setIsSubmitting(false);
-          },
-          async () => { // Complete
-            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-            await createPostInDb(data, downloadURL);
-            setIsSubmitting(false);
-          }
-        );
+        finalMediaUrl = await new Promise<string>((resolve, reject) => {
+            const uploadTask = uploadBytesResumable(fileRef, file);
+            uploadTask.on('state_changed',
+              (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                setUploadProgress(progress);
+              },
+              (error) => {
+                console.error('Upload failed:', error);
+                reject(error);
+              },
+              async () => {
+                try {
+                  const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                  resolve(downloadURL);
+                } catch (error) {
+                  reject(error);
+                }
+              }
+            );
+        });
       }
+      
+      await createPostInDb(data, finalMediaUrl);
+
     } catch (error) {
       console.error('Error creating post:', error);
       toast({
@@ -154,7 +156,8 @@ export default function UploadPage() {
         title: 'Post Creation Failed',
         description: 'There was a problem creating your post. Please try again.',
       });
-      setIsSubmitting(false);
+    } finally {
+        setIsSubmitting(false);
     }
   };
   
@@ -327,3 +330,5 @@ export default function UploadPage() {
     </div>
   );
 }
+
+    
