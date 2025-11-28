@@ -93,7 +93,7 @@ function ProfileContentTabs({ userId }: { userId: string }) {
 }
 
 
-export default function ProfilePage({ params }: { params: { userId: string } }) {
+export default function ProfilePage({ params: { userId } }: { params: { userId: string } }) {
   const { user: currentUser, isUserLoading } = useUser();
   const firestore = useFirestore();
   const { toast } = useToast();
@@ -101,7 +101,6 @@ export default function ProfilePage({ params }: { params: { userId: string } }) 
   const [isUploading, setIsUploading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   
-  const userId = params.userId;
   const isOwnProfile = currentUser?.uid === userId;
 
   useEffect(() => {
