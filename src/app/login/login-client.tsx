@@ -124,10 +124,15 @@ export default function LoginClientPage() {
     setError(null);
     try {
         const provider = new GoogleAuthProvider();
-        const userCredential = await signInWithPopup(auth, provider);
-        await handleUserCreation(userCredential.user);
+        const result = await signInWithPopup(auth, provider);
+        await handleUserCreation(result.user);
     } catch (err: any) {
         setError(err.message);
+        toast({
+            variant: "destructive",
+            title: "Sign-in Failed",
+            description: err.message,
+        });
     }
   };
 
