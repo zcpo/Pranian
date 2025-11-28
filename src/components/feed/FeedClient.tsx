@@ -9,7 +9,6 @@ import {
   getDocs,
   startAfter,
   Timestamp,
-  onSnapshot,
   where,
   QueryDocumentSnapshot,
 } from 'firebase/firestore';
@@ -44,7 +43,7 @@ export default function FeedClient({ initialItems }: { initialItems: FeedItem[] 
   const lastDocRef = useRef<QueryDocumentSnapshot | null>(null);
   const [loading, setLoading] = useState(initialItems.length === 0);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [hasMore, setHasMore] = useState(initialItems.length === PAGE_SIZE);
+  const [hasMore, setHasMore] = useState(true);
 
   const localItems = useLiveQuery(() => db.feed.reverse().sortBy('createdAt'), []);
 
@@ -53,6 +52,34 @@ export default function FeedClient({ initialItems }: { initialItems: FeedItem[] 
     const uniqueItems = Array.from(new Map(allItems.map(item => [item.id, item])).values());
     return uniqueItems.sort((a, b) => toDate(b.createdAt).getTime() - toDate(a.createdAt).getTime());
   }, [localItems, items]);
+
+  const loadInitialPage = useCallback(async () => {
+    if (!firestore) return;
+    setLoading(true);
+
+    const q = query(collection(firestore, 'feed_items'), orderBy('createdAt', 'desc'), limit(PAGE_SIZE));
+
+    try {
+      const querySnapshot = await getDocs(q);
+      if (querySnapshot.docs.length > 0) {
+        lastDocRef.current = querySnapshot.docs[querySnapshot.docs.length - 1];
+      }
+      
+      const newItems = querySnapshot.docs.map(docToFeedItem);
+      setHasMore(newItems.length === PAGE_SIZE);
+      setItems(newItems);
+    } catch (error) {
+      console.error("Error fetching initial page:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [firestore]);
+  
+  useEffect(() => {
+    if (items.length === 0) {
+        loadInitialPage();
+    }
+  }, [items.length, loadInitialPage]);
 
 
   const loadNextPage = useCallback(async () => {
@@ -90,44 +117,6 @@ export default function FeedClient({ initialItems }: { initialItems: FeedItem[] 
     }
   }, [firestore, hasMore, loadingMore]);
 
-  // Real-time listener for new remote posts
-  useEffect(() => {
-    if (!firestore) return;
-    setLoading(false);
-
-    const newestItemTimestamp = items.length > 0 ? toDate(items[0].createdAt) : new Date(0);
-    
-    const q = query(
-      collection(firestore, 'feed_items'),
-      where('createdAt', '>', newestItemTimestamp),
-      orderBy('createdAt', 'desc')
-    );
-
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const newItems: FeedItem[] = [];
-      snapshot.docChanges().forEach(change => {
-        if (change.type === 'added') {
-            const newItem = docToFeedItem(change.doc);
-            // This is a new item from firestore, check if we have a local version
-            const localIdToDelete = localItems?.find(
-              (localItem) =>
-                localItem.title === newItem.title &&
-                localItem.subtitle === newItem.subtitle &&
-                localItem.status === 'uploading'
-            )?.id;
-            if (localIdToDelete) {
-              db.feed.delete(localIdToDelete);
-            }
-            newItems.push(newItem);
-        }
-      });
-      if (newItems.length > 0) {
-        setItems(prev => [...newItems, ...prev]);
-      }
-    });
-
-    return () => unsubscribe();
-  }, [firestore, user, items, localItems]);
 
   return (
     <div className="container mx-auto px-4 py-8">
