@@ -7,8 +7,10 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { meditations } from '@/lib/meditations';
 import { videoMeditations } from '@/lib/video-meditations';
 import { videos } from '@/lib/videos';
-import { PlayCircle } from 'lucide-react';
+import { PlayCircle, Search } from 'lucide-react';
 import Image from 'next/image';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 export default function LibraryPage() {
     const featuredMeditations = meditations.slice(0, 4);
@@ -49,6 +51,17 @@ export default function LibraryPage() {
                         <Link href="/feed" className="pb-3 border-b-2 border-transparent text-muted-foreground hover:text-primary hover:border-primary/50 transition-colors text-sm">New Releases</Link>
                     </div>
                 </nav>
+
+                <div className="mb-8">
+                    <div className="relative">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                        <Input
+                            placeholder="Search songs, artists, podcasts..."
+                            className="glass-input pl-12 pr-24 h-12 text-lg rounded-full focus-visible:ring-primary/50"
+                        />
+                         <Button className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full h-9" size="sm">Search</Button>
+                    </div>
+                </div>
                 
                 <section className="mb-12">
                     <h2 className="text-2xl font-bold font-headline mb-4">Featured Audio Meditations</h2>
@@ -120,10 +133,6 @@ export default function LibraryPage() {
                 </section>
 
             </main>
-            <aside className="hidden xl:block w-52 shrink-0 p-6 border-l">
-                <h2 className="text-lg font-semibold mb-4">Friend Activity</h2>
-                <button className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/80 text-sm py-2 rounded-full">Find Friends</button>
-            </aside>
         </div>
     );
 }
