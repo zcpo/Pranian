@@ -14,8 +14,6 @@ import { Button } from '@/components/ui/button';
 
 export default function LibraryPage() {
     const featuredMeditations = meditations.slice(0, 4);
-    const featuredVideoMeditations = videoMeditations.slice(0, 4);
-    const featuredVideos = videos.slice(0, 4);
 
     return (
         <div className="flex flex-col lg:flex-row min-h-screen">
