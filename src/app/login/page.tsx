@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -11,7 +11,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   GoogleAuthProvider,
-  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   User,
 } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
@@ -73,6 +74,30 @@ export default function LoginPage() {
   const isTrial = searchParams.get('trial') === 'true';
   const isSubscribing = searchParams.get('subscribe') === 'true';
   const defaultTab = isSubscribing || isTrial ? 'signup' : 'signin';
+
+  useEffect(() => {
+    if (!auth) return;
+    setIsSubmitting(true);
+    getRedirectResult(auth)
+      .then(async (result) => {
+        if (result) {
+          await handleUserCreation(result.user);
+          toast({ title: 'Success!', description: 'You are now signed in.' });
+          router.push('/profile');
+        }
+      })
+      .catch((err) => {
+        setError(err.message);
+        toast({
+          variant: 'destructive',
+          title: 'Sign-in Failed',
+          description: err.message,
+        });
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+      });
+  }, [auth]);
 
   const {
     register: registerSignUp,
@@ -143,10 +168,8 @@ export default function LoginPage() {
     setIsSubmitting(true);
     const provider = new GoogleAuthProvider();
     try {
-      const result = await signInWithPopup(auth, provider);
-      await handleUserCreation(result.user);
-      toast({ title: 'Success!', description: 'You are now signed in.' });
-      router.push('/profile');
+      await signInWithRedirect(auth, provider);
+      // The redirect will happen here. The result is handled by the useEffect hook.
     } catch (err: any) {
       setError(err.message);
       toast({
@@ -154,7 +177,6 @@ export default function LoginPage() {
         title: 'Sign-in Failed',
         description: err.message,
       });
-    } finally {
       setIsSubmitting(false);
     }
   };
@@ -290,5 +312,7 @@ export default function LoginPage() {
     </div>
   );
 }
+
+    
 
     
