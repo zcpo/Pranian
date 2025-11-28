@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -162,7 +163,7 @@ export default function LoginPage() {
     message ? <p className="text-destructive text-xs mt-1">{message}</p> : null;
 
   return (
-    <div className="container min-h-screen flex items-center justify-center">
+    <div className="container h-screen flex items-center justify-center overflow-hidden">
       <Tabs defaultValue={defaultTab} className="w-full max-w-md">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="signin">Sign In</TabsTrigger>
@@ -289,3 +290,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+    
