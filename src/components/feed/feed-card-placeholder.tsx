@@ -1,67 +1,31 @@
+
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
-import { FeedItem } from '@/lib/feed-items';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { Card, CardContent, CardHeader, CardFooter, CardTitle } from '../ui/card';
-import { Heart, MessageCircle, Repeat2, AlertTriangle } from 'lucide-react';
-import { Button } from '../ui/button';
-import { Progress } from '../ui/progress';
+import { Card, CardContent, CardHeader, CardFooter } from '../ui/card';
+import { Skeleton } from '../ui/skeleton';
 
-export function FeedCardPlaceholder({ item }: { item: FeedItem }) {
-  const isError = item.status === 'error';
 
+export function FeedCardPlaceholder() {
   return (
-    <Card className="flex flex-col relative overflow-hidden opacity-70">
-      {isError && (
-        <div className="absolute inset-0 bg-destructive/80 z-10 flex flex-col items-center justify-center text-destructive-foreground p-4 text-center">
-            <AlertTriangle className="h-10 w-10 mb-4" />
-            <p className="font-bold">Upload Failed</p>
-            <p className="text-sm">Could not post. Please try again.</p>
-        </div>
-      )}
-      {item.image && (
-         <div className="relative w-full aspect-video bg-muted">
-            <Image src={item.image} alt={item.title || 'Feed item image'} fill className="object-cover" />
-            <div className="absolute inset-0 bg-black/30" />
-         </div>
-      )}
+    <Card className="flex flex-col relative overflow-hidden">
+      <Skeleton className="w-full aspect-video" />
       <CardHeader>
         <div className="flex items-center gap-3">
-            <Avatar className="h-10 w-10 border-2 border-white/50">
-                <AvatarImage src={item.userAvatar} />
-                <AvatarFallback>{item.userName?.charAt(0).toUpperCase()}</AvatarFallback>
-            </Avatar>
-            <div>
-              <CardTitle className="text-base">{item.userName || 'User'}</CardTitle>
-              <p className="text-xs text-muted-foreground">Posting now...</p>
+            <Skeleton className="h-10 w-10 rounded-full" />
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-3 w-20" />
             </div>
         </div>
       </CardHeader>
-      <CardContent className="flex-grow">
-        <h3 className="font-semibold text-lg mb-2">{item.title}</h3>
-        {item.subtitle && (
-          <p className="text-muted-foreground text-sm">{item.subtitle}</p>
-        )}
+      <CardContent className="flex-grow space-y-3">
+        <Skeleton className="h-5 w-3/4" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-5/6" />
       </CardContent>
-      <CardFooter className="flex flex-col items-start gap-2 border-t pt-4">
-        <div className="flex justify-between items-center w-full">
-            <div className="flex gap-2">
-                <Button variant="ghost" size="sm" className="text-muted-foreground" disabled>
-                    <Heart className="mr-2 h-4 w-4" /> Like
-                </Button>
-                <Button variant="ghost" size="sm" className="text-muted-foreground" disabled>
-                    <MessageCircle className="mr-2 h-4 w-4" /> Comment
-                </Button>
-            </div>
-            <Button variant="ghost" size="sm" className="text-muted-foreground" disabled>
-                <Repeat2 className="mr-2 h-4 w-4" /> Repost
-            </Button>
-        </div>
-        {!isError && (
-            <Progress value={item.uploadProgress || 0} className="h-1 w-full mt-2" />
-        )}
+      <CardFooter className="border-t pt-4">
+        <Skeleton className="h-8 w-full" />
       </CardFooter>
     </Card>
   );

@@ -18,8 +18,6 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, UploadCloud, Image as ImageIcon, X, Link as LinkIcon, Eye } from 'lucide-react';
 import Image from 'next/image';
-import { v4 as uuidv4 } from 'uuid';
-import { db as dexieDB } from '@/lib/db';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { FeedCard } from '@/components/feed/feed-card';
 import type { FeedItem } from '@/lib/feed-items';
@@ -32,39 +30,6 @@ const feedSchema = z.object({
 });
 
 type FeedFormValues = z.infer<typeof feedSchema>;
-
-async function createThumbnail(file: File, maxSize = 1080): Promise<Blob> {
-  return new Promise((resolve, reject) => {
-    const img = new window.Image();
-    const url = URL.createObjectURL(file);
-    img.onload = () => {
-      let { width, height } = img;
-      if (width > maxSize || height > maxSize) {
-        const scale = Math.min(maxSize / width, maxSize / height);
-        width = Math.round(width * scale);
-        height = Math.round(height * scale);
-      }
-      const canvas = document.createElement('canvas');
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) {
-        return reject(new Error('Could not get canvas context'));
-      }
-      ctx.drawImage(img, 0, 0, width, height);
-      canvas.toBlob((blob) => {
-        if (!blob) return reject(new Error('Canvas toBlob failed'));
-        resolve(blob);
-        URL.revokeObjectURL(url);
-      }, 'image/jpeg', 0.85); // 85% quality
-    };
-    img.onerror = (e) => {
-        URL.revokeObjectURL(url);
-        reject(e)
-    };
-    img.src = url;
-  });
-}
 
 export default function UploadPage() {
   const { user, isUserLoading } = useUser();
@@ -126,55 +91,21 @@ export default function UploadPage() {
         return;
     }
 
-
     setIsSubmitting(true);
     let finalMediaUrl = data.mediaUrl || undefined;
-    const localId = `local_${uuidv4()}`;
-
-    // Create optimistic post in Dexie and redirect immediately
-    await dexieDB.feed.add({
-      id: localId,
-      title: data.title,
-      subtitle: data.subtitle,
-      image: preview || finalMediaUrl,
-      userId: user.uid,
-      userName: user.displayName || 'You',
-      userAvatar: user.photoURL || undefined,
-      createdAt: new Date().toISOString(),
-      type: 'user_post',
-      status: 'uploading',
-      uploadProgress: 0,
-    });
-
-    router.push('/feed');
-    toast({ title: "Your post is being uploaded!", description: "It will appear at the top of the feed." });
 
     try {
       // 1. Handle image upload if a file is selected
       if (uploadMode === 'file' && file && storage) {
-        try {
-            const thumb = await createThumbnail(file);
-            const filename = `feed_images/${user.uid}/${Date.now()}-${file.name.replace(/\s+/g, '_')}`;
-            const fileRef = storageRef(storage, filename);
-            const uploadTask = uploadBytesResumable(fileRef, thumb);
-            
-            finalMediaUrl = await new Promise<string>((resolve, reject) => {
-                uploadTask.on('state_changed',
-                    (snapshot) => {
-                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                        dexieDB.feed.update(localId, { uploadProgress: progress });
-                    },
-                    (error) => reject(error),
-                    async () => {
-                        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-                        resolve(downloadURL);
-                    }
-                );
-            });
-        } catch (uploadError) {
-            console.error('Image upload failed:', uploadError);
-            finalMediaUrl = undefined;
-        }
+        const filename = `feed_images/${user.uid}/${Date.now()}-${file.name.replace(/\s+/g, '_')}`;
+        const fileRef = storageRef(storage, filename);
+        const uploadTask = uploadBytesResumable(fileRef, file);
+
+        // Await the completion of the upload
+        await uploadTask;
+
+        // Get the download URL
+        finalMediaUrl = await getDownloadURL(fileRef);
       }
 
       // 2. Create the final Realtime Database entry
@@ -194,11 +125,8 @@ export default function UploadPage() {
       
       await set(newPostRef, postData);
       
-      // Update local item with final data
-      const finalItem = (await dexieDB.feed.get(localId)) as FeedItem;
-      await dexieDB.feed.delete(localId); 
-      await dexieDB.feed.add({ ...finalItem, id: newPostRef.key!, status: 'complete', image: finalMediaUrl, createdAt: new Date().toISOString() });
-
+      toast({ title: "Success!", description: "Your post has been created." });
+      router.push('/feed');
 
     } catch (error) {
       console.error('Error creating post:', error);
@@ -207,7 +135,6 @@ export default function UploadPage() {
         title: 'Upload Failed',
         description: 'There was a problem creating your post. Please try again.',
       });
-       await dexieDB.feed.update(localId, { status: 'error' });
     } finally {
       setIsSubmitting(false);
     }
@@ -231,7 +158,6 @@ export default function UploadPage() {
         userId: user?.uid,
         userName: user?.displayName || 'Your Name',
         userAvatar: user?.photoURL || undefined,
-        status: 'complete'
     };
   }
 
