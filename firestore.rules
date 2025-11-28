@@ -217,9 +217,10 @@ service cloud.firestore {
      * @allow (update, delete) Users can only update or delete their own posts.
      */
     match /feed_items/{itemId} {
-      allow get, list: if isSignedIn();
-      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
-      allow update, delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+      // Any user can read the public feed.
+      allow read: if true;
+      // Any authenticated user can write, but only if they are the owner of the document.
+      allow write: if request.auth.uid == request.resource.data.userId;
     }
   }
 }
