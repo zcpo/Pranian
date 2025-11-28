@@ -8,7 +8,7 @@ import { z } from 'zod';
 import { useDropzone } from 'react-dropzone';
 import { useUser, useDatabase } from '@/firebase';
 import { ref as dbRef, push, set, serverTimestamp } from 'firebase/database';
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL, UploadTask } from 'firebase/storage';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -21,6 +21,7 @@ import Image from 'next/image';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { FeedCard } from '@/components/feed/feed-card';
 import type { FeedItem } from '@/lib/feed-items';
+import { Progress } from '@/components/ui/progress';
 
 
 const feedSchema = z.object({
@@ -92,17 +93,34 @@ export default function UploadPage() {
     }
 
     setIsSubmitting(true);
-    let finalMediaUrl = data.mediaUrl || undefined;
+    setUploadProgress(0);
 
     try {
+      let finalMediaUrl = data.mediaUrl || undefined;
+
       // 1. Handle image upload if a file is selected
       if (uploadMode === 'file' && file && storage) {
         const filename = `feed_images/${user.uid}/${Date.now()}-${file.name.replace(/\s+/g, '_')}`;
         const fileRef = storageRef(storage, filename);
         
-        // Use the simpler uploadBytes which returns a promise that resolves on completion
-        const snapshot = await uploadBytes(fileRef, file);
-        finalMediaUrl = await getDownloadURL(snapshot.ref);
+        const uploadTask = uploadBytesResumable(fileRef, file);
+
+        finalMediaUrl = await new Promise((resolve, reject) => {
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    setUploadProgress(progress);
+                },
+                (error) => {
+                    console.error('Upload failed:', error);
+                    reject(error);
+                },
+                async () => {
+                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                    resolve(downloadURL);
+                }
+            );
+        });
       }
 
       // 2. Create the final Realtime Database entry
@@ -194,7 +212,7 @@ export default function UploadPage() {
                 name="title"
                 control={control}
                 render={({ field }) => (
-                  <Input id="title" placeholder="Give your post a title" {...field} />
+                  <Input id="title" placeholder="Give your post a title" {...field} disabled={isSubmitting} />
                 )}
               />
               {errors.title && <p className="text-sm text-destructive">{errors.title.message}</p>}
@@ -206,15 +224,15 @@ export default function UploadPage() {
                 name="subtitle"
                 control={control}
                 render={({ field }) => (
-                  <Textarea id="subtitle" placeholder="What's on your mind?" {...field} rows={4} />
+                  <Textarea id="subtitle" placeholder="What's on your mind?" {...field} rows={4} disabled={isSubmitting} />
                 )}
               />
               {errors.subtitle && <p className="text-sm text-destructive">{errors.subtitle.message}</p>}
             </div>
             
             <div className="flex gap-2 rounded-md bg-muted p-1">
-                <Button type="button" variant={uploadMode === 'file' ? 'secondary' : 'ghost'} className="flex-1" onClick={() => setUploadMode('file')}>Upload File</Button>
-                <Button type="button" variant={uploadMode === 'url' ? 'secondary' : 'ghost'} className="flex-1" onClick={() => setUploadMode('url')}>From URL</Button>
+                <Button type="button" variant={uploadMode === 'file' ? 'secondary' : 'ghost'} className="flex-1" onClick={() => setUploadMode('file')} disabled={isSubmitting}>Upload File</Button>
+                <Button type="button" variant={uploadMode === 'url' ? 'secondary' : 'ghost'} className="flex-1" onClick={() => setUploadMode('url')} disabled={isSubmitting}>From URL</Button>
             </div>
 
             {uploadMode === 'file' ? (
@@ -223,13 +241,13 @@ export default function UploadPage() {
                   {preview ? (
                     <div className="relative">
                       <Image src={preview} alt="Preview" width={400} height={300} className="rounded-md object-cover w-full aspect-video" />
-                      <Button type="button" variant="destructive" size="icon" className="absolute top-2 right-2 h-8 w-8" onClick={() => { setFile(null); setPreview(null); }}>
+                      <Button type="button" variant="destructive" size="icon" className="absolute top-2 right-2 h-8 w-8" onClick={() => { setFile(null); setPreview(null); }} disabled={isSubmitting}>
                         <X className="h-4 w-4" />
                       </Button>
                     </div>
                   ) : (
-                    <div {...getRootProps()} className="flex flex-col items-center justify-center p-10 border-2 border-dashed rounded-md cursor-pointer hover:bg-muted/50 transition-colors">
-                      <input {...getInputProps()} />
+                    <div {...getRootProps()} className={`flex flex-col items-center justify-center p-10 border-2 border-dashed rounded-md ${isSubmitting ? 'cursor-not-allowed bg-muted/50' : 'cursor-pointer hover:bg-muted/50'} transition-colors`}>
+                      <input {...getInputProps()} disabled={isSubmitting} />
                       <UploadCloud className="h-12 w-12 text-muted-foreground" />
                       <p className="mt-4 text-sm text-muted-foreground">
                         {isDragActive ? 'Drop the image here...' : 'Drag & drop an image, or click to select'}
@@ -246,7 +264,7 @@ export default function UploadPage() {
                             name="mediaUrl"
                             control={control}
                             render={({ field }) => (
-                              <Input id="mediaUrl" placeholder="https://youtube.com/watch?v=..." {...field} className="pl-10" />
+                              <Input id="mediaUrl" placeholder="https://youtube.com/watch?v=..." {...field} className="pl-10" disabled={isSubmitting} />
                             )}
                         />
                     </div>
@@ -268,10 +286,18 @@ export default function UploadPage() {
                 </div>
             )}
             
+            {isSubmitting && uploadMode === 'file' && (
+                <div className="space-y-2">
+                    <Label>Upload Progress</Label>
+                    <Progress value={uploadProgress} />
+                    <p className="text-sm text-muted-foreground text-center">{Math.round(uploadProgress)}%</p>
+                </div>
+            )}
+
             <div className="flex justify-end gap-2">
                 <Dialog>
                     <DialogTrigger asChild>
-                         <Button type="button" variant="outline">
+                         <Button type="button" variant="outline" disabled={isSubmitting}>
                             <Eye className="mr-2 h-4 w-4" />
                             Preview
                         </Button>
@@ -298,3 +324,5 @@ export default function UploadPage() {
     </div>
   );
 }
+
+    
