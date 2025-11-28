@@ -251,14 +251,10 @@ function defaultPoses(): Pose[] {
 
 function CategoryEntryForm({ category, userId }: { category: string, userId: string }) {
   const firestore = useFirestore();
-  const today = new Date().toISOString().split("T")[0];
   const [entry, setEntry] = useState("");
   const [mediaUrl, setMediaUrl] = useState<string | null>(null);
   const [completedToday, setCompletedToday] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-
-  // This is a bit of a hack for the demo. In a real app, you'd fetch this from Firestore.
-  const entryId = `${category.replace(/\s+/g, '-')}-${today}`;
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -275,22 +271,41 @@ function CategoryEntryForm({ category, userId }: { category: string, userId: str
     if (!firestore || !userId) return;
     setIsSaving(true);
     
+    const now = new Date();
+    const newEntryId = uuidv4();
+    const newEntry: SessionEntry = {
+      id: newEntryId,
+      userId: userId,
+      title: category,
+      notes: entry,
+      mediaUrl: mediaUrl || undefined,
+      completed: completedToday,
+      date: now.toISOString().split("T")[0],
+      createdAt: now.toISOString(),
+      modifiedAt: now.toISOString(),
+      duration: 0,
+      style: 'Journal',
+    };
+
     try {
-      const sessionsRef = collection(firestore, "users", userId, "sessions");
-      await addDoc(sessionsRef, {
-        title: category,
-        notes: entry,
-        mediaUrl: mediaUrl || null,
-        completed: completedToday,
-        date: new Date(), // Use client-side date for Dexie compatibility
-        duration: 0, // Not a timed session
-        style: 'Journal',
-      });
+      // Optimistic UI update
+      await db.sessions.add(newEntry);
+      
+      // Clear form
+      setEntry('');
+      setMediaUrl(null);
+      setCompletedToday(false);
+
+      // Background sync
+      const docRef = doc(firestore, "users", userId, "sessions", newEntryId);
+      await setDoc(docRef, newEntry);
 
       alert(`Saved entry for ${category}`);
     } catch (error) {
       console.error("Error saving journal entry:", error);
       alert(`Failed to save entry for ${category}`);
+      // Optionally, remove the failed entry from Dexie
+      await db.sessions.delete(newEntryId);
     } finally {
       setIsSaving(false);
     }
@@ -498,10 +513,11 @@ function useAnalytics(userId?: string) {
 
       const sessions = snap.docs.map(doc => {
         const data = doc.data() as SessionEntry;
+        const dateString = data.date || data.createdAt;
         return {
             id: doc.id,
             ...data,
-            date: data.date ? (data.date as any).toDate() : new Date()
+            date: dateString ? new Date(dateString) : new Date()
         }
       });
 
@@ -636,3 +652,5 @@ function IntensityChart({ sessions }: { sessions: {date: Date, intensity?: numbe
     </Card>
   );
 }
+
+    
