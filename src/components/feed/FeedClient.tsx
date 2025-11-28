@@ -27,8 +27,10 @@ export default function FeedClient({ initialItems = [] }: { initialItems: FeedIt
 
     setLoading(true);
     const feedRef = ref(database, 'feed_items');
+    // Create the query
     const feedQuery = query(feedRef, limitToLast(PAGE_SIZE));
 
+    // Pass the query to the listener
     const unsubscribe = onValue(
       feedQuery,
       (snapshot) => {
@@ -58,7 +60,7 @@ export default function FeedClient({ initialItems = [] }: { initialItems: FeedIt
     <div className="container mx-auto px-4 py-8">
       {user && (
         <div className="mb-8 max-w-xl mx-auto">
-          <Button asChild>
+          <Button asChild className="w-full">
             <Link href="/upload">Create Post</Link>
           </Button>
         </div>
