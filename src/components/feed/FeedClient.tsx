@@ -16,11 +16,13 @@ const PAGE_SIZE = 50;
 export default function FeedClient({ initialItems = [] }: { initialItems: FeedItem[] }) {
   const { user } = useUser();
   const database = useDatabase();
+  console.log('Database instance in FeedClient:', database);
   const [items, setItems] = useState<FeedItem[]>(initialItems);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!database) {
+      console.log("FeedClient: Database service not available yet.");
       setLoading(false);
       return;
     }
