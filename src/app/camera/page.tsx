@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { Camera, RefreshCcw, Check, Video, Loader2, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { useUser, useStorage } from '@/firebase';
+import { useUser } from '@/firebase';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 function CameraIcon({ className }: { className?: string }) {
@@ -28,7 +28,7 @@ export default function CameraPage() {
   
   const { toast } = useToast();
   const router = useRouter();
-  const storage = useStorage();
+  const storage = getStorage();
   const { user } = useUser();
 
   useEffect(() => {
