@@ -1,6 +1,13 @@
 import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
+  experimental: {
+    // This is a dev-only configuration to allow the Next.js dev server to accept requests
+    // from the Firebase Studio environment.
+    allowedDevOrigins: [
+      'https://6000-firebase-studio-1764097066853.cluster-ux5mmlia3zhhask7riihruxydo.cloudworkstations.dev',
+    ],
+  },
   images: {
     remotePatterns: [
       {
