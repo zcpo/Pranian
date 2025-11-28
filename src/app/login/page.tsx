@@ -7,14 +7,16 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Mail, Lock, LogIn } from 'lucide-react';
-import { useAuth, useFirestore } from '@/firebase';
+import { useAuth, useFirestore, useUser } from '@/firebase';
 import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
   User,
 } from 'firebase/auth';
+import {
+  initiateEmailSignUp,
+  initiateEmailSignIn,
+} from '@/firebase/non-blocking-login';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
@@ -63,10 +65,19 @@ export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
+  const { user, isUserLoading } = useUser();
 
   const isTrial = searchParams.get('trial') === 'true';
   const isSubscribing = searchParams.get('subscribe') === 'true';
   const defaultTab = isSubscribing || isTrial ? 'signup' : 'signin';
+
+  useEffect(() => {
+    // Redirect if user is already logged in
+    if (user && !isUserLoading) {
+      toast({ title: 'Success!', description: 'You are now signed in.' });
+      router.push('/profile');
+    }
+  }, [user, isUserLoading, router, toast]);
 
   const {
     register: registerSignUp,
@@ -108,31 +119,20 @@ export default function LoginPage() {
     if (!auth) return;
     setError(null);
     setIsSubmitting(true);
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
-      await handleUserCreation(userCredential.user);
-      toast({ title: 'Success!', description: 'Your account has been created.' });
-      router.push('/profile');
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setIsSubmitting(false);
-    }
+    // Non-blocking call
+    initiateEmailSignUp(auth, data.email, data.password);
+    // The useEffect will handle the redirect on successful login.
+    // We can add a toast here for immediate feedback if desired.
+    toast({ title: 'Creating account...', description: 'Please wait a moment.' });
   };
 
   const onSignIn: SubmitHandler<SignInFormValues> = async (data) => {
     if (!auth) return;
     setError(null);
     setIsSubmitting(true);
-    try {
-      await signInWithEmailAndPassword(auth, data.email, data.password);
-      toast({ title: 'Success!', description: 'You are now signed in.' });
-      router.push('/profile');
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setIsSubmitting(false);
-    }
+    // Non-blocking call
+    initiateEmailSignIn(auth, data.email, data.password);
+    toast({ title: 'Signing in...', description: 'Please wait a moment.' });
   };
   
   const handleGoogleSignIn = async () => {
@@ -140,16 +140,15 @@ export default function LoginPage() {
     const provider = new GoogleAuthProvider();
     setIsSubmitting(true);
     try {
+      // signInWithPopup is an exception; it needs to be awaited to handle the popup flow.
       const result = await signInWithPopup(auth, provider);
       await handleUserCreation(result.user);
-      toast({ title: 'Success!', description: 'You are now signed in.' });
-      router.push('/profile');
+      // The redirect will be handled by the useEffect.
     } catch (err: any) {
       if (err.code !== 'auth/popup-closed-by-user') {
         setError(err.message);
       }
-    } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false); // Only set submitting to false on error here
     }
   };
 
@@ -284,5 +283,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-    

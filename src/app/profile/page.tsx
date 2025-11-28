@@ -22,6 +22,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { GenericCard } from '@/components/feed/generic-card';
 import type { FeedItem } from '@/lib/feed-items';
+import { useRouter } from 'next/navigation';
 
 const profileSchema = z.object({
   displayName: z.string().min(1, 'Display name is required'),
@@ -97,8 +98,15 @@ export default function ProfilePage() {
   const { user, isUserLoading } = useUser();
   const firestore = useFirestore();
   const { toast } = useToast();
+  const router = useRouter();
   const [isUploading, setIsUploading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    if (!isUserLoading && !user) {
+      router.push('/login');
+    }
+  }, [user, isUserLoading, router]);
 
   const userDocRef = useMemoFirebase(
     () => (user ? doc(firestore, 'users', user.uid) : null),
@@ -208,7 +216,7 @@ export default function ProfilePage() {
       toast({ title: "Follow clicked!" });
   }
 
-  if (isUserLoading || isProfileLoading) {
+  if (isUserLoading || (isProfileLoading && user)) {
     return (
       <div className="container mx-auto px-4 py-8 sm:py-16 flex justify-center">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
@@ -217,10 +225,11 @@ export default function ProfilePage() {
   }
 
   if (!user) {
+    // This will be caught by the useEffect, but it's good practice to have a conditional return.
     return (
       <div className="container mx-auto px-4 py-8 sm:py-16 text-center">
-        <h1 className="text-2xl font-bold">Please sign in</h1>
-        <p className="text-muted-foreground">You need to be logged in to view your profile.</p>
+        <h1 className="text-2xl font-bold">Redirecting to login...</h1>
+        <Loader2 className="mx-auto mt-4 h-8 w-8 animate-spin" />
       </div>
     );
   }
@@ -272,4 +281,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-
