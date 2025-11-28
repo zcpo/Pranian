@@ -78,7 +78,7 @@ const VideoPlayer = ({ source, poster }: VideoPlayerProps) => {
         hls.destroy();
       }
     };
-  }, [source, videoRef.current]);
+  }, [source]);
 
   return (
     <div ref={containerRef} className="player-container w-full h-screen">
