@@ -15,7 +15,7 @@ export default function VideoPlayerPage({ params }: { params: { slug: string } }
   const imageUrl = video.posterUrl || videoImage?.imageUrl.replace(/seed\/[^/]+/, `seed/${video.slug}`) || 'https://picsum.photos/1920/1080';
   
   return (
-     <div className="bg-black min-h-screen flex items-center justify-center">
+     <div className="bg-black min-h-screen w-full flex items-center justify-center">
         <VideoPlayer source={video.videoUrl} poster={imageUrl} />
     </div>
   );

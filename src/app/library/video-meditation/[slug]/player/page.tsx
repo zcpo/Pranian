@@ -15,7 +15,7 @@ export default function VideoMeditationPlayerPage({ params }: { params: { slug: 
   const imageUrl = meditation.posterUrl || meditationImage?.imageUrl.replace(/seed\/[^/]+/, `seed/${meditation.slug}`) || 'https://picsum.photos/1920/1080';
 
   return (
-    <div className="bg-black min-h-screen flex items-center justify-center">
+    <div className="bg-black min-h-screen w-full flex items-center justify-center">
         <VideoPlayer source={meditation.videoUrl} poster={imageUrl} />
     </div>
   );

@@ -23,7 +23,7 @@ export default function MeditationPlayerPage({ params }: { params: { slug: strin
   }
 
   return (
-    <div className="bg-black min-h-screen flex items-center justify-center">
+    <div className="bg-black min-h-screen w-full">
         <MusicPlayer track={track} />
     </div>
   );

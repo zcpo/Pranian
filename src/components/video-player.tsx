@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useRef } from 'react';
@@ -13,15 +14,14 @@ type VideoPlayerProps = {
 
 const VideoPlayer = ({ source, poster }: VideoPlayerProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (typeof window === 'undefined' || !videoRef.current) {
       return;
     }
     
-    // Ensure Plyr and Hls are loaded
     if (typeof Plyr === 'undefined' || typeof Hls === 'undefined') {
-        console.error('Plyr or HLS.js is not loaded');
         const timeout = setTimeout(() => {
             if (videoRef.current) {
                 videoRef.current.dataset.retry = 'true';
@@ -72,7 +72,7 @@ const VideoPlayer = ({ source, poster }: VideoPlayerProps) => {
   }, [source, videoRef.current]);
 
   return (
-    <div className="player-container glass-card">
+    <div ref={containerRef} className="player-container w-full h-screen">
       <video ref={videoRef} controls crossOrigin="" playsInline poster={poster}></video>
     </div>
   );
