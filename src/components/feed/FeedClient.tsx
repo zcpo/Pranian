@@ -34,7 +34,7 @@ export default function FeedClient({ initialItems }: { initialItems: FeedItem[] 
   const [loading, setLoading] = useState(true);
 
   // 1. Get local optimistic posts from Dexie
-  const localItems = useLiveQuery(() => dexieDB.feed.where('status').equals('uploading').reverse().sortBy('createdAt'), []);
+  const localItems = useLiveQuery(() => dexieDB.feed.where('status').notEqual('complete').reverse().sortBy('createdAt'), []);
 
   // 2. Setup the real-time listener for the main feed from Realtime Database
   useEffect(() => {
@@ -73,11 +73,17 @@ export default function FeedClient({ initialItems }: { initialItems: FeedItem[] 
     const uniqueItemsMap = new Map<string, FeedItem>();
 
     for (const item of allItems) {
-      if (item.status === 'uploading') {
-          uniqueItemsMap.set(item.id, item);
-      } else {
-        uniqueItemsMap.set(item.id, item);
-      }
+        // Always prioritize the local item if it exists, as it holds the upload status
+        if (item.status === 'uploading' || item.status === 'error') {
+             if (!uniqueItemsMap.has(item.id)) {
+                uniqueItemsMap.set(item.id, item);
+             }
+        } else {
+             // Only add the server item if a local version doesn't already exist
+            if (!uniqueItemsMap.has(item.id)) {
+                uniqueItemsMap.set(item.id, item);
+            }
+        }
     }
     
     const uniqueItems = Array.from(uniqueItemsMap.values());
