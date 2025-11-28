@@ -28,7 +28,7 @@ service cloud.firestore {
      * non-existent data and to enforce ownership.
      */
     function isExistingOwner(userId) {
-      return isOwner(userId) && exists(resource.data.userId);
+      return isOwner(userId) && exists(path);
     }
     
     /**
