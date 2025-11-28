@@ -3,7 +3,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useDatabase, useUser } from '@/firebase';
-import { ref, onValue, query, orderByChild, limitToLast } from 'firebase/database';
+import { ref, onValue, query, limitToLast } from 'firebase/database';
 import type { FeedItem } from '@/lib/feed-items';
 import { FeedCard } from '@/components/feed/feed-card';
 import { Button } from '@/components/ui/button';
@@ -27,7 +27,8 @@ export default function FeedClient({ initialItems = [] }: { initialItems: FeedIt
 
     setLoading(true);
     const feedRef = ref(database, 'feed_items');
-    const feedQuery = query(feedRef, orderByChild('createdAt'), limitToLast(PAGE_SIZE));
+    // Fetch the last 50 items. We will sort them on the client.
+    const feedQuery = query(feedRef, limitToLast(PAGE_SIZE));
 
     const unsubscribe = onValue(
       feedQuery,
@@ -40,8 +41,9 @@ export default function FeedClient({ initialItems = [] }: { initialItems: FeedIt
             newItems.push({ id: key, ...data[key] });
           });
         }
-        // Reverse because limitToLast gives us ascending order, and we want newest first
-        setItems(newItems.reverse());
+        // Sort by createdAt descending to show newest posts first
+        newItems.sort((a, b) => b.createdAt - a.createdAt);
+        setItems(newItems);
         setLoading(false);
       },
       (error) => {
