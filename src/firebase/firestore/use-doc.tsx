@@ -1,3 +1,4 @@
+
 'use client';
     
 import { useState, useEffect } from 'react';
@@ -7,9 +8,13 @@ import {
   DocumentData,
   FirestoreError,
   DocumentSnapshot,
+  Query,
+  QuerySnapshot,
+  collection,
 } from 'firebase/firestore';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
+import { useCollection, UseCollectionResult } from './use-collection';
 
 /** Utility type to add an 'id' field to a given type T. */
 type WithId<T> = T & { id: string };
@@ -96,4 +101,5 @@ export function useDoc<T = any>(
   return { data, isLoading, error };
 }
 
-    
+export { useCollection };
+export type { UseCollectionResult };
