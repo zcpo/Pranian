@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -30,6 +31,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const signUpSchema = z
   .object({
@@ -165,13 +167,24 @@ export default function LoginPage() {
     await signInWithRedirect(auth, provider);
   };
 
+  const heroImage = PlaceHolderImages.find(img => img.id === 'hero-background');
 
   const FormError = ({ message }: { message?: string }) =>
     message ? <p className="text-destructive text-xs mt-1">{message}</p> : null;
 
   return (
-    <div className="container h-screen flex items-center justify-center overflow-hidden">
-      <Card className="w-full max-w-md">
+    <div className="h-screen flex items-center justify-center overflow-hidden relative">
+      {heroImage && (
+        <Image
+          src={heroImage.imageUrl}
+          alt={heroImage.description}
+          fill
+          className="object-cover"
+          priority
+          data-ai-hint={heroImage.imageHint}
+        />
+      )}
+      <Card className="w-full max-w-md glass-card z-10">
         <Tabs defaultValue={defaultTab} className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="signin">Sign In</TabsTrigger>
