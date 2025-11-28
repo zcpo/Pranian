@@ -1,8 +1,9 @@
 
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { meditations } from '@/lib/meditations';
 import { videoMeditations } from '@/lib/video-meditations';
@@ -14,6 +15,15 @@ import { Button } from '@/components/ui/button';
 
 export default function LibraryPage() {
     const featuredMeditations = meditations.slice(0, 4);
+    const [searchQuery, setSearchQuery] = useState('');
+    const router = useRouter();
+
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (searchQuery.trim()) {
+            router.push(`/library/search?q=${encodeURIComponent(searchQuery.trim())}`);
+        }
+    };
 
     return (
         <div className="flex flex-col lg:flex-row min-h-screen">
@@ -51,14 +61,16 @@ export default function LibraryPage() {
                 </nav>
 
                 <div className="mb-8">
-                    <div className="relative">
+                    <form onSubmit={handleSearch} className="relative">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                         <Input
                             placeholder="Search songs, artists, podcasts..."
                             className="glass-input pl-12 pr-24 h-12 text-lg rounded-full focus-visible:ring-primary/50"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                         />
-                         <Button className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full h-9" size="sm">Search</Button>
-                    </div>
+                         <Button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full h-9" size="sm">Search</Button>
+                    </form>
                 </div>
                 
                 <section className="mb-12">
