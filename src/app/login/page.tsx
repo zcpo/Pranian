@@ -12,8 +12,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   GoogleAuthProvider,
-  signInWithRedirect,
-  getRedirectResult,
+  signInWithPopup,
   User,
 } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
@@ -68,32 +67,6 @@ export default function LoginPage() {
   const isTrial = searchParams.get('trial') === 'true';
   const isSubscribing = searchParams.get('subscribe') === 'true';
   const defaultTab = isSubscribing || isTrial ? 'signup' : 'signin';
-
-  // Effect to handle redirect result from Google Sign-In
-  useEffect(() => {
-    if (!auth) return;
-
-    const handleRedirect = async () => {
-      try {
-        setIsSubmitting(true);
-        const result = await getRedirectResult(auth);
-        if (result) {
-          toast({ title: 'Success!', description: 'You are now signed in.' });
-          await handleUserCreation(result.user);
-          router.push('/profile');
-        }
-      } catch (err: any) {
-        // This can happen if the user closes the sign-in window
-        if (err.code !== 'auth/cancelled-popup-request') {
-          setError(err.message);
-        }
-      } finally {
-        setIsSubmitting(false);
-      }
-    };
-    
-    handleRedirect();
-  }, [auth, router, toast]);
 
   const {
     register: registerSignUp,
@@ -165,8 +138,19 @@ export default function LoginPage() {
   const handleGoogleSignIn = async () => {
     if (!auth) return;
     const provider = new GoogleAuthProvider();
-    // Use signInWithRedirect for better UX and to avoid popup blockers
-    await signInWithRedirect(auth, provider);
+    setIsSubmitting(true);
+    try {
+      const result = await signInWithPopup(auth, provider);
+      await handleUserCreation(result.user);
+      toast({ title: 'Success!', description: 'You are now signed in.' });
+      router.push('/profile');
+    } catch (err: any) {
+      if (err.code !== 'auth/popup-closed-by-user') {
+        setError(err.message);
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const heroImage = PlaceHolderImages.find(img => img.id === 'hero-background');
@@ -300,3 +284,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+    
