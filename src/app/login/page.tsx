@@ -5,11 +5,14 @@ import { useState, useEffect } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Mail, Lock } from 'lucide-react';
+import { Mail, Lock, LogIn } from 'lucide-react';
 import { useAuth, useFirestore } from '@/firebase';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithRedirect,
+  getRedirectResult,
   User,
 } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
@@ -26,6 +29,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Separator } from '@/components/ui/separator';
 
 const signUpSchema = z
   .object({
@@ -61,6 +65,32 @@ export default function LoginPage() {
   const isSubscribing = searchParams.get('subscribe') === 'true';
   const defaultTab = isSubscribing || isTrial ? 'signup' : 'signin';
 
+  // Effect to handle redirect result from Google Sign-In
+  useEffect(() => {
+    if (!auth) return;
+
+    const handleRedirect = async () => {
+      try {
+        setIsSubmitting(true);
+        const result = await getRedirectResult(auth);
+        if (result) {
+          toast({ title: 'Success!', description: 'You are now signed in.' });
+          await handleUserCreation(result.user);
+          router.push('/profile');
+        }
+      } catch (err: any) {
+        // This can happen if the user closes the sign-in window
+        if (err.code !== 'auth/cancelled-popup-request') {
+          setError(err.message);
+        }
+      } finally {
+        setIsSubmitting(false);
+      }
+    };
+    
+    handleRedirect();
+  }, [auth, router, toast]);
+
   const {
     register: registerSignUp,
     handleSubmit: handleSignUpSubmit,
@@ -83,10 +113,14 @@ export default function LoginPage() {
     const userDoc = await getDoc(userDocRef);
 
     if (!userDoc.exists()) {
+      const displayName = user.displayName || user.email?.split('@')[0] || 'Pranian User';
+      const nameParts = displayName.split(' ');
+      
       const data = {
         id: user.uid,
         email: user.email,
-        displayName: user.displayName || user.email?.split('@')[0] || 'Pranian User',
+        firstName: nameParts[0] || 'New',
+        lastName: nameParts.slice(1).join(' ') || 'User',
         avatarUrl: user.photoURL,
       };
       await setDoc(userDocRef, data, { merge: true });
@@ -123,111 +157,125 @@ export default function LoginPage() {
       setIsSubmitting(false);
     }
   };
+  
+  const handleGoogleSignIn = async () => {
+    if (!auth) return;
+    const provider = new GoogleAuthProvider();
+    // Use signInWithRedirect for better UX and to avoid popup blockers
+    await signInWithRedirect(auth, provider);
+  };
+
 
   const FormError = ({ message }: { message?: string }) =>
     message ? <p className="text-destructive text-xs mt-1">{message}</p> : null;
 
   return (
     <div className="container h-screen flex items-center justify-center overflow-hidden">
-      <Tabs defaultValue={defaultTab} className="w-full max-w-md">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="signin">Sign In</TabsTrigger>
-          <TabsTrigger value="signup">Sign Up</TabsTrigger>
-        </TabsList>
-        <TabsContent value="signin">
-          <Card>
-            <CardHeader>
-              <CardTitle>Sign In</CardTitle>
-              <CardDescription>
-                Welcome back! Sign in to access your account.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {error && <p className="text-destructive text-sm my-2">{error}</p>}
-              <form onSubmit={handleSignInSubmit(onSignIn)} noValidate className="space-y-4">
-                 <div className="space-y-2">
-                  <Label htmlFor="signin-email">Email</Label>
-                  <Input
-                    id="signin-email"
-                    type="email"
-                    {...registerSignIn('email')}
-                    required
-                    autoComplete="email"
-                    placeholder="m@example.com"
-                  />
-                  <FormError message={signInErrors.email?.message} />
-                </div>
-                 <div className="space-y-2">
-                  <Label htmlFor="signin-password">Password</Label>
-                  <Input
-                    id="signin-password"
-                    type="password"
-                    {...registerSignIn('password')}
-                    required
-                    autoComplete="current-password"
-                  />
-                  <FormError message={signInErrors.password?.message} />
-                </div>
-                <Button type="submit" className="w-full" disabled={isSubmitting}>
-                  {isSubmitting ? 'Signing In...' : 'Sign In'}
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
-        </TabsContent>
-        <TabsContent value="signup">
-          <Card>
-            <CardHeader>
-              <CardTitle>Sign Up</CardTitle>
-              <CardDescription>
-                Create an account to start your journey with Pranian.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-               {error && <p className="text-destructive text-sm my-2">{error}</p>}
-               <form onSubmit={handleSignUpSubmit(onSignUp)} noValidate className="space-y-4">
-                 <div className="space-y-2">
-                  <Label htmlFor="signup-email">Email</Label>
-                  <Input
-                    id="signup-email"
-                    type="email"
-                    {...registerSignUp('email')}
-                    required
-                    autoComplete="email"
-                    placeholder="m@example.com"
-                  />
-                  <FormError message={signUpErrors.email?.message} />
-                </div>
-                 <div className="space-y-2">
-                  <Label htmlFor="signup-password">Password</Label>
-                  <Input
-                    id="signup-password"
-                    type="password"
-                    {...registerSignUp('password')}
-                    required
-                    autoComplete="new-password"
-                  />
-                  <FormError message={signUpErrors.password?.message} />
-                </div>
-                 <div className="space-y-2">
-                  <Label htmlFor="signup-confirmPassword">Confirm Password</Label>
-                  <Input
-                    id="signup-confirmPassword"
-                    type="password"
-                    {...registerSignUp('confirmPassword')}
-                    required
-                    autoComplete="new-password"
-                  />
-                  <FormError message={signUpErrors.confirmPassword?.message} />
-                </div>
-                <Button type="submit" className="w-full" disabled={isSubmitting}>
-                   {isSubmitting ? 'Creating Account...' : 'Create Account'}
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+      <Card className="w-full max-w-md">
+        <Tabs defaultValue={defaultTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="signin">Sign In</TabsTrigger>
+              <TabsTrigger value="signup">Sign Up</TabsTrigger>
+            </TabsList>
+            <TabsContent value="signin">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2"><LogIn />Sign In</CardTitle>
+                  <CardDescription>
+                    Welcome back! Sign in to access your account.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {error && <p className="text-destructive text-sm my-2">{error}</p>}
+                  <form onSubmit={handleSignInSubmit(onSignIn)} noValidate className="space-y-4">
+                     <div className="space-y-2">
+                      <Label htmlFor="signin-email">Email</Label>
+                      <Input
+                        id="signin-email"
+                        type="email"
+                        {...registerSignIn('email')}
+                        required
+                        autoComplete="email"
+                        placeholder="m@example.com"
+                      />
+                      <FormError message={signInErrors.email?.message} />
+                    </div>
+                     <div className="space-y-2">
+                      <Label htmlFor="signin-password">Password</Label>
+                      <Input
+                        id="signin-password"
+                        type="password"
+                        {...registerSignIn('password')}
+                        required
+                        autoComplete="current-password"
+                      />
+                      <FormError message={signInErrors.password?.message} />
+                    </div>
+                    <Button type="submit" className="w-full" disabled={isSubmitting}>
+                      {isSubmitting ? 'Signing In...' : 'Sign In'}
+                    </Button>
+                  </form>
+                  <Separator className="my-4" />
+                   <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isSubmitting}>
+                      Sign in with Google
+                  </Button>
+                </CardContent>
+            </TabsContent>
+            <TabsContent value="signup">
+                <CardHeader>
+                  <CardTitle>Sign Up</CardTitle>
+                  <CardDescription>
+                    Create an account to start your journey with Pranian.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                   {error && <p className="text-destructive text-sm my-2">{error}</p>}
+                   <form onSubmit={handleSignUpSubmit(onSignUp)} noValidate className="space-y-4">
+                     <div className="space-y-2">
+                      <Label htmlFor="signup-email">Email</Label>
+                      <Input
+                        id="signup-email"
+                        type="email"
+                        {...registerSignUp('email')}
+                        required
+                        autoComplete="email"
+                        placeholder="m@example.com"
+                      />
+                      <FormError message={signUpErrors.email?.message} />
+                    </div>
+                     <div className="space-y-2">
+                      <Label htmlFor="signup-password">Password</Label>
+                      <Input
+                        id="signup-password"
+                        type="password"
+                        {...registerSignUp('password')}
+                        required
+                        autoComplete="new-password"
+                      />
+                      <FormError message={signUpErrors.password?.message} />
+                    </div>
+                     <div className="space-y-2">
+                      <Label htmlFor="signup-confirmPassword">Confirm Password</Label>
+                      <Input
+                        id="signup-confirmPassword"
+                        type="password"
+                        {...registerSignUp('confirmPassword')}
+                        required
+                        autoComplete="new-password"
+                      />
+                      <FormError message={signUpErrors.confirmPassword?.message} />
+                    </div>
+                    <Button type="submit" className="w-full" disabled={isSubmitting}>
+                       {isSubmitting ? 'Creating Account...' : 'Create Account'}
+                    </Button>
+                  </form>
+                   <Separator className="my-4" />
+                   <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isSubmitting}>
+                      Sign up with Google
+                  </Button>
+                </CardContent>
+            </TabsContent>
+        </Tabs>
+      </Card>
     </div>
   );
 }
