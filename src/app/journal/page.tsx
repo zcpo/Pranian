@@ -135,11 +135,14 @@ export default function JournalPage() {
     const unsubscribe = onSnapshot(sessionsCollection, async (snapshot) => {
       const remoteSessions: SessionEntry[] = [];
       snapshot.forEach((doc) => {
-        remoteSessions.push(doc.data() as SessionEntry);
+        // Ensure the document ID is included with the data
+        remoteSessions.push({ id: doc.id, ...doc.data() } as SessionEntry);
       });
 
       // Basic conflict resolution: last write wins
-      await db.sessions.bulkPut(remoteSessions);
+      if (remoteSessions.length > 0) {
+        await db.sessions.bulkPut(remoteSessions);
+      }
     });
 
     return () => unsubscribe();
