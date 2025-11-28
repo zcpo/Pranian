@@ -305,7 +305,8 @@
   "auth": {
     "providers": [
       "password",
-      "anonymous"
+      "anonymous",
+      "google.com"
     ]
   },
   "firestore": {
@@ -414,3 +415,4 @@
     "reasoning": "The Firestore structure is designed to support a yoga and meditation PWA (Pranian) with a focus on user-owned session data, products, and subscription management. The core principle is Authorization Independence, achieved through denormalization. This approach avoids `get()` calls in security rules, enabling atomic operations and easier debugging. Segregation is used to isolate data with different security needs (e.g., user sessions vs. global products).  Access modeling follows a consistent pattern: private data is stored under user-specific paths, while global data (products, feed_items) reside in root-level collections.\n\nSpecifically:\n\n*   `/users/{userId}`: Stores user profiles.\n*   `/users/{userId}/sessions/{sessionId}`: Stores user-specific yoga/meditation session data. The `userId` is denormalized into each `session` document to ensure authorization independence.\n*   `/products/{productId}`: Stores product information for the e-commerce store. These are globally accessible.\n*   `/subscriptions/{subscriptionId}`: Stores subscription details. The `userId` is stored in each `subscription` document to enable rules to verify the requesting user owns the subscription.\n*   `/roles_admin/{uid}`: Allows the application to determine admin privileges based on the existance of a document with the users UID. \n*   `/feed_items/{feedItemId}`: Stores chronological, public feed content for all users.\n\nThis structure supports the required QAPs:\n\n*   **Secure List Operations:**  Since session data is segregated under user-specific paths (`/users/{userId}/sessions/{sessionId}`), listing sessions is secure. Rules can easily enforce that only the logged-in user can list their own sessions. Similarly, public collections like products and feed_items can be listed securely.\n*   **Authorization Independence:** The denormalization of `userId` into the `sessions` collection is critical for authorization independence. Security rules can validate that `request.auth.uid == resource.data.userId` without needing to perform a `get()` operation on the parent `/users/{userId}` document. This allows atomic creation and modification of sessions."
   }
 }
+    
