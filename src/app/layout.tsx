@@ -1,9 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import Header from '@/components/layout/header';
 import { Toaster } from "@/components/ui/toaster";
-import { FloatingNav } from '@/components/layout/floating-nav';
-import { FirebaseClientProvider } from '@/firebase';
+import { ClientProviders } from '@/components/layout/client-providers';
 
 export const metadata: Metadata = {
   title: 'Pranian - Yoga & Meditation',
@@ -26,16 +24,14 @@ export default function RootLayout({
         <script src='https://unpkg.com/plyr@3' async></script>
       </head>
       <body className="dark font-body antialiased text-foreground">
-          <FirebaseClientProvider>
-            <div className="flex flex-col min-h-screen">
-              <Header />
-              <main className="flex-1">
-                {children}
-              </main>
-            </div>
-            <Toaster />
-            <FloatingNav />
-          </FirebaseClientProvider>
+        <ClientProviders>
+          <div className="flex flex-col min-h-screen">
+            <main className="flex-1">
+              {children}
+            </main>
+          </div>
+          <Toaster />
+        </ClientProviders>
       </body>
     </html>
   );

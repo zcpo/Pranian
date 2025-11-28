@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { UserCircle, Menu, BookOpen, Store, Calendar, DollarSign, BookText, Music4, Heart, Headphones, Video, Podcast, Clapperboard, Brain, Sparkles, Rss as FeedIcon } from 'lucide-react';
+import { UserCircle, Menu, BookOpen, Store, Calendar, DollarSign, BookText, Music4, Rss as FeedIcon } from 'lucide-react';
 import * as React from "react"
 import { signOut } from 'firebase/auth';
 
@@ -15,7 +15,6 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetDescription,
   SheetTrigger,
 } from "@/components/ui/sheet"
 import {
@@ -28,7 +27,6 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useUser, useAuth } from '@/firebase';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { GlassNavLink } from './glass-nav-link';
 
 
 const navLinks = [
@@ -135,27 +133,22 @@ export default function Header() {
                   <span className="sr-only">Open menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="bg-black pr-0">
-                  <SheetHeader className="border-b border-white/10 pb-4 mb-4 pr-6">
+              <SheetContent side="right">
+                  <SheetHeader className="border-b pb-4 mb-4">
                     <SheetTitle>
                         <Link href="/" onClick={() => setOpen(false)}>
                             <Logo />
                         </Link>
                     </SheetTitle>
-                    <SheetDescription>
-                      Navigate through the Pranian app.
-                    </SheetDescription>
                   </SheetHeader>
-                  <div className="grid grid-cols-2 gap-4 pr-6">
+                  <div className="flex flex-col gap-4">
                     {navLinks.map((link) => (
-                        <GlassNavLink 
-                          key={link.href} 
-                          href={link.href} 
-                          label={link.label}
-                          icon={link.icon} 
-                          active={pathname === link.href}
-                          onClick={() => setOpen(false)}
-                        />
+                      <NavLink
+                        key={link.href}
+                        href={link.href}
+                        label={link.label}
+                        className="text-lg"
+                      />
                     ))}
                   </div>
               </SheetContent>
