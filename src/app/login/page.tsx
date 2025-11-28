@@ -32,6 +32,7 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { cn } from '@/lib/utils';
 
 const signUpSchema = z
   .object({
@@ -209,6 +210,7 @@ export default function LoginPage() {
                         required
                         autoComplete="email"
                         placeholder="m@example.com"
+                        className="glass-input"
                       />
                       <FormError message={signInErrors.email?.message} />
                     </div>
@@ -220,6 +222,7 @@ export default function LoginPage() {
                         {...registerSignIn('password')}
                         required
                         autoComplete="current-password"
+                        className="glass-input"
                       />
                       <FormError message={signInErrors.password?.message} />
                     </div>
@@ -228,7 +231,7 @@ export default function LoginPage() {
                     </Button>
                   </form>
                   <Separator className="my-4" />
-                   <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isSubmitting}>
+                   <Button variant="outline" className="w-full glass-button" onClick={handleGoogleSignIn} disabled={isSubmitting}>
                       Sign in with Google
                   </Button>
                 </CardContent>
@@ -252,6 +255,7 @@ export default function LoginPage() {
                         required
                         autoComplete="email"
                         placeholder="m@example.com"
+                        className="glass-input"
                       />
                       <FormError message={signUpErrors.email?.message} />
                     </div>
@@ -263,6 +267,7 @@ export default function LoginPage() {
                         {...registerSignUp('password')}
                         required
                         autoComplete="new-password"
+                        className="glass-input"
                       />
                       <FormError message={signUpErrors.password?.message} />
                     </div>
@@ -274,6 +279,7 @@ export default function LoginPage() {
                         {...registerSignUp('confirmPassword')}
                         required
                         autoComplete="new-password"
+                        className="glass-input"
                       />
                       <FormError message={signUpErrors.confirmPassword?.message} />
                     </div>
@@ -282,7 +288,7 @@ export default function LoginPage() {
                     </Button>
                   </form>
                    <Separator className="my-4" />
-                   <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isSubmitting}>
+                   <Button variant="outline" className="w-full glass-button" onClick={handleGoogleSignIn} disabled={isSubmitting}>
                       Sign up with Google
                   </Button>
                 </CardContent>

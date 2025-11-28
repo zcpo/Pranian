@@ -68,6 +68,26 @@
     color: rgba(255, 255, 255, 0.8);
   }
 
+  .dark .glass-card .glass-input {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: white;
+  }
+  
+  .dark .glass-card .glass-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
+  
+  .dark .glass-card .glass-button {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: white;
+  }
+
+  .dark .glass-card .glass-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
   .glass-card {
     @apply bg-card border-border;
   }
