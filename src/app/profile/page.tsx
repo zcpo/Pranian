@@ -3,7 +3,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { useUser, useFirestore, useMemoFirebase } from '@/firebase';
-import { doc, updateDoc, collection, query, orderBy, setDoc, deleteDoc, getDocs, getDoc } from 'firebase/firestore';
+import { doc, updateDoc, collection, query, orderBy, setDoc, deleteDoc, getDocs, getDoc, where } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { updateProfile } from 'firebase/auth';
 import { useDropzone } from 'react-dropzone';
@@ -56,7 +56,7 @@ function ProfileContentTabs({ userId }: { userId: string }) {
     const firestore = useFirestore();
 
     const postsQuery = useMemoFirebase(
-        () => firestore ? query(collection(firestore, 'users', userId, 'feed_items'), orderBy('createdAt', 'desc')) : null,
+        () => firestore ? query(collection(firestore, 'feed_items'), where('userId', '==', userId), orderBy('createdAt', 'desc')) : null,
         [firestore, userId]
     );
     const { data: posts, isLoading: isLoadingPosts } = useCollection<FeedItem>(postsQuery);
