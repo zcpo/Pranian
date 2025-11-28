@@ -86,7 +86,7 @@ export default function LoginClientPage() {
       await setDoc(userDocRef, {
         id: user.uid,
         email: user.email,
-        displayName: user.displayName,
+        displayName: user.displayName || user.email, // Fallback to email
         avatarUrl: user.photoURL,
       });
     }
@@ -122,8 +122,8 @@ export default function LoginClientPage() {
   const handleGoogleSignIn = async () => {
     if (!auth) return;
     setError(null);
+    const provider = new GoogleAuthProvider();
     try {
-        const provider = new GoogleAuthProvider();
         const result = await signInWithPopup(auth, provider);
         await handleUserCreation(result.user);
     } catch (err: any) {
