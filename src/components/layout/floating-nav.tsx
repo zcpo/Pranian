@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -8,6 +9,7 @@ import '@/app/quick-nav/glass-button.css'; // Import the new CSS file
 export function FloatingNav() {
   const pathname = usePathname();
 
+  // Do not render the button on the root path or the quick-nav page itself
   if (pathname === '/' || pathname.startsWith('/quick-nav')) {
     return null;
   }
