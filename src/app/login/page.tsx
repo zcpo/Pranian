@@ -143,6 +143,7 @@ export default function LoginPage() {
       // signInWithPopup is an exception; it needs to be awaited to handle the popup flow.
       const result = await signInWithPopup(auth, provider);
       await handleUserCreation(result.user);
+      setIsSubmitting(false);
       // The redirect will be handled by the useEffect.
     } catch (err: any) {
       if (err.code !== 'auth/popup-closed-by-user') {
@@ -283,3 +284,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+    
