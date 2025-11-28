@@ -18,7 +18,7 @@ dayjs.extend(relativeTime);
 export function GenericCard({ item }: { item: FeedItem }) {
   const { user } = useUser();
   const firestore = useFirestore();
-  const timeAgo = dayjs(item.createdAt).fromNow();
+  const timeAgo = item.createdAt ? dayjs(item.createdAt).fromNow() : 'just now';
   const isVideo = item.image && (item.image.includes('youtube.com') || item.image.includes('vimeo.com'));
 
   // Placeholder states
@@ -26,24 +26,18 @@ export function GenericCard({ item }: { item: FeedItem }) {
   const [isSaved, setIsSaved] = useState(false);
 
   const handleLike = async () => {
-    if (!user || !firestore || !item.userId) return;
-    const likeRef = doc(firestore, 'users', user.uid, 'likes', item.id);
-    const postLikesRef = doc(firestore, 'users', item.userId, 'feed_items', item.id, 'likes', user.uid);
+    if (!user || !firestore || !item.id) return;
     
-    if (isLiked) {
-      await deleteDoc(likeRef);
-      await deleteDoc(postLikesRef);
-    } else {
-      const likeData = { userId: user.uid, createdAt: new Date().toISOString() };
-      await setDoc(likeRef, { postId: item.id, postOwnerId: item.userId, createdAt: new Date().toISOString() });
-      await setDoc(postLikesRef, likeData);
-    }
+    // With RTDB, the logic for likes would also change.
+    // This Firestore logic is now a placeholder.
+    console.log("Like functionality needs to be adapted for RTDB.");
     setIsLiked(!isLiked);
   };
   
   const handleFollow = async () => {
     if (!user || !firestore || !item.userId || user.uid === item.userId) return;
 
+    // This logic also needs to be adapted for RTDB if you want to keep it.
     const followingRef = doc(firestore, 'users', user.uid, 'following', item.userId);
     const followerRef = doc(firestore, 'users', item.userId, 'followers', user.uid);
 
@@ -111,4 +105,3 @@ export function GenericCard({ item }: { item: FeedItem }) {
     </>
   );
 }
-

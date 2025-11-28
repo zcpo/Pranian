@@ -4,6 +4,7 @@ export const firebaseConfig = {
   "apiKey": "AIzaSyACMSObxsmU219RJgNz7rQYDohM8JqvL4c",
   "authDomain": "studio-481934975-de4a8.firebaseapp.com",
   "storageBucket": "pranian.firebasestorage.app",
+  "databaseURL": "https://pranian-default-rtdb.firebaseio.com/",
   "measurementId": "",
   "messagingSenderId": "704301395500"
 };

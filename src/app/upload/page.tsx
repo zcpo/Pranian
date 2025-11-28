@@ -5,9 +5,9 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useDropzone } from 'react-dropzone';
-import { useUser, useFirestore } from '@/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { useUser, useDatabase } from '@/firebase';
+import { ref as dbRef, push, set, serverTimestamp } from 'firebase/database';
+import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,7 +18,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, UploadCloud, Image as ImageIcon, X, Link as LinkIcon, Eye } from 'lucide-react';
 import Image from 'next/image';
 import { v4 as uuidv4 } from 'uuid';
-import { db } from '@/lib/db';
+import { db as dexieDB } from '@/lib/db';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { FeedCard } from '@/components/feed/feed-card';
 import type { FeedItem } from '@/lib/feed-items';
@@ -67,7 +67,7 @@ async function createThumbnail(file: File, maxSize = 1080): Promise<Blob> {
 
 export default function UploadPage() {
   const { user, isUserLoading } = useUser();
-  const firestore = useFirestore();
+  const database = useDatabase();
   const storage = getStorage();
   const router = useRouter();
   const { toast } = useToast();
@@ -107,7 +107,7 @@ export default function UploadPage() {
   });
 
   const onSubmit = async (data: FeedFormValues) => {
-    if (!user || !firestore) {
+    if (!user || !database) {
       toast({
         variant: 'destructive',
         title: 'Authentication Error',
@@ -131,7 +131,7 @@ export default function UploadPage() {
     const localId = `local_${uuidv4()}`;
 
     // Create optimistic post in Dexie and redirect immediately
-    await db.feed.add({
+    await dexieDB.feed.add({
       id: localId,
       title: data.title,
       subtitle: data.subtitle,
@@ -154,14 +154,14 @@ export default function UploadPage() {
         try {
             const thumb = await createThumbnail(file);
             const filename = `feed_images/${user.uid}/${Date.now()}-${file.name.replace(/\s+/g, '_')}`;
-            const storageRef = ref(storage, filename);
-            const uploadTask = uploadBytesResumable(storageRef, thumb);
+            const fileRef = storageRef(storage, filename);
+            const uploadTask = uploadBytesResumable(fileRef, thumb);
             
             finalMediaUrl = await new Promise<string>((resolve, reject) => {
                 uploadTask.on('state_changed',
                     (snapshot) => {
                         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                        db.feed.update(localId, { uploadProgress: progress });
+                        dexieDB.feed.update(localId, { uploadProgress: progress });
                     },
                     (error) => reject(error),
                     async () => {
@@ -172,14 +172,15 @@ export default function UploadPage() {
             });
         } catch (uploadError) {
             console.error('Image upload failed:', uploadError);
-            // Don't throw, allow text post to proceed without image
             finalMediaUrl = undefined;
         }
       }
 
-      // 2. Create the final Firestore document in the global feed_items collection
-      const feedCollection = collection(firestore, 'feed_items');
-      const docData = {
+      // 2. Create the final Realtime Database entry
+      const feedRef = dbRef(database, 'feed_items');
+      const newPostRef = push(feedRef);
+      
+      const postData = {
         title: data.title,
         subtitle: data.subtitle,
         type: 'user_post',
@@ -190,13 +191,12 @@ export default function UploadPage() {
         createdAt: serverTimestamp(),
       };
       
-      const docRef = await addDoc(feedCollection, docData);
+      await set(newPostRef, postData);
       
-      // Update local item with final data and remove it (or update its status)
-      const finalItem = (await db.feed.get(localId)) as FeedItem;
-      await db.feed.delete(localId); // Remove the temp local item
-      // Add the final, confirmed item to Dexie to avoid UI flicker
-      await db.feed.add({ ...finalItem, id: docRef.id, status: 'complete', image: finalMediaUrl });
+      // Update local item with final data
+      const finalItem = (await dexieDB.feed.get(localId)) as FeedItem;
+      await dexieDB.feed.delete(localId); 
+      await dexieDB.feed.add({ ...finalItem, id: newPostRef.key!, status: 'complete', image: finalMediaUrl, createdAt: new Date().toISOString() });
 
 
     } catch (error) {
@@ -206,7 +206,7 @@ export default function UploadPage() {
         title: 'Upload Failed',
         description: 'There was a problem creating your post. Please try again.',
       });
-       await db.feed.update(localId, { status: 'error' });
+       await dexieDB.feed.update(localId, { status: 'error' });
     } finally {
       setIsSubmitting(false);
     }
