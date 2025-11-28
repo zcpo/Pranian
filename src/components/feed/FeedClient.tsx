@@ -89,23 +89,25 @@ export default function FeedClient({ initialItems }: { initialItems: FeedItem[] 
   return (
     <div className="container mx-auto px-4 py-8">
       {user && (
-        <div className="mb-8 max-w-7xl mx-auto">
+        <div className="mb-8 max-w-xl mx-auto">
           <Button asChild>
             <a href="/upload">Create Post</a>
           </Button>
         </div>
       )}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-        {loading && combinedItems.length === 0 ? (
-            Array.from({ length: 3 }).map((_, i) => <FeedCardPlaceholder key={i} item={{ id: `p${i}`, type: 'user_post', title: '', createdAt: new Date().toISOString() }} />)
-        ) : (
-            combinedItems.map((item) => {
-                if (item.status === 'uploading' || item.status === 'error') {
-                    return <FeedCardPlaceholder key={item.id} item={item} />;
-                }
-                return <FeedCard key={item.id} item={item} />;
-            })
-        )}
+      <div className="flex flex-col items-center w-full">
+        <div className="w-full max-w-xl space-y-8">
+            {loading && combinedItems.length === 0 ? (
+                Array.from({ length: 3 }).map((_, i) => <FeedCardPlaceholder key={i} item={{ id: `p${i}`, type: 'user_post', title: '', createdAt: new Date().toISOString() }} />)
+            ) : (
+                combinedItems.map((item) => {
+                    if (item.status === 'uploading' || item.status === 'error') {
+                        return <FeedCardPlaceholder key={item.id} item={item} />;
+                    }
+                    return <FeedCard key={item.id} item={item} />;
+                })
+            )}
+        </div>
       </div>
 
       {!loading && combinedItems.length === 0 && (
