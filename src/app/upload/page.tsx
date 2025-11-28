@@ -73,6 +73,28 @@ export default function UploadPage() {
     multiple: false,
   });
 
+  const createPostInDb = async (data: FeedFormValues, mediaUrl?: string) => {
+    if (!user || !database) return;
+    const feedRef = dbRef(database, 'feed_items');
+    const newPostRef = push(feedRef);
+    
+    const postData = {
+      title: data.title,
+      subtitle: data.subtitle,
+      type: 'user_post',
+      image: mediaUrl,
+      userId: user.uid,
+      userName: user.displayName,
+      userAvatar: user.photoURL,
+      createdAt: serverTimestamp(),
+    };
+    
+    await set(newPostRef, postData);
+    toast({ title: "Success!", description: "Your post has been created." });
+    router.push('/feed');
+  };
+
+
   const onSubmit = async (data: FeedFormValues) => {
     if (!user || !database) {
       toast({
@@ -96,61 +118,42 @@ export default function UploadPage() {
     setUploadProgress(0);
 
     try {
-      let finalMediaUrl = data.mediaUrl || undefined;
-
-      // 1. Handle image upload if a file is selected
-      if (uploadMode === 'file' && file && storage) {
+      if (uploadMode === 'url') {
+        await createPostInDb(data, data.mediaUrl || undefined);
+      } else if (uploadMode === 'file' && file && storage) {
         const filename = `feed_images/${user.uid}/${Date.now()}-${file.name.replace(/\s+/g, '_')}`;
         const fileRef = storageRef(storage, filename);
         
         const uploadTask = uploadBytesResumable(fileRef, file);
 
-        finalMediaUrl = await new Promise((resolve, reject) => {
-            uploadTask.on('state_changed',
-                (snapshot) => {
-                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    setUploadProgress(progress);
-                },
-                (error) => {
-                    console.error('Upload failed:', error);
-                    reject(error);
-                },
-                async () => {
-                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-                    resolve(downloadURL);
-                }
-            );
-        });
+        uploadTask.on('state_changed',
+          (snapshot) => { // Progress
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            setUploadProgress(progress);
+          },
+          (error) => { // Error
+            console.error('Upload failed:', error);
+            toast({
+              variant: 'destructive',
+              title: 'Upload Failed',
+              description: 'There was a problem creating your post. Please try again.',
+            });
+            setIsSubmitting(false);
+          },
+          async () => { // Complete
+            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+            await createPostInDb(data, downloadURL);
+            setIsSubmitting(false);
+          }
+        );
       }
-
-      // 2. Create the final Realtime Database entry
-      const feedRef = dbRef(database, 'feed_items');
-      const newPostRef = push(feedRef);
-      
-      const postData = {
-        title: data.title,
-        subtitle: data.subtitle,
-        type: 'user_post',
-        image: finalMediaUrl,
-        userId: user.uid,
-        userName: user.displayName,
-        userAvatar: user.photoURL,
-        createdAt: serverTimestamp(),
-      };
-      
-      await set(newPostRef, postData);
-      
-      toast({ title: "Success!", description: "Your post has been created." });
-      router.push('/feed');
-
     } catch (error) {
       console.error('Error creating post:', error);
       toast({
         variant: 'destructive',
-        title: 'Upload Failed',
+        title: 'Post Creation Failed',
         description: 'There was a problem creating your post. Please try again.',
       });
-    } finally {
       setIsSubmitting(false);
     }
   };
@@ -324,5 +327,3 @@ export default function UploadPage() {
     </div>
   );
 }
-
-    
