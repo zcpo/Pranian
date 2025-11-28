@@ -8,7 +8,7 @@ import { z } from 'zod';
 import { useDropzone } from 'react-dropzone';
 import { useUser, useDatabase } from '@/firebase';
 import { ref as dbRef, push, set, serverTimestamp } from 'firebase/database';
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, uploadBytesResumable, UploadTask } from 'firebase/storage';
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
