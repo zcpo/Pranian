@@ -81,8 +81,6 @@ export default function LoginClientPage() {
     const userDocRef = doc(firestore, 'users', user.uid);
     const userDoc = await getDoc(userDocRef);
 
-    // Only create a new document if one doesn't already exist.
-    // Use merge: true to safely update existing docs (e.g., from anonymous to permanent)
     if (!userDoc.exists()) {
       const data = {
         id: user.uid,
@@ -288,5 +286,3 @@ export default function LoginClientPage() {
     </main>
   );
 }
-
-    
