@@ -75,7 +75,7 @@ export default function LoginPage() {
     // Redirect if user is already logged in
     if (user && !isUserLoading) {
       toast({ title: 'Success!', description: 'You are now signed in.' });
-      router.push('/profile');
+      router.push(`/profile/${user.uid}`);
     }
   }, [user, isUserLoading, router, toast]);
 
@@ -284,5 +284,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-    
