@@ -8,6 +8,7 @@
  * Data Structure:
  * - /users/{userId}: Private user profile.
  * - /users/{userId}/subscriptions/{subscriptionId}: User's private subscription info.
+ * - /users/{userId}/sessions/{sessionId}: User's private session analytics.
  * - /subscriptionTiers, /products, /productCategories, /contentTypes: Publicly
  *   readable collections containing catalog-style data. These are read-only for
  *   clients, intended to be managed via a trusted backend/admin process.
@@ -36,7 +37,7 @@
  * status. This is achieved by first reading the user's profile to find their
  * `subscriptionId`, then reading the corresponding subscription document to check
  * its `endDate`. While this involves two `get()` calls, it is necessary to
- * enforce this security requirement with the current data structure.
+ * enforce this security requirement with the current data model.
  */
 rules_version = '2';
 service cloud.firestore {
@@ -120,6 +121,16 @@ service cloud.firestore {
       allow create: if isOwner(userId) && request.resource.data.id == subscriptionId;
       allow update: if isOwner(userId);
       allow delete: if isExistingOwner(userId);
+    }
+    
+    /**
+     * @description Manages a user's session analytics data.
+     * @path /users/{userId}/sessions/{sessionId}
+     * @allow (read, write) A signed-in user can read and write to their own sessions.
+     * @principle Enforces path-based ownership for a user's private subcollections.
+     */
+    match /users/{userId}/sessions/{sessionId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
     }
 
     /**

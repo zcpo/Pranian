@@ -195,7 +195,7 @@ export default function JournalPage() {
             ) : (
               <>
                 <DailyProgress categories={categories} />
-                <AnalyticsDashboard sessions={sessions || []} />
+                <AnalyticsDashboard userId={user.uid} />
                 <Card>
                   <CardHeader>
                     <CardTitle>Journal Entries</CardTitle>
@@ -269,26 +269,21 @@ function CategoryEntryForm({ category, userId }: { category: string, userId: str
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!firestore) return;
+    if (!firestore || !userId) return;
     setIsSaving(true);
     
-    const sessionData: Partial<SessionEntry> = {
-      id: entryId,
-      userId: userId,
-      title: category,
-      notes: entry,
-      date: today,
-      duration: 0, // Not a timed session
-      style: 'Journal',
-      mediaUrl: mediaUrl || undefined,
-      completed: completedToday,
-      createdAt: new Date().toISOString(),
-      modifiedAt: new Date().toISOString(),
-    };
-
     try {
-      const docRef = doc(firestore, 'users', userId, 'sessions', entryId);
-      await setDoc(docRef, sessionData, { merge: true });
+      const sessionsRef = collection(firestore, "users", userId, "sessions");
+      await addDoc(sessionsRef, {
+        title: category,
+        notes: entry,
+        mediaUrl: mediaUrl || null,
+        completed: completedToday,
+        date: serverTimestamp(), // backend timestamp
+        duration: 0, // Not a timed session
+        style: 'Journal',
+      });
+
       alert(`Saved entry for ${category}`);
     } catch (error) {
       console.error("Error saving journal entry:", error);
@@ -475,103 +470,73 @@ function MindfulnessTimer() {
     );
 }
 
-const moods = ["😀", "🙂", "😐", "😔", "😭"];
+function useAnalytics(userId?: string) {
+  const firestore = useFirestore();
+  const [analytics, setAnalytics] = useState({
+    totalSessions: 0,
+    totalMinutes: 0,
+    avgDuration: 0,
+    longest: 0,
+    sessions: [] as (SessionEntry & { id: string; date: Date })[],
+    loading: true
+  });
 
-function MoodTracker({ onMoodSelect }: { onMoodSelect: (mood: string) => void }) {
-    const [selectedMood, setSelectedMood] = useState<string | null>(null);
+  useEffect(() => {
+    if (!userId || !firestore) {
+        setAnalytics(prev => ({...prev, loading: false}));
+        return;
+    };
 
-    const handleSelect = (mood: string) => {
-        setSelectedMood(mood);
-        onMoodSelect(mood);
+    async function fetchData() {
+      setAnalytics(prev => ({...prev, loading: true}));
+      const sessionsRef = collection(firestore, "users", userId, "sessions");
+      const q = query(sessionsRef, orderBy("date", "asc"));
+      const snap = await getDocs(q);
+
+      const sessions = snap.docs.map(doc => {
+        const data = doc.data() as SessionEntry;
+        return {
+            id: doc.id,
+            ...data,
+            date: data.date ? (data.date as any).toDate() : new Date()
+        }
+      });
+
+      const sessionsWithDuration = sessions.filter(s => typeof s.duration === 'number' && s.duration > 0);
+      
+      const totalSessions = sessionsWithDuration.length;
+      const totalMinutes = sessionsWithDuration.reduce((a, b) => a + b.duration, 0);
+      const avgDuration = totalSessions ? totalMinutes / totalSessions : 0;
+      const longest = totalSessions ? Math.max(...sessionsWithDuration.map(s => s.duration)) : 0;
+
+      setAnalytics({
+        totalSessions,
+        totalMinutes,
+        avgDuration,
+        longest,
+        sessions,
+        loading: false
+      });
     }
-    
-    return (
-        <Card>
-            <CardHeader>
-                <CardTitle>Today's Mood</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <div className="flex justify-around">
-                    {moods.map(mood => (
-                        <button
-                            key={mood}
-                            onClick={() => handleSelect(mood)}
-                            className={`text-3xl p-2 rounded-full transition-transform duration-200 ${selectedMood === mood ? 'bg-primary/20 scale-125' : 'hover:scale-110'}`}
-                        >
-                            {mood}
-                        </button>
-                    ))}
-                </div>
-            </CardContent>
-        </Card>
-    );
+
+    fetchData();
+  }, [userId, firestore]);
+
+  return analytics;
 }
 
-const AnalyticsDashboard = ({ sessions }: { sessions: SessionEntry[] }) => {
-  const chartData = sessions
-    .filter(s => s.duration > 0) // Only include timed sessions
-    .map(s => ({
-      date: dayjs(s.date).format('MMM D'),
-      duration: Math.round(s.duration / 60), // in minutes
-      intensity: s.intensity || 0,
-    }))
-    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-  const totalMinutes = sessions.reduce((acc, s) => acc + (s.duration || 0), 0) / 60;
-  const totalSessions = sessions.length;
-  const avgDuration = totalSessions > 0 ? totalMinutes / totalSessions : 0;
-  const longestSession = Math.max(...sessions.map(s => s.duration || 0), 0) / 60;
+function AnalyticsDashboard({ userId }: { userId: string }) {
+    const {
+        totalSessions,
+        totalMinutes,
+        avgDuration,
+        longest,
+        sessions,
+        loading
+  } = useAnalytics(userId);
 
-  const featureStubs = {
-    practice: [
-      "Daily/weekly practice frequency", "Calendar heatmap of practice habits", "Practice time-of-day distribution",
-      "Pose category distribution", "Yoga style distribution", "Intensity trend over time", "Instructor preference analysis",
-      "Top used sequences", "Most repeated session type", "Longest streaks for each yoga style",
-      "Average intensity score vs. mood score correlation", "Time between sessions (recovery tracking)"
-    ],
-    wellness: [
-      "Mood-before vs. mood-after comparison charts", "Stress reduction score", "Sleep quality vs. practice trend",
-      "Breathwork minutes completed", "Meditation minutes completed", "Emotional trend graph (7-90 days)",
-      "Mindfulness streak", "Body pain tracking", "Flexibility improvement monitors", "Balance improvement meter"
-    ],
-    pose: [
-      "Most practiced poses", "Poses improving (by hold time)", "Poses needing attention", "Holds duration trend per pose",
-      "Side-to-side symmetry", "Pose difficulty curve", "Personalized recommended poses", "Pose fatigue detection"
-    ],
-    sequence: [
-      "Sequence completion rates", "Average sequence length", "Most effective sequences (by mood)", "AI-optimized suggestions",
-      "Drag-and-drop efficiency tracking", "Transitions used most frequently", "Time spent per sequence category", "Flow consistency rating"
-    ],
-    gamification: [
-      "Daily goals completed", "Weekly challenge progress", "Monthly milestone achievements", "Leveling system (XP)",
-      "Badge system", "Goal prediction", "Celebration cards for milestones"
-    ],
-    content: [
-        "Most watched video classes", "Most saved or bookmarked sessions", "Average video completion rate", "New classes engagement",
-        "Category popularity", "Audio vs. video practice preference"
-    ],
-    personal: [
-        "Personalized growth timeline ('Year in Review')", "Strength, flexibility, and balance scores", "Body & mind improvement dashboard",
-        "Recommended routines", "Personalized 'Practice Persona'", "Top wellness categories"
-    ],
-    ai: [
-        "AI mood trend analysis", "AI-overexertion warnings", "AI recommended rest days", "Sequence auto-optimizer",
-        "AI summary of weekly practice", "AI detection of burnout risk", "AI clustering of similar sessions"
-    ],
-    backup: [
-        "Session backup health (local vs. cloud)", "Export analytics report (PDF/CSV)", "Last sync timestamp & queue length",
-        "Conflict resolution logs"
-    ],
-    media: [
-        "Photo pose comparisons over time", "Progress timeline (side-by-side)", "Video playback insights (pause hotspots)"
-    ]
-  };
-  
-  const StubList = ({ items }: { items: string[] }) => (
-    <ul className="list-disc list-inside space-y-2 text-sm text-muted-foreground">
-        {items.map(item => <li key={item}>{item} (coming soon)</li>)}
-    </ul>
-  );
+  if (loading) return <Card><CardHeader><CardTitle>Loading Analytics...</CardTitle></CardHeader><CardContent><div className="h-60" /></CardContent></Card>;
 
   return (
     <div className="space-y-8">
@@ -592,134 +557,80 @@ const AnalyticsDashboard = ({ sessions }: { sessions: SessionEntry[] }) => {
               <p className="text-sm text-muted-foreground">Total Minutes</p>
             </div>
             <div className="p-4 bg-muted/50 rounded-lg">
-              <p className="text-2xl font-bold">{avgDuration.toFixed(0)}</p>
+              <p className="text-2xl font-bold">{avgDuration.toFixed(1)}</p>
               <p className="text-sm text-muted-foreground">Avg. Duration</p>
             </div>
             <div className="p-4 bg-muted/50 rounded-lg">
-              <p className="text-2xl font-bold">{longestSession.toFixed(0)}</p>
+              <p className="text-2xl font-bold">{longest.toFixed(0)}</p>
               <p className="text-sm text-muted-foreground">Longest Session</p>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="text-base">Session Duration (minutes)</CardTitle>
-                    </CardHeader>
-                    <CardContent className="h-60">
-                         <ResponsiveContainer width="100%" height="100%">
-                            <LineChart data={chartData}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="date" />
-                                <YAxis />
-                                <Tooltip />
-                                <Legend />
-                                <Line type="monotone" dataKey="duration" stroke="hsl(var(--primary))" />
-                            </LineChart>
-                        </ResponsiveContainer>
-                    </CardContent>
-                </Card>
-                 <Card>
-                    <CardHeader>
-                        <CardTitle className="text-base">Session Intensity (1-5)</CardTitle>
-                    </CardHeader>
-                    <CardContent className="h-60">
-                         <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={chartData}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="date" />
-                                <YAxis domain={[0, 5]} />
-                                <Tooltip />
-                                <Legend />
-                                <Bar dataKey="intensity" fill="hsl(var(--primary))" />
-                            </BarChart>
-                        </ResponsiveContainer>
-                    </CardContent>
-                </Card>
+                <DurationChart sessions={sessions} />
+                <IntensityChart sessions={sessions} />
             </div>
-            <StubList items={featureStubs.practice} />
         </CardContent>
       </Card>
-
-        <Card>
-            <CardHeader>
-                <CardTitle>🌿 Wellness & Mindfulness Metrics</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <StubList items={featureStubs.wellness} />
-            </CardContent>
-        </Card>
-        
-        <Card>
-            <CardHeader>
-                <CardTitle>🧘‍♂️ Pose-Level Analytics</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <StubList items={featureStubs.pose} />
-            </CardContent>
-        </Card>
-
-        <Card>
-            <CardHeader>
-                <CardTitle>🔥 Sequence Builder Insights</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <StubList items={featureStubs.sequence} />
-            </CardContent>
-        </Card>
-
-        <Card>
-            <CardHeader>
-                <CardTitle>🔒 Habit Tracking & Gamification</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <StubList items={featureStubs.gamification} />
-            </CardContent>
-        </Card>
-        
-        <Card>
-            <CardHeader>
-                <CardTitle>📚 Content Usage Metrics</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <StubList items={featureStubs.content} />
-            </CardContent>
-        </Card>
-
-        <Card>
-            <CardHeader>
-                <CardTitle>👤 Profile & Personal Growth</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <StubList items={featureStubs.personal} />
-            </CardContent>
-        </Card>
-        
-        <Card>
-            <CardHeader>
-                <CardTitle>🤖 AI-Driven Insights</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <StubList items={featureStubs.ai} />
-            </CardContent>
-        </Card>
-
-        <Card>
-            <CardHeader>
-                <CardTitle>📤 Sessions, Export & Backup Insights</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <StubList items={featureStubs.backup} />
-            </CardContent>
-        </Card>
-
-        <Card>
-            <CardHeader>
-                <CardTitle>🖼️ Media Dashboard</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <StubList items={featureStubs.media} />
-            </CardContent>
-        </Card>
     </div>
   );
 };
+
+
+function DurationChart({ sessions }: { sessions: {date: Date, duration: number}[] }) {
+  const data = sessions
+    .filter(s => s.duration > 0)
+    .map(s => ({
+        date: s.date.toLocaleDateString(),
+        duration: s.duration
+    }));
+
+  return (
+    <Card>
+        <CardHeader>
+            <CardTitle className="text-base">Session Duration (minutes)</CardTitle>
+        </CardHeader>
+        <CardContent className="h-60">
+             <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={data}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="date" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Line type="monotone" dataKey="duration" name="Duration (min)" stroke="hsl(var(--primary))" />
+                </LineChart>
+            </ResponsiveContainer>
+        </CardContent>
+    </Card>
+  );
+}
+
+function IntensityChart({ sessions }: { sessions: {date: Date, intensity?: number}[] }) {
+    const data = sessions
+    .filter(s => (s.intensity || 0) > 0)
+    .map(s => ({
+        date: s.date.toLocaleDateString(),
+        intensity: s.intensity
+    }));
+
+  return (
+    <Card>
+        <CardHeader>
+            <CardTitle className="text-base">Session Intensity (1-5)</CardTitle>
+        </CardHeader>
+        <CardContent className="h-60">
+             <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={data}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="date" />
+                    <YAxis domain={[0, 5]} />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="intensity" name="Intensity" fill="hsl(var(--primary))" />
+                </BarChart>
+            </ResponsiveContainer>
+        </CardContent>
+    </Card>
+  );
+}
+

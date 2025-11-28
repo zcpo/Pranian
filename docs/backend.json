@@ -30,9 +30,7 @@
       },
       "required": [
         "id",
-        "email",
-        "firstName",
-        "lastName"
+        "email"
       ]
     },
     "Subscription": {
@@ -212,6 +210,36 @@
         "id",
         "name"
       ]
+    },
+    "Session": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Session",
+      "type": "object",
+      "description": "Represents a user's yoga or meditation session.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the session."
+        },
+        "date": {
+          "type": "string",
+          "description": "The date and time the session occurred.",
+          "format": "date-time"
+        },
+        "duration": {
+          "type": "number",
+          "description": "The duration of the session in minutes."
+        },
+        "intensity": {
+          "type": "number",
+          "description": "The user-rated intensity of the session (1-5)."
+        }
+      },
+      "required": [
+        "id",
+        "date",
+        "duration"
+      ]
     }
   },
   "auth": {
@@ -254,6 +282,26 @@
             {
               "name": "subscriptionId",
               "description": "The unique identifier for the user's subscription."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/sessions/{sessionId}",
+        "definition": {
+          "entityName": "Session",
+          "schema": {
+            "$ref": "#/backend/entities/Session"
+          },
+          "description": "Stores session analytics data for each user.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            },
+            {
+              "name": "sessionId",
+              "description": "The unique identifier for the user's session."
             }
           ]
         }
