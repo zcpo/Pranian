@@ -61,7 +61,7 @@ export default function ProfilePage() {
             email: user.email || '',
         });
     }
-  }, [userProfile, user]);
+  }, [userProfile, user, reset]);
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     if (!user || !firestore) return;
@@ -76,8 +76,11 @@ export default function ProfilePage() {
       const snapshot = await uploadBytes(storageRef, file);
       const photoURL = await getDownloadURL(snapshot.ref);
 
-      await updateProfile(user, { photoURL });
-      await updateDoc(doc(firestore, 'users', user.uid), { avatarUrl: photoURL });
+      if(user) {
+        await updateProfile(user, { photoURL });
+      }
+      const userDoc = doc(firestore, 'users', user.uid);
+      await updateDoc(userDoc, { avatarUrl: photoURL });
 
       toast({
         title: 'Success',

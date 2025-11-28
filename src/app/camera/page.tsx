@@ -92,11 +92,11 @@ export default function CameraPage() {
   };
   
   const handleUsePhoto = async () => {
-    if (!capturedImage || !storage || !user) {
+    if (!capturedImage || !user) {
         toast({
             variant: 'destructive',
             title: 'Error',
-            description: 'Could not use photo. Missing user or storage service.',
+            description: 'Could not use photo. Missing user or photo data.',
         });
         return;
     }
