@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useCallback, useEffect } from 'react';
@@ -178,8 +177,8 @@ export default function UploadPage() {
         }
       }
 
-      // 2. Create the final Firestore document
-      const feedCollection = collection(firestore, 'users', user.uid, 'feed_items');
+      // 2. Create the final Firestore document in the global feed_items collection
+      const feedCollection = collection(firestore, 'feed_items');
       const docData = {
         title: data.title,
         subtitle: data.subtitle,
@@ -375,5 +374,3 @@ export default function UploadPage() {
     </div>
   );
 }
-
-    
