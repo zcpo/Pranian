@@ -16,34 +16,28 @@ const PAGE_SIZE = 50;
 export default function FeedClient({ initialItems = [] }: { initialItems: FeedItem[] }) {
   const { user } = useUser();
   const database = useDatabase();
-  console.log('Database instance in FeedClient:', database);
   const [items, setItems] = useState<FeedItem[]>(initialItems);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!database) {
-      console.log("FeedClient: Database service not available yet.");
       setLoading(false);
       return;
     }
 
     setLoading(true);
     const feedRef = ref(database, 'feed_items');
-    // Create the query
     const feedQuery = query(feedRef, limitToLast(PAGE_SIZE));
 
-    // Pass the query to the listener
     const unsubscribe = onValue(
       feedQuery,
       (snapshot) => {
         const data = snapshot.val();
         const newItems: FeedItem[] = [];
         if (data) {
-          // The Realtime DB returns an object, so we iterate over its keys
           Object.keys(data).forEach((key) => {
             newItems.push({ id: key, ...data[key] });
           });
-          // Sort by createdAt descending to show newest posts first
           newItems.sort((a, b) => b.createdAt - a.createdAt);
         }
         setItems(newItems);

@@ -3,10 +3,10 @@
     ".read": false,
     ".write": false,
     "feed_items": {
-      ".read": true,
+      ".read": "auth != null",
+      ".write": "auth != null",
       ".indexOn": ["createdAt"],
       "$postId": {
-        ".write": "auth != null",
         "userId": {
           ".validate": "newData.val() === auth.uid"
         },
