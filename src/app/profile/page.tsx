@@ -41,7 +41,7 @@ function UserActivity({ userId }: { userId: string }) {
   const { data: sessions, isLoading: isLoadingSessions } = useCollection(sessionsQuery);
 
   const postsQuery = useMemoFirebase(
-    () => (firestore ? query(collection(firestore, 'feed_items'), where('userId', '==', userId), orderBy('createdAt', 'desc')) : null),
+    () => (firestore ? query(collection(firestore, 'users', userId, 'feed_items'), orderBy('createdAt', 'desc')) : null),
     [firestore, userId]
   );
   const { data: posts, isLoading: isLoadingPosts } = useCollection(postsQuery);
@@ -321,3 +321,5 @@ export default function ProfilePage() {
     </div>
   );
 }
+
+    

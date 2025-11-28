@@ -179,8 +179,8 @@ export default function UploadPage() {
       }
 
       // 2. Create the final Firestore document
-      const feedCollection = collection(firestore, 'feed_items');
-      const docRef = await addDoc(feedCollection, {
+      const feedCollection = collection(firestore, 'users', user.uid, 'feed_items');
+      const docData = {
         title: data.title,
         subtitle: data.subtitle,
         type: 'user_post',
@@ -189,7 +189,9 @@ export default function UploadPage() {
         userName: user.displayName,
         userAvatar: user.photoURL,
         createdAt: serverTimestamp(),
-      });
+      };
+      
+      const docRef = await addDoc(feedCollection, docData);
       
       // Update local item with final data and remove it (or update its status)
       const finalItem = (await db.feed.get(localId)) as FeedItem;
@@ -373,3 +375,5 @@ export default function UploadPage() {
     </div>
   );
 }
+
+    

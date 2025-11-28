@@ -240,6 +240,46 @@
         "date",
         "duration"
       ]
+    },
+    "FeedItem": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "FeedItem",
+      "type": "object",
+      "description": "Represents an item in the user's social feed.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the feed item."
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the feed item."
+        },
+        "subtitle": {
+          "type": "string",
+          "description": "Subtitle or content of the feed item."
+        },
+        "image": {
+          "type": "string",
+          "description": "URL of an image associated with the feed item.",
+          "format": "uri"
+        },
+        "userId": {
+          "type": "string",
+          "description": "ID of the user who created the feed item."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the feed item was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "userId",
+        "createdAt"
+      ]
     }
   },
   "auth": {
@@ -303,6 +343,26 @@
             {
               "name": "sessionId",
               "description": "The unique identifier for the user's session."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/feed_items/{itemId}",
+        "definition": {
+          "entityName": "FeedItem",
+          "schema": {
+            "$ref": "#/backend/entities/FeedItem"
+          },
+          "description": "Stores feed items created by a specific user.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            },
+            {
+              "name": "itemId",
+              "description": "The unique identifier for the feed item."
             }
           ]
         }
