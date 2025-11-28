@@ -33,6 +33,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { cn } from '@/lib/utils';
+import './glass-form.css';
 
 const signUpSchema = z
   .object({
@@ -185,6 +186,7 @@ export default function LoginPage() {
           data-ai-hint={heroImage.imageHint}
         />
       )}
+      <div className="absolute inset-0 bg-black/60" />
       <Card className="w-full max-w-md glass-card z-10">
         <Tabs defaultValue={defaultTab} className="w-full">
             <TabsList className="grid w-full grid-cols-2">
