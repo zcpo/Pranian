@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useEffect, useState, useMemo } from 'react';
@@ -51,6 +52,7 @@ export default function FeedClient({ initialItems }: { initialItems: FeedItem[] 
     const unsubscribe = onValue(feedQuery, (snapshot) => {
         const newItems: FeedItem[] = [];
         if (snapshot.exists()) {
+            console.log("Feed data received:", snapshot.val());
             snapshot.forEach((childSnapshot) => {
                 newItems.push(snapshotToFeedItem(childSnapshot));
             });
