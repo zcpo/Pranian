@@ -1,3 +1,4 @@
+
 rules_version = '2';
 
 service cloud.firestore {
@@ -15,7 +16,8 @@ service cloud.firestore {
       }
       
       match /feed_items/{itemId} {
-        allow read, write: if request.auth.uid == userId;
+        allow read: if request.auth.uid == userId;
+        allow write: if request.auth.uid == userId;
       }
 
       // Rules for following/followers
@@ -32,6 +34,17 @@ service cloud.firestore {
       match /likes/{likeId} {
         allow read: if request.auth.uid == userId;
         allow write: if request.auth.uid == userId;
+      }
+    }
+    
+    match /feed_items/{itemId} {
+      allow get, list: if request.auth != null;
+      allow create: if request.auth.uid == request.resource.data.userId;
+      allow update, delete: if request.auth.uid == resource.data.userId;
+
+       match /likes/{userId} {
+        allow read: if true;
+        allow create, delete: if request.auth.uid == userId;
       }
     }
 
@@ -56,4 +69,3 @@ service cloud.firestore {
     }
   }
 }
-

@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import {
   collection,
   query,
@@ -12,8 +12,9 @@ import {
   Timestamp,
   where,
   QueryDocumentSnapshot,
+  onSnapshot,
 } from 'firebase/firestore';
-import { useFirestore, useUser } from '@/firebase';
+import { useFirestore, useUser, useMemoFirebase } from '@/firebase';
 import type { FeedItem } from '@/lib/feed-items';
 import { FeedCard } from '@/components/feed/feed-card';
 import { Button } from '@/components/ui/button';
@@ -42,34 +43,59 @@ export default function FeedClient({ initialItems }: { initialItems: FeedItem[] 
   const firestore = useFirestore();
   const [items, setItems] = useState<FeedItem[]>(initialItems);
   const lastDocRef = useRef<QueryDocumentSnapshot | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
   const localItems = useLiveQuery(() => db.feed.reverse().sortBy('createdAt'), []);
 
-  const combinedItems = React.useMemo(() => {
+  const combinedItems = useMemo(() => {
     const allItems = [...(localItems || []), ...items];
     const uniqueItems = Array.from(new Map(allItems.map(item => [item.id, item])).values());
     return uniqueItems.sort((a, b) => toDate(b.createdAt).getTime() - toDate(a.createdAt).getTime());
   }, [localItems, items]);
 
+  const feedCollectionQuery = useMemoFirebase(
+    () => firestore ? query(collection(firestore, 'feed_items'), orderBy('createdAt', 'desc'), limit(PAGE_SIZE)) : null,
+    [firestore]
+  );
+  
+  useEffect(() => {
+    if (!feedCollectionQuery) {
+        setLoading(false);
+        return;
+    };
+
+    setLoading(true);
+
+    const unsubscribe = onSnapshot(feedCollectionQuery, (querySnapshot) => {
+        if (querySnapshot.docs.length > 0) {
+            lastDocRef.current = querySnapshot.docs[querySnapshot.docs.length - 1];
+        }
+        const newItems = querySnapshot.docs.map(docToFeedItem);
+        setHasMore(newItems.length === PAGE_SIZE);
+        setItems(newItems);
+        setLoading(false);
+    }, (error) => {
+        console.error("Error fetching initial feed:", error);
+        setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [feedCollectionQuery]);
+
+
   const loadNextPage = useCallback(async () => {
-    if (!firestore || !hasMore || loadingMore) return;
+    if (!firestore || !hasMore || loadingMore || !lastDocRef.current) return;
     setLoadingMore(true);
 
-    let q;
-    if (lastDocRef.current) {
-      q = query(
+    const q = query(
         collection(firestore, 'feed_items'),
         orderBy('createdAt', 'desc'),
         startAfter(lastDocRef.current),
         limit(PAGE_SIZE)
-      );
-    } else {
-      q = query(collection(firestore, 'feed_items'), orderBy('createdAt', 'desc'), limit(PAGE_SIZE));
-    }
-
+    );
+    
     try {
       const querySnapshot = await getDocs(q);
       if (querySnapshot.docs.length > 0) {
@@ -100,19 +126,17 @@ export default function FeedClient({ initialItems }: { initialItems: FeedItem[] 
         </div>
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-        {combinedItems.map((item) => {
-          if (item.status === 'uploading' || item.status === 'error') {
-            return <FeedCardPlaceholder key={item.id} item={item} />;
-          }
-          return <FeedCard key={item.id} item={item} />;
-        })}
+        {loading ? (
+            Array.from({ length: 3 }).map((_, i) => <FeedCardPlaceholder key={i} item={{ id: `p${i}`, type: 'user_post', title: '', createdAt: new Date().toISOString() }} />)
+        ) : (
+            combinedItems.map((item) => {
+                if (item.status === 'uploading' || item.status === 'error') {
+                    return <FeedCardPlaceholder key={item.id} item={item} />;
+                }
+                return <FeedCard key={item.id} item={item} />;
+            })
+        )}
       </div>
-
-      {loading && (
-        <div className="text-center py-8">
-          <Loader2 className="w-8 h-8 animate-spin mx-auto text-primary" />
-        </div>
-      )}
 
       {hasMore && !loading && (
         <div className="text-center py-8">
