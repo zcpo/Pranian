@@ -81,20 +81,17 @@ export default function LoginClientPage() {
     const userDocRef = doc(firestore, 'users', user.uid);
     const userDoc = await getDoc(userDocRef);
 
+    // Only create a new document if one doesn't already exist.
+    // Use merge: true to safely update existing docs (e.g., from anonymous to permanent)
     if (!userDoc.exists()) {
-      // User is new, create a document for them
-      await setDoc(userDocRef, {
+      const data = {
         id: user.uid,
         email: user.email,
-        displayName: user.displayName || user.email, // Fallback to email
+        displayName: user.displayName || user.email?.split('@')[0] || 'Pranian User',
         avatarUrl: user.photoURL,
-      });
+      };
+      await setDoc(userDocRef, data, { merge: true });
     }
-    toast({
-      title: 'Success!',
-      description: 'You have been successfully signed in.',
-    });
-    router.push('/profile');
   };
 
   const onSignUp: SubmitHandler<SignUpFormValues> = async (data) => {
@@ -103,6 +100,8 @@ export default function LoginClientPage() {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
       await handleUserCreation(userCredential.user);
+      toast({ title: 'Success!', description: 'Your account has been created.' });
+      router.push('/profile');
     } catch (err: any) {
       setError(err.message);
     }
@@ -112,8 +111,9 @@ export default function LoginClientPage() {
     if (!auth) return;
     setError(null);
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
-      await handleUserCreation(userCredential.user);
+      await signInWithEmailAndPassword(auth, data.email, data.password);
+      toast({ title: 'Success!', description: 'You are now signed in.' });
+      router.push('/profile');
     } catch (err: any) {
       setError(err.message);
     }
@@ -126,6 +126,8 @@ export default function LoginClientPage() {
     try {
         const result = await signInWithPopup(auth, provider);
         await handleUserCreation(result.user);
+        toast({ title: 'Success!', description: 'You are now signed in.' });
+        router.push('/profile');
     } catch (err: any) {
         setError(err.message);
         toast({
@@ -286,3 +288,5 @@ export default function LoginClientPage() {
     </main>
   );
 }
+
+    
