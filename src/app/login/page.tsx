@@ -67,17 +67,19 @@ export default function LoginPage() {
   const { toast } = useToast();
   const { user, isUserLoading } = useUser();
 
+  const redirectUrl = searchParams.get('redirect');
   const isTrial = searchParams.get('trial') === 'true';
   const isSubscribing = searchParams.get('subscribe') === 'true';
   const defaultTab = isSubscribing || isTrial ? 'signup' : 'signin';
 
   useEffect(() => {
-    // Redirect if user is already logged in
     if (user && !isUserLoading) {
       toast({ title: 'Success!', description: 'You are now signed in.' });
-      router.push(`/profile/${user.uid}`);
+      // Redirect to the intended URL, or the profile page as a fallback
+      router.push(redirectUrl || `/profile/${user.uid}`);
     }
-  }, [user, isUserLoading, router, toast]);
+  }, [user, isUserLoading, router, toast, redirectUrl]);
+
 
   const {
     register: registerSignUp,
@@ -284,3 +286,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+    

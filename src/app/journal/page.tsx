@@ -48,6 +48,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { useAuth } from '@/firebase';
 import { Camera } from 'lucide-react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+
 
 // Helper for ISO timestamps
 const nowISO = () => new Date().toISOString();
@@ -57,6 +59,14 @@ export default function JournalPage() {
   const firestore = useFirestore();
   const [activeSession, setActiveSession] = useState<SessionEntry | null>(null);
   const auth = useAuth();
+  const router = useRouter();
+
+  // Redirect to login if user is not authenticated
+  useEffect(() => {
+    if (!isUserLoading && !user) {
+      router.push('/login?redirect=/journal');
+    }
+  }, [user, isUserLoading, router]);
 
   // --- LOCAL DATA (DEXIE) ---
   const sessions = useLiveQuery(
@@ -362,6 +372,11 @@ function DailyProgress({ categories }: { categories: string[] }) {
     const [categoryStatus, setCategoryStatus] = useState<Record<string, boolean>>({});
 
     useEffect(() => {
+        // This check ensures localStorage is only accessed on the client side
+        if (typeof window === 'undefined') {
+            return;
+        }
+
         const today = new Date().toISOString().split("T")[0];
         let count = 0;
         let status: Record<string, boolean> = {};
@@ -651,6 +666,8 @@ function IntensityChart({ sessions }: { sessions: {date: Date, intensity?: numbe
     </Card>
   );
 }
+
+    
 
     
 
