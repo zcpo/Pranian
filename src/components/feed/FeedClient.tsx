@@ -9,72 +9,75 @@ import { FeedCard } from '@/components/feed/feed-card';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import { FeedCardPlaceholder } from './feed-card-placeholder';
+import Link from 'next/link';
 
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 50;
 
-const snapshotToFeedItem = (snapshot: any): FeedItem => {
-    const data = snapshot.val();
-    // Firebase server timestamps are numbers (milliseconds since epoch)
-    const createdAt = new Date(data.createdAt).toISOString();
-    return { id: snapshot.key, ...data, createdAt } as FeedItem;
-};
-
-export default function FeedClient() {
+export default function FeedClient({ initialItems = [] }: { initialItems: FeedItem[] }) {
   const { user } = useUser();
   const database = useDatabase();
-  const [items, setItems] = useState<FeedItem[]>([]);
+  const [items, setItems] = useState<FeedItem[]>(initialItems);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!database) {
-        setLoading(false);
-        return;
+      setLoading(false);
+      return;
     }
 
     setLoading(true);
     const feedRef = ref(database, 'feed_items');
     const feedQuery = query(feedRef, orderByChild('createdAt'), limitToLast(PAGE_SIZE));
 
-    const unsubscribe = onValue(feedQuery, (snapshot) => {
+    const unsubscribe = onValue(
+      feedQuery,
+      (snapshot) => {
         const newItems: FeedItem[] = [];
         if (snapshot.exists()) {
-            snapshot.forEach((childSnapshot) => {
-                newItems.push(snapshotToFeedItem(childSnapshot));
-            });
+          const data = snapshot.val();
+          // The Realtime DB returns an object, so we iterate over its keys
+          Object.keys(data).forEach((key) => {
+            newItems.push({ id: key, ...data[key] });
+          });
         }
-        // Reverse because limitToLast gives us ascending order
-        setItems(newItems.reverse()); 
+        // Reverse because limitToLast gives us ascending order, and we want newest first
+        setItems(newItems.reverse());
         setLoading(false);
-    }, (error) => {
+      },
+      (error) => {
         console.error("Error fetching real-time feed:", error);
         setLoading(false);
-    });
+      }
+    );
 
     return () => unsubscribe();
   }, [database]);
-
 
   return (
     <div className="container mx-auto px-4 py-8">
       {user && (
         <div className="mb-8 max-w-xl mx-auto">
           <Button asChild>
-            <a href="/upload">Create Post</a>
+            <Link href="/upload">Create Post</Link>
           </Button>
         </div>
       )}
       <div className="flex flex-col items-center w-full">
         <div className="w-full max-w-xl space-y-8">
-            {loading && items.length === 0 ? (
-                Array.from({ length: 3 }).map((_, i) => <FeedCardPlaceholder key={i} />)
-            ) : (
-                items.map((item) => <FeedCard key={item.id} item={item} />)
-            )}
+          {loading && items.length === 0 ? (
+            <>
+              <FeedCardPlaceholder />
+              <FeedCardPlaceholder />
+              <FeedCardPlaceholder />
+            </>
+          ) : (
+            items.map((item) => <FeedCard key={item.id} item={item} />)
+          )}
         </div>
       </div>
 
       {!loading && items.length === 0 && (
-          <p className="text-center text-muted-foreground py-8">The feed is empty. Create the first post!</p>
+        <p className="text-center text-muted-foreground py-8">The feed is empty. Create the first post!</p>
       )}
     </div>
   );
