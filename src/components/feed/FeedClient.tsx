@@ -27,22 +27,21 @@ export default function FeedClient({ initialItems = [] }: { initialItems: FeedIt
 
     setLoading(true);
     const feedRef = ref(database, 'feed_items');
-    // Fetch the last 50 items. We will sort them on the client.
     const feedQuery = query(feedRef, limitToLast(PAGE_SIZE));
 
     const unsubscribe = onValue(
       feedQuery,
       (snapshot) => {
+        const data = snapshot.val();
         const newItems: FeedItem[] = [];
-        if (snapshot.exists()) {
-          const data = snapshot.val();
+        if (data) {
           // The Realtime DB returns an object, so we iterate over its keys
           Object.keys(data).forEach((key) => {
             newItems.push({ id: key, ...data[key] });
           });
+          // Sort by createdAt descending to show newest posts first
+          newItems.sort((a, b) => b.createdAt - a.createdAt);
         }
-        // Sort by createdAt descending to show newest posts first
-        newItems.sort((a, b) => b.createdAt - a.createdAt);
         setItems(newItems);
         setLoading(false);
       },
@@ -66,7 +65,7 @@ export default function FeedClient({ initialItems = [] }: { initialItems: FeedIt
       )}
       <div className="flex flex-col items-center w-full">
         <div className="w-full max-w-xl space-y-8">
-          {loading && items.length === 0 ? (
+          {loading ? (
             <>
               <FeedCardPlaceholder />
               <FeedCardPlaceholder />
