@@ -1,12 +1,13 @@
+
 'use client';
 
 import React from 'react';
 import Link from 'next/link';
-import { Menu } from 'lucide-react';
+import { Menu, Loader2 } from 'lucide-react';
 import { FirebaseClientProvider } from '@/firebase';
 import Header from '@/components/layout/header';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import Logo from '@/components/logo';
 
 const navLinks = [
@@ -21,21 +22,31 @@ const navLinks = [
 
 export function ClientProviders({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = React.useState(false);
+  const [isMenuLoading, setIsMenuLoading] = React.useState(false);
+
+  const handleMenuOpen = () => {
+    setIsMenuLoading(true);
+    setTimeout(() => {
+      setOpen(true);
+      setIsMenuLoading(false);
+    }, 500); // 500ms delay to show loader
+  };
+
   return (
     <FirebaseClientProvider>
       <Header />
       {children}
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetTrigger asChild>
-          <Button
-            variant="default"
-            size="icon"
-            className="fixed bottom-6 right-6 h-16 w-16 rounded-full shadow-2xl bg-background/50 backdrop-blur-sm border-white/20 border text-white md:hidden"
-            aria-label="Toggle Navigation"
-          >
-            <Menu className="h-6 w-6" />
-          </Button>
-        </SheetTrigger>
+        <Button
+          variant="default"
+          size="icon"
+          className="fixed bottom-6 right-6 h-16 w-16 rounded-full shadow-2xl bg-background/50 backdrop-blur-sm border-white/20 border text-white md:hidden"
+          aria-label="Toggle Navigation"
+          onClick={handleMenuOpen}
+          disabled={isMenuLoading}
+        >
+          {isMenuLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : <Menu className="h-6 w-6" />}
+        </Button>
         <SheetContent side="left">
           <SheetHeader>
             <SheetTitle>
