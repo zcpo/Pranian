@@ -52,17 +52,14 @@ export default function Header() {
   };
 
   const NavLink = ({ href, label, className }: { href: string; label: string; className?: string }) => (
-    <Link
-      href={href}
-      onClick={() => setOpen(false)}
-      className={cn(
-        "text-sm font-medium transition-colors hover:text-primary",
-        pathname === href ? "text-foreground" : "text-muted-foreground",
-        className
-      )}
-    >
-      {label}
-    </Link>
+    <Button asChild variant="ghost" className={cn("text-sm font-medium", pathname === href ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:text-foreground", className)}>
+        <Link
+        href={href}
+        onClick={() => setOpen(false)}
+        >
+        {label}
+        </Link>
+    </Button>
   );
 
   return (
@@ -90,7 +87,11 @@ export default function Header() {
               </SheetHeader>
               <div className="flex flex-col gap-4 py-4">
                 {navLinks.map((link) => (
-                  <NavLink key={link.href} {...link} className="text-base" />
+                   <Button asChild variant="ghost" className="justify-start text-base" key={link.href}>
+                        <Link href={link.href} onClick={() => setOpen(false)}>
+                           {link.label}
+                        </Link>
+                   </Button>
                 ))}
               </div>
             </SheetContent>
@@ -98,7 +99,7 @@ export default function Header() {
           <Link href="/" className="mr-6 hidden items-center space-x-2 md:flex">
             <Logo />
           </Link>
-          <nav className="hidden md:flex items-center gap-4 lg:gap-6">
+          <nav className="hidden md:flex items-center gap-1 lg:gap-2 p-1 rounded-md bg-muted/50 border">
             {navLinks.map((link) => (
               <NavLink key={link.href} {...link} />
             ))}
