@@ -207,7 +207,7 @@ export default function JournalPage() {
               </Card>
             ) : (
               <>
-                <DailyProgress categories={categories} />
+                <DailyProgress categories={categories} sessions={sessions} />
                 <AnalyticsDashboard sessions={sessions} />
                 <Card>
                   <CardHeader>
@@ -317,7 +317,7 @@ function CategoryEntryForm({ category, userId }: { category: string, userId: str
       // Optionally, remove the failed entry from Dexie
       await db.sessions.delete(newEntryId);
     } finally {
-      setIsSaving(false);
+      setIsSaving(isSaving);
     }
   };
 
@@ -366,35 +366,30 @@ function CategoryEntryForm({ category, userId }: { category: string, userId: str
 }
 
 
-function DailyProgress({ categories }: { categories: string[] }) {
-    const [completed, setCompleted] = useState(0);
-    const [streak, setStreak] = useState(0);
-    const [categoryStatus, setCategoryStatus] = useState<Record<string, boolean>>({});
-
-    useEffect(() => {
-        // This check ensures localStorage is only accessed on the client side
+function DailyProgress({ categories, sessions }: { categories: string[], sessions: SessionEntry[] | undefined }) {
+    const { completed, percent, streak, categoryStatus } = useMemo(() => {
         if (typeof window === 'undefined') {
-            return;
+            return { completed: 0, percent: 0, streak: 0, categoryStatus: {} };
         }
 
         const today = new Date().toISOString().split("T")[0];
-        let count = 0;
-        let status: Record<string, boolean> = {};
+        
+        const todaysSessions = sessions?.filter(s => s.date === today && s.completed) || [];
+        const completedCategories = new Set(todaysSessions.map(s => s.title));
 
-        categories.forEach((category) => {
-            const saved = JSON.parse(localStorage.getItem(category) || "{}");
-            const done = saved.completedDate === today;
-            status[category] = done;
-            if (done) count++;
+        const status: Record<string, boolean> = {};
+        categories.forEach(cat => {
+            status[cat] = completedCategories.has(cat);
         });
 
-        setCategoryStatus(status);
-        setCompleted(count);
-
+        const completedCount = completedCategories.size;
+        const percentage = categories.length > 0 ? Math.round((completedCount / categories.length) * 100) : 0;
+        
+        // Streak calculation (remains localStorage-based for simplicity)
         const savedStreak = JSON.parse(localStorage.getItem("streakData") || "{}");
         let newStreak = savedStreak.streak || 0;
 
-        if (count > 0 && savedStreak.lastDate !== today) {
+        if (completedCount > 0 && savedStreak.lastDate !== today) {
             const yesterday = new Date();
             yesterday.setDate(yesterday.getDate() - 1);
             const yDate = yesterday.toISOString().split("T")[0];
@@ -405,14 +400,20 @@ function DailyProgress({ categories }: { categories: string[] }) {
                 newStreak = 1;
             }
             localStorage.setItem("streakData", JSON.stringify({ lastDate: today, streak: newStreak }));
-        } else if (count === 0 && savedStreak.lastDate === today) {
-            // User unchecked all for today, reset streak if needed
+        } else if (savedStreak.lastDate !== today) {
+             // Reset streak if no completed sessions today and last recorded day wasn't today
+             const yesterday = new Date();
+             yesterday.setDate(yesterday.getDate() - 1);
+             const yDate = yesterday.toISOString().split("T")[0];
+             if(savedStreak.lastDate !== yDate) {
+                newStreak = 0;
+                localStorage.setItem("streakData", JSON.stringify({ lastDate: savedStreak.lastDate, streak: newStreak }));
+             }
         }
         
-        setStreak(newStreak);
-    }, [categories]);
+        return { completed: completedCount, percent: percentage, streak: newStreak, categoryStatus: status };
 
-    const percent = categories.length > 0 ? Math.round((completed / categories.length) * 100) : 0;
+    }, [categories, sessions]);
 
     return (
         <Card>
@@ -658,13 +659,3 @@ function IntensityChart({ sessions }: { sessions: {date: Date, intensity?: numbe
     </Card>
   );
 }
-
-    
-
-    
-
-    
-
-    
-
-    
