@@ -8,43 +8,58 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { CardContent, CardHeader, CardFooter, CardTitle } from '../ui/card';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Heart, MessageCircle, Repeat2, UserPlus, Bookmark } from 'lucide-react';
+import { Heart, MessageCircle, Repeat2, UserPlus, Bookmark, Trash2 } from 'lucide-react';
 import { Button } from '../ui/button';
-import { useUser, useFirestore } from '@/firebase';
-import { doc, setDoc, deleteDoc } from 'firebase/firestore';
+import { useUser, useDatabase } from '@/firebase';
+import { ref, remove } from "firebase/database";
+import { ADMIN_EMAILS } from '@/lib/admins';
+import { useToast } from '@/hooks/use-toast';
 
 dayjs.extend(relativeTime);
 
 export function GenericCard({ item }: { item: FeedItem }) {
   const { user } = useUser();
-  const firestore = useFirestore();
+  const database = useDatabase();
+  const { toast } = useToast();
   const timeAgo = item.createdAt ? dayjs(item.createdAt).fromNow() : 'just now';
   const isVideo = item.image && (item.image.includes('youtube.com') || item.image.includes('vimeo.com'));
+  const isAdmin = user && ADMIN_EMAILS.includes(user.email || '');
 
   // Placeholder states
   const [isLiked, setIsLiked] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
   const handleLike = async () => {
-    if (!user || !firestore || !item.id) return;
-    
-    // With RTDB, the logic for likes would also change.
-    // This Firestore logic is now a placeholder.
+    if (!user || !item.id) return;
     console.log("Like functionality needs to be adapted for RTDB.");
     setIsLiked(!isLiked);
   };
   
   const handleFollow = async () => {
-    if (!user || !firestore || !item.userId || user.uid === item.userId) return;
+    if (!user || !item.userId || user.uid === item.userId) return;
+    alert(`Follow functionality needs to be implemented for user ${item.userName}`);
+  };
 
-    // This logic also needs to be adapted for RTDB if you want to keep it.
-    const followingRef = doc(firestore, 'users', user.uid, 'following', item.userId);
-    const followerRef = doc(firestore, 'users', item.userId, 'followers', user.uid);
+  const handleDelete = async () => {
+    if (!isAdmin || !database || !item.id) return;
 
-    // In a real app, you'd check if the user is already followed
-    await setDoc(followingRef, { userId: item.userId, createdAt: new Date().toISOString() });
-    await setDoc(followerRef, { userId: user.uid, createdAt: new Date().toISOString() });
-    alert(`You are now following ${item.userName}`);
+    if (confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
+      try {
+        const postRef = ref(database, `feed_items/${item.id}`);
+        await remove(postRef);
+        toast({
+          title: 'Post Deleted',
+          description: 'The post has been successfully removed from the feed.',
+        });
+      } catch (error) {
+        console.error("Error deleting post:", error);
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: 'Failed to delete the post. Please try again.',
+        });
+      }
+    }
   };
 
   return (
@@ -74,10 +89,15 @@ export function GenericCard({ item }: { item: FeedItem }) {
               <CardTitle className="text-base">{item.userName || 'User'}</CardTitle>
               <p className="text-xs text-muted-foreground">{timeAgo}</p>
             </div>
-            {user && item.userId && user.uid !== item.userId && (
+            {user && item.userId && user.uid !== item.userId && !isAdmin && (
                  <Button size="sm" variant="outline" onClick={handleFollow}>
                     <UserPlus className="h-4 w-4" />
                 </Button>
+            )}
+            {isAdmin && (
+              <Button size="sm" variant="destructive" onClick={handleDelete}>
+                <Trash2 className="h-4 w-4" />
+              </Button>
             )}
         </div>
       </CardHeader>
