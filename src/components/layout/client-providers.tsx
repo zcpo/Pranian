@@ -3,21 +3,16 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Menu, Loader2 } from 'lucide-react';
+import { Menu, Loader2, Upload, Camera as CameraIcon } from 'lucide-react';
 import { FirebaseClientProvider } from '@/firebase';
 import Header from '@/components/layout/header';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import Logo from '@/components/logo';
 
-const navLinks = [
-  { href: '/feed', label: 'Feed' },
-  { href: '/library', label: 'Library' },
-  { href: '/store', label: 'Store' },
-  { href: '/events', label: 'Events' },
-  { href: '/pricing', label: 'Pricing' },
-  { href: '/journal', label: 'Journal' },
-  { href: '/class-vibes', label: 'Class Vibes' },
+const actionLinks = [
+  { href: '/upload', label: 'Create Post', icon: Upload },
+  { href: '/camera', label: 'Use Camera', icon: CameraIcon },
 ];
 
 export function ClientProviders({ children }: { children: React.ReactNode }) {
@@ -25,6 +20,7 @@ export function ClientProviders({ children }: { children: React.ReactNode }) {
   const [isMenuLoading, setIsMenuLoading] = React.useState(false);
 
   const handleMenuOpen = () => {
+    if (isMenuLoading) return;
     setIsMenuLoading(true);
     setTimeout(() => {
       setOpen(true);
@@ -40,8 +36,8 @@ export function ClientProviders({ children }: { children: React.ReactNode }) {
         <Button
           variant="default"
           size="icon"
-          className="fixed bottom-6 right-6 h-16 w-16 rounded-full shadow-2xl bg-background/50 backdrop-blur-sm border-white/20 border text-white md:hidden"
-          aria-label="Toggle Navigation"
+          className="fixed bottom-6 right-6 h-16 w-16 rounded-full shadow-2xl bg-background/50 backdrop-blur-sm border-white/20 border text-white"
+          aria-label="Toggle Quick Actions"
           onClick={handleMenuOpen}
           disabled={isMenuLoading}
         >
@@ -50,15 +46,14 @@ export function ClientProviders({ children }: { children: React.ReactNode }) {
         <SheetContent side="left">
           <SheetHeader>
             <SheetTitle>
-              <Link href="/" className="flex items-center" onClick={() => setOpen(false)}>
-                <Logo />
-              </Link>
+                Quick Actions
             </SheetTitle>
           </SheetHeader>
           <div className="flex flex-col gap-4 py-4">
-            {navLinks.map((link) => (
-              <Button asChild variant="ghost" className="justify-start text-base" key={link.href}>
+            {actionLinks.map((link) => (
+              <Button asChild variant="ghost" className="justify-start text-base gap-4" key={link.href}>
                 <Link href={link.href} onClick={() => setOpen(false)}>
+                  <link.icon className="h-5 w-5 text-muted-foreground" />
                   {link.label}
                 </Link>
               </Button>
