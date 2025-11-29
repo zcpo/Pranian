@@ -16,7 +16,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, UserCircle, Edit, Heart, Bookmark, UserPlus } from 'lucide-react';
-import { useDoc, useCollection } from '@/firebase/firestore/use-doc';
+import { useDoc, useCollection } from '@/firebase/firestore/use-collection';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { GenericCard } from '@/components/feed/generic-card';
@@ -128,8 +128,9 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (userProfile) {
+      const name = userProfile.displayName || (userProfile.firstName ? `${userProfile.firstName} ${userProfile.lastName}`: '');
       reset({
-        displayName: userProfile.firstName ? `${userProfile.firstName} ${userProfile.lastName}` : userProfile.displayName || '',
+        displayName: name,
         email: userProfile.email || '',
       });
     }
@@ -282,3 +283,5 @@ export default function ProfilePage() {
     </div>
   );
 }
+
+    

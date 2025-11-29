@@ -208,7 +208,7 @@ export default function JournalPage() {
             ) : (
               <>
                 <DailyProgress categories={categories} />
-                <AnalyticsDashboard userId={user.uid} />
+                <AnalyticsDashboard sessions={sessions} />
                 <Card>
                   <CardHeader>
                     <CardTitle>Journal Entries</CardTitle>
@@ -502,72 +502,57 @@ function MindfulnessTimer() {
     );
 }
 
-function useAnalytics(userId?: string) {
-  const firestore = useFirestore();
-  const [analytics, setAnalytics] = useState({
-    totalSessions: 0,
-    totalMinutes: 0,
-    avgDuration: 0,
-    longest: 0,
-    sessions: [] as (SessionEntry & { id: string; date: Date })[],
-    loading: true
-  });
-
-  useEffect(() => {
-    if (!userId || !firestore) {
-        setAnalytics(prev => ({...prev, loading: false}));
-        return;
-    };
-
-    async function fetchData() {
-      setAnalytics(prev => ({...prev, loading: true}));
-      const sessionsRef = collection(firestore, "users", userId, "sessions");
-      const q = query(sessionsRef, orderBy("date", "asc"));
-      const snap = await getDocs(q);
-
-      const sessions = snap.docs.map(doc => {
-        const data = doc.data() as SessionEntry;
-        const dateString = data.date || data.createdAt;
-        return {
-            id: doc.id,
-            ...data,
-            date: dateString ? new Date(dateString) : new Date()
+function useAnalytics(sessions: SessionEntry[] | undefined) {
+    const analytics = useMemo(() => {
+        if (!sessions || sessions.length === 0) {
+            return {
+                totalSessions: 0,
+                totalMinutes: 0,
+                avgDuration: 0,
+                longest: 0,
+                chartSessions: [],
+                loading: false,
+            };
         }
-      });
 
-      const sessionsWithDuration = sessions.filter(s => typeof s.duration === 'number' && s.duration > 0);
-      
-      const totalSessions = sessionsWithDuration.length;
-      const totalMinutes = sessionsWithDuration.reduce((a, b) => a + b.duration, 0);
-      const avgDuration = totalSessions ? totalMinutes / totalSessions : 0;
-      const longest = totalSessions ? Math.max(...sessionsWithDuration.map(s => s.duration)) : 0;
+        const sessionsWithDuration = sessions.filter(s => typeof s.duration === 'number' && s.duration > 0);
+        
+        const totalSessions = sessionsWithDuration.length;
+        const totalMinutes = sessionsWithDuration.reduce((a, b) => a + b.duration, 0);
+        const avgDuration = totalSessions ? totalMinutes / totalSessions : 0;
+        const longest = totalSessions ? Math.max(...sessionsWithDuration.map(s => s.duration)) : 0;
+        
+        const chartSessions = sessions.map(s => {
+            const dateString = s.date || s.createdAt;
+            return {
+                ...s,
+                date: dateString ? new Date(dateString) : new Date()
+            }
+        }).sort((a,b) => a.date.getTime() - b.date.getTime());
 
-      setAnalytics({
-        totalSessions,
-        totalMinutes,
-        avgDuration,
-        longest,
-        sessions,
-        loading: false
-      });
-    }
+        return {
+            totalSessions,
+            totalMinutes,
+            avgDuration,
+            longest,
+            chartSessions,
+            loading: false,
+        };
+    }, [sessions]);
 
-    fetchData();
-  }, [userId, firestore]);
-
-  return analytics;
+    return analytics;
 }
 
 
-function AnalyticsDashboard({ userId }: { userId: string }) {
+function AnalyticsDashboard({ sessions }: { sessions: SessionEntry[] | undefined }) {
     const {
         totalSessions,
         totalMinutes,
         avgDuration,
         longest,
-        sessions,
+        chartSessions,
         loading
-  } = useAnalytics(userId);
+  } = useAnalytics(sessions);
 
   if (loading) return <Card><CardHeader><CardTitle>Loading Analytics...</CardTitle></CardHeader><CardContent><div className="h-60" /></CardContent></Card>;
 
@@ -599,8 +584,8 @@ function AnalyticsDashboard({ userId }: { userId: string }) {
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                <DurationChart sessions={sessions} />
-                <IntensityChart sessions={sessions} />
+                <DurationChart sessions={chartSessions} />
+                <IntensityChart sessions={chartSessions} />
             </div>
         </CardContent>
       </Card>
@@ -666,6 +651,8 @@ function IntensityChart({ sessions }: { sessions: {date: Date, intensity?: numbe
     </Card>
   );
 }
+
+    
 
     
 

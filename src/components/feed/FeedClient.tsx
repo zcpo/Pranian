@@ -38,7 +38,7 @@ export default function FeedClient({ initialItems = [] }: { initialItems: FeedIt
           // Convert it to an array and reverse it to show newest items first.
           const newItems: FeedItem[] = Object.keys(data)
             .map((key) => ({ id: key, ...data[key] }))
-            .reverse(); // Reverse the array to get descending order
+            .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)); // Sort descending
           setItems(newItems);
         } else {
           // Handle the case where the database is empty or returns no data
@@ -86,4 +86,5 @@ export default function FeedClient({ initialItems = [] }: { initialItems: FeedIt
   );
 }
 
+    
     
