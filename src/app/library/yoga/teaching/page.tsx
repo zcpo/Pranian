@@ -143,15 +143,175 @@ const lessons = [
     category: 'Teaching',
     title: 'Crafting Inspiring Class Themes',
     description: 'Weave philosophy and intention into your classes.',
-    quiz: [],
+    quiz: [
+        {
+            question: "What is the benefit of theming a yoga class?",
+            options: [
+                { id: "a", text: "It makes the class longer." },
+                { id: "b", text: "It provides a deeper, more meaningful experience beyond just physical postures." },
+                { id: "c", text: "It's a requirement for all certified yoga teachers." },
+                { id: "d", text: "It guarantees more students will attend." }
+            ],
+            correctAnswerId: "b"
+        },
+        {
+            question: "A good source of inspiration for a class theme could be:",
+            options: [
+                { id: "a", text: "A yoga sutra or philosophical concept." },
+                { id: "b", text: "The current season or time of year." },
+                { id: "c", text: "An anatomical focus, like 'hip-opening'." },
+                { id: "d", text: "All of the above." }
+            ],
+            correctAnswerId: "d"
+        },
+        {
+            question: "How can you weave a theme throughout the class?",
+            options: [
+                { id: "a", text: "Mention it once at the beginning." },
+                { id: "b", text: "Repeat the theme word over and over." },
+                { id: "c", text: "Introduce it at the beginning, connect poses to the theme, and reflect on it during Savasana." },
+                { id: "d", text: "Only discuss it at the end of class." }
+            ],
+            correctAnswerId: "c"
+        },
+        {
+            question: "If your theme is 'grounding', which type of pose would be most appropriate to emphasize?",
+            options: [
+                { id: "a", text: "Inversions like Headstand." },
+                { id: "b", text: "Fast-paced Vinyasa flow." },
+                { id: "c", text: "Standing poses like Mountain Pose and Warrior poses." },
+                { id: "d", text: "Advanced arm balances." }
+            ],
+            correctAnswerId: "c"
+        },
+        {
+            question: "What is 'arcing' in the context of class theming?",
+            options: [
+                { id: "a", text: "A type of backbend." },
+                { id: "b", text: "The process of building the class energy up to a peak and then bringing it back down." },
+                { id: "c", text: "Creating a circular shape with the yoga mats." },
+                { id: "d", text: "A breathing technique." }
+            ],
+            correctAnswerId: "b"
+        }
+    ]
   },
   {
     id: 'teaching-4',
     category: 'Teaching',
-    title: 'Yoga Teacher Ethics',
-    description: 'Explore the responsibilities of being a yoga teacher.',
-    quiz: [],
+    title: 'Yoga Teacher Ethics & Scope of Practice',
+    description: 'Explore the responsibilities and boundaries of being a yoga teacher.',
+    quiz: [
+        {
+            question: "What does 'Scope of Practice' refer to for a yoga teacher?",
+            options: [
+                { id: "a", text: "The different styles of yoga a teacher is allowed to teach." },
+                { id: "b", text: "The professional boundaries of a teacher, defining what services they can and cannot provide." },
+                { id: "c", text: "The geographical area where a teacher can legally teach." },
+                { id: "d", text: "The number of students allowed in a class." }
+            ],
+            correctAnswerId: "b"
+        },
+        {
+            question: "Which of the following is generally considered outside a yoga teacher's scope of practice?",
+            options: [
+                { id: "a", text: "Suggesting a student use a block for support in Triangle Pose." },
+                { id: "b", text: "Diagnosing a student's medical condition." },
+                { id: "c", text: "Leading a guided meditation." },
+                { id: "d", text: "Creating a sequence of yoga poses." }
+            ],
+            correctAnswerId: "b"
+        },
+        {
+            question: "The principle of 'Ahimsa' (non-harming) in a teaching context primarily means:",
+            options: [
+                { id: "a", text: "Never touching students." },
+                { id: "b", text: "Creating a safe and supportive environment, both physically and emotionally." },
+                { id: "c", text: "Only teaching beginner-level classes." },
+                { id: "d", text: "Ensuring the room is at a comfortable temperature." }
+            ],
+            correctAnswerId: "b"
+        },
+        {
+            question: "A student tells you about a serious personal problem. What is the most ethical response?",
+            options: [
+                { id: "a", text: "Offer them detailed life advice based on your own experiences." },
+                { id: "b", text: "Listen with compassion, hold space for them, and recommend they speak with a trained therapist or counselor." },
+                { id: "c", text: "Share their problem with other students to see if they can help." },
+                { id: "d", text: "Prescribe specific yoga poses to cure their problem." }
+            ],
+            correctAnswerId: "b"
+        },
+        {
+            question: "Why is maintaining professional boundaries with students important?",
+            options: [
+                { id: "a", text: "It prevents students from asking for discounts." },
+                { id: "b", text: "It upholds the integrity of the teacher-student relationship and prevents potential conflicts of interest." },
+                { id: "c", text: "It's a rule that only applies to new teachers." },
+                { id: "d", text: "It makes the teacher seem more mysterious and wise." }
+            ],
+            correctAnswerId: "b"
+        }
+    ]
   },
+  {
+    id: 'teaching-5',
+    category: 'Teaching',
+    title: 'Sequencing for Peak Poses',
+    description: 'Learn to intelligently build a class that culminates in a challenging posture.',
+    quiz: [
+        {
+            question: "What is a 'peak pose' in yoga sequencing?",
+            options: [
+                { id: "a", text: "The very first pose of the class." },
+                { id: "b", text: "The most challenging posture that the class builds towards." },
+                { id: "c", text: "A pose done on a mountain top." },
+                { id: "d", text: "The final relaxation pose, Savasana." }
+            ],
+            correctAnswerId: "b"
+        },
+        {
+            question: "If your peak pose is Headstand (Sirsasana), which part of the body is CRITICAL to warm up?",
+            options: [
+                { id: "a", text: "The ankles and wrists." },
+                { id: "b", text: "The shoulders, upper back, and core." },
+                { id: "c", text: "The hips and hamstrings." },
+                { id: "d", text: "The lower back." }
+            ],
+            correctAnswerId: "b"
+        },
+        {
+            question: "What is the purpose of 'counter-poses' after a deep backbend like Wheel Pose (Urdhva Dhanurasana)?",
+            options: [
+                { id: "a", text: "To do another, even deeper backbend." },
+                { id: "b", text: "To immediately go into a deep forward fold." },
+                { id: "c", text: "To neutralize the spine with gentle twists and mild forward folds." },
+                { id: "d", text: "To practice arm balances." }
+            ],
+            correctAnswerId: "c"
+        },
+        {
+            question: "Which of these is NOT a key component of a well-rounded yoga sequence?",
+            options: [
+                { id: "a", text: "Centering and Warm-up." },
+                { id: "b", text: "Sun Salutations." },
+                { id: "c", text: "A competitive section to see who can hold poses the longest." },
+                { id: "d", text: "Cool-down and Savasana." }
+            ],
+            correctAnswerId: "c"
+        },
+        {
+            question: "When sequencing for a peak pose, you should include poses that:",
+            options: [
+                { id: "a", text: "Mimic the shape and actions of the peak pose in a less intense way." },
+                { id: "b", text: "Are the complete opposite of the peak pose." },
+                { id: "c", text: "Only focus on one muscle group." },
+                { id: "d", text: "Are all seated poses." }
+            ],
+            correctAnswerId: "a"
+        }
+    ]
+  }
 ];
 
 const QuizComponent = ({ quiz }: { quiz: QuizQuestion[] }) => {
@@ -275,3 +435,5 @@ export default function TeachingPage() {
     </div>
   );
 }
+
+    
