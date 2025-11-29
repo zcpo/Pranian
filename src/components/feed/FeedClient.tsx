@@ -3,7 +3,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useDatabase, useUser } from '@/firebase';
-import { ref, onValue, query, limitToLast } from 'firebase/database';
+import { ref, onValue, query, orderByChild, limitToLast } from 'firebase/database';
 import type { FeedItem } from '@/lib/feed-items';
 import { FeedCard } from '@/components/feed/feed-card';
 import { Button } from '@/components/ui/button';
@@ -27,7 +27,8 @@ export default function FeedClient({ initialItems = [] }: { initialItems: FeedIt
 
     setLoading(true);
     const feedRef = ref(database, 'feed_items');
-    const feedQuery = query(feedRef, limitToLast(PAGE_SIZE));
+    // Order by createdAt and get the last 50 items (which will be the newest)
+    const feedQuery = query(feedRef, orderByChild('createdAt'), limitToLast(PAGE_SIZE));
 
     const unsubscribe = onValue(
       feedQuery,
@@ -35,10 +36,13 @@ export default function FeedClient({ initialItems = [] }: { initialItems: FeedIt
         const data = snapshot.val();
         const newItems: FeedItem[] = [];
         if (data) {
+          // The snapshot from RTDB is an object, convert it to an array
           Object.keys(data).forEach((key) => {
             newItems.push({ id: key, ...data[key] });
           });
-          newItems.sort((a, b) => b.createdAt - a.createdAt);
+          // Since we ordered by ascending time to get the latest, we now reverse the array
+          // on the client to show newest first.
+          newItems.reverse();
         }
         setItems(newItems);
         setLoading(false);
