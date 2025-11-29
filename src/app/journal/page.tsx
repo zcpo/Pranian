@@ -2,7 +2,7 @@
 
 'use client';
 
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import { useUser, useFirestore, useMemoFirebase } from '@/firebase';
 import {
   collection,
@@ -503,44 +503,51 @@ function MindfulnessTimer() {
 }
 
 function useAnalytics(sessions: SessionEntry[] | undefined) {
-    const analytics = useMemo(() => {
-        if (!sessions || sessions.length === 0) {
-            return {
-                totalSessions: 0,
-                totalMinutes: 0,
-                avgDuration: 0,
-                longest: 0,
-                chartSessions: [],
-                loading: false,
-            };
-        }
+  return useMemo(() => {
+    const defaultAnalytics = {
+      totalSessions: 0,
+      totalMinutes: 0,
+      avgDuration: 0,
+      longest: 0,
+      chartSessions: [],
+      loading: sessions === undefined, // True if sessions are not yet loaded from Dexie
+    };
 
-        const sessionsWithDuration = sessions.filter(s => typeof s.duration === 'number' && s.duration > 0);
-        
-        const totalSessions = sessionsWithDuration.length;
-        const totalMinutes = sessionsWithDuration.reduce((a, b) => a + b.duration, 0);
-        const avgDuration = totalSessions ? totalMinutes / totalSessions : 0;
-        const longest = totalSessions ? Math.max(...sessionsWithDuration.map(s => s.duration)) : 0;
-        
-        const chartSessions = sessions.map(s => {
-            const dateString = s.date || s.createdAt;
-            return {
-                ...s,
-                date: dateString ? new Date(dateString) : new Date()
-            }
-        }).sort((a,b) => a.date.getTime() - b.date.getTime());
+    if (!sessions || sessions.length === 0) {
+      return defaultAnalytics;
+    }
 
-        return {
-            totalSessions,
-            totalMinutes,
-            avgDuration,
-            longest,
-            chartSessions,
-            loading: false,
-        };
-    }, [sessions]);
+    try {
+      const sessionsWithDuration = sessions.filter(s => typeof s.duration === 'number' && s.duration > 0);
+      
+      const totalSessions = sessionsWithDuration.length;
+      const totalMinutes = sessionsWithDuration.reduce((a, b) => a + b.duration, 0);
+      const avgDuration = totalSessions ? totalMinutes / totalSessions : 0;
+      const longest = totalSessions ? Math.max(...sessionsWithDuration.map(s => s.duration)) : 0;
+      
+      const chartSessions = sessions.map(s => {
+          const dateString = s.date || s.createdAt;
+          // Ensure dateString is valid before creating a new Date object
+          const date = dateString && !isNaN(new Date(dateString).getTime()) ? new Date(dateString) : new Date();
+          return {
+              ...s,
+              date: date
+          }
+      }).sort((a,b) => a.date.getTime() - b.date.getTime());
 
-    return analytics;
+      return {
+          totalSessions,
+          totalMinutes,
+          avgDuration,
+          longest,
+          chartSessions,
+          loading: false,
+      };
+    } catch (error) {
+        console.error("Error processing analytics:", error);
+        return { ...defaultAnalytics, loading: false }; // Return default state on error
+    }
+  }, [sessions]);
 }
 
 
@@ -651,6 +658,8 @@ function IntensityChart({ sessions }: { sessions: {date: Date, intensity?: numbe
     </Card>
   );
 }
+
+    
 
     
 
