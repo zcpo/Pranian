@@ -2,16 +2,15 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { meditations } from '@/lib/meditations';
 import { videoMeditations } from '@/lib/video-meditations';
 import { videos } from '@/lib/videos';
-import { PlayCircle, Search } from 'lucide-react';
-import Image from 'next/image';
+import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { ContentCard } from '@/components/content-card';
 
 export default function LibraryPage() {
     const featuredAudioMeditations = meditations.slice(0, 4);
@@ -54,17 +53,15 @@ export default function LibraryPage() {
                             const imageData = PlaceHolderImages.find(img => img.id === item.imageId);
                             const imageUrl = imageData?.imageUrl.replace(/seed\/[^/]+/, `seed/${item.slug}`) || 'https://picsum.photos/600/400';
                             return (
-                                <Link href={`/library/meditation/${item.slug}`} key={item.slug} className="group relative block overflow-hidden rounded-lg">
-                                    <Image src={imageUrl} alt={item.title} width={600} height={400} className="w-full h-auto object-cover aspect-video transition-transform duration-300 group-hover:scale-105" />
-                                    <div className="absolute inset-0 bg-black/40 transition-colors group-hover:bg-black/60"></div>
-                                    <div className="absolute inset-0 flex flex-col justify-end p-4 text-white">
-                                        <h3 className="font-bold text-lg">{item.title}</h3>
-                                        <p className="text-sm opacity-80">{item.author}</p>
-                                    </div>
-                                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <PlayCircle size={64} className="text-white/80" />
-                                    </div>
-                                </Link>
+                                <ContentCard
+                                    key={item.slug}
+                                    href={`/library/meditation/${item.slug}`}
+                                    imageUrl={imageUrl}
+                                    imageHint={imageData?.imageHint || 'meditation'}
+                                    category="Audio Meditation"
+                                    title={item.title}
+                                    description={item.author}
+                                />
                             );
                         })}
                     </div>
@@ -77,17 +74,15 @@ export default function LibraryPage() {
                             const imageData = PlaceHolderImages.find(img => img.id === item.imageId);
                             const imageUrl = item.posterUrl || imageData?.imageUrl.replace(/seed\/[^/]+/, `seed/${item.slug}`) || 'https://picsum.photos/600/400';
                             return (
-                                <Link href={`/library/video-meditation/${item.slug}`} key={item.slug} className="group relative block overflow-hidden rounded-lg">
-                                    <Image src={imageUrl} alt={item.title} width={600} height={400} className="w-full h-auto object-cover aspect-video transition-transform duration-300 group-hover:scale-105" />
-                                    <div className="absolute inset-0 bg-black/40 transition-colors group-hover:bg-black/60"></div>
-                                    <div className="absolute inset-0 flex flex-col justify-end p-4 text-white">
-                                        <h3 className="font-bold text-lg">{item.title}</h3>
-                                        <p className="text-sm opacity-80">{item.author}</p>
-                                    </div>
-                                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <PlayCircle size={64} className="text-white/80" />
-                                    </div>
-                                </Link>
+                                <ContentCard
+                                    key={item.slug}
+                                    href={`/library/video-meditation/${item.slug}`}
+                                    imageUrl={imageUrl}
+                                    imageHint={imageData?.imageHint || 'video meditation'}
+                                    category="Video Meditation"
+                                    title={item.title}
+                                    description={item.author}
+                                />
                             );
                         })}
                     </div>
@@ -100,17 +95,15 @@ export default function LibraryPage() {
                             const imageData = PlaceHolderImages.find(img => img.id === item.imageId);
                             const imageUrl = item.posterUrl || imageData?.imageUrl.replace(/seed\/[^/]+/, `seed/${item.slug}`) || 'https://picsum.photos/600/400';
                             return (
-                                <Link href={`/library/video/${item.slug}`} key={item.slug} className="group relative block overflow-hidden rounded-lg">
-                                    <Image src={imageUrl} alt={item.title} width={600} height={400} className="w-full h-auto object-cover aspect-video transition-transform duration-300 group-hover:scale-105" />
-                                    <div className="absolute inset-0 bg-black/40 transition-colors group-hover:bg-black/60"></div>
-                                    <div className="absolute inset-0 flex flex-col justify-end p-4 text-white">
-                                        <h3 className="font-bold text-lg">{item.title}</h3>
-                                        <p className="text-sm opacity-80">{item.author}</p>
-                                    </div>
-                                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <PlayCircle size={64} className="text-white/80" />
-                                    </div>
-                                </Link>
+                                <ContentCard
+                                    key={item.slug}
+                                    href={`/library/video/${item.slug}`}
+                                    imageUrl={imageUrl}
+                                    imageHint={imageData?.imageHint || 'yoga video'}
+                                    category="Yoga Video"
+                                    title={item.title}
+                                    description={item.author}
+                                />
                             );
                         })}
                     </div>
