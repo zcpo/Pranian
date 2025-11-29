@@ -21,7 +21,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { GenericCard } from '@/components/feed/generic-card';
 import type { FeedItem } from '@/lib/feed-items';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 
 const profileSchema = z.object({
   displayName: z.string().min(1, 'Display name is required'),
@@ -93,7 +93,9 @@ function ProfileContentTabs({ userId }: { userId: string }) {
 }
 
 
-export default function ProfilePage({ params: { userId } }: { params: { userId: string } }) {
+export default function ProfilePage() {
+  const params = useParams();
+  const userId = params.userId as string;
   const { user: currentUser, isUserLoading } = useUser();
   const firestore = useFirestore();
   const { toast } = useToast();
