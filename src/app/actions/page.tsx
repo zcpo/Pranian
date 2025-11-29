@@ -71,7 +71,7 @@ export default function ActionsPage() {
       className="flex flex-col items-center justify-center h-24 w-24 p-2 rounded-lg text-center"
     >
       <Link href={href}>
-        <div className="flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 mb-2 transition-colors group-hover:bg-primary/20">
+        <div className="flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 mb-2 transition-colors">
           <Icon className="h-6 w-6 text-primary" />
         </div>
         <span className="text-xs text-muted-foreground">{label}</span>
