@@ -34,9 +34,11 @@ export default function FeedClient({ initialItems = [] }: { initialItems: FeedIt
       (snapshot) => {
         const data = snapshot.val();
         if (data && typeof data === 'object') {
+          // When querying, Firebase returns an array-like object.
+          // Convert it to an array and reverse it to show newest items first.
           const newItems: FeedItem[] = Object.keys(data)
             .map((key) => ({ id: key, ...data[key] }))
-            .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)); // Sort newest first
+            .reverse(); // Reverse the array to get descending order
           setItems(newItems);
         } else {
           setItems([]);
