@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useDropzone } from 'react-dropzone';
 import { useUser, useDatabase } from '@/firebase';
-import { ref as dbRef, push, set, serverTimestamp } from 'firebase/database';
+import { ref as dbRef, push, set } from 'firebase/database';
 import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL, UploadTask } from 'firebase/storage';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -86,7 +86,7 @@ export default function UploadPage() {
       userId: user.uid,
       userName: user.displayName,
       userAvatar: user.photoURL,
-      createdAt: serverTimestamp(),
+      createdAt: { ".sv": "timestamp" }, // Correct timestamp for RTDB
     };
     
     await set(newPostRef, postData);

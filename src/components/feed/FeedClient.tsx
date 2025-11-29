@@ -41,6 +41,7 @@ export default function FeedClient({ initialItems = [] }: { initialItems: FeedIt
             .reverse(); // Reverse the array to get descending order
           setItems(newItems);
         } else {
+          // Handle the case where the database is empty or returns no data
           setItems([]);
         }
         setLoading(false);
@@ -84,3 +85,5 @@ export default function FeedClient({ initialItems = [] }: { initialItems: FeedIt
     </div>
   );
 }
+
+    
