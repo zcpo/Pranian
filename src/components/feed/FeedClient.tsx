@@ -27,28 +27,25 @@ export default function FeedClient({ initialItems = [] }: { initialItems: FeedIt
 
     setLoading(true);
     const feedRef = ref(database, 'feed_items');
-    // Order by createdAt and get the last 50 items (which will be the newest)
     const feedQuery = query(feedRef, orderByChild('createdAt'), limitToLast(PAGE_SIZE));
 
     const unsubscribe = onValue(
       feedQuery,
       (snapshot) => {
         const data = snapshot.val();
-        const newItems: FeedItem[] = [];
-        if (data) {
-          // The snapshot from RTDB is an object, convert it to an array
-          Object.keys(data).forEach((key) => {
-            newItems.push({ id: key, ...data[key] });
-          });
-          // Since we ordered by ascending time to get the latest, we now reverse the array
-          // on the client to show newest first.
-          newItems.reverse();
+        if (data && typeof data === 'object') {
+          const newItems: FeedItem[] = Object.keys(data)
+            .map((key) => ({ id: key, ...data[key] }))
+            .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)); // Sort newest first
+          setItems(newItems);
+        } else {
+          setItems([]);
         }
-        setItems(newItems);
         setLoading(false);
       },
       (error) => {
         console.error("Error fetching real-time feed:", error);
+        setItems([]);
         setLoading(false);
       }
     );
