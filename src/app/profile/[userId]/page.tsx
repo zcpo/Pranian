@@ -1,7 +1,8 @@
+
 'use client';
 
 import { useState, useCallback, useEffect } from 'react';
-import { useUser, useFirestore, useMemoFirebase } from '@/firebase';
+import { useUser, useFirestore, useMemoFirebase, useDoc, useCollection } from '@/firebase';
 import { doc, updateDoc, collection, query, orderBy, setDoc, deleteDoc, getDocs, getDoc, where } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { updateProfile } from 'firebase/auth';
@@ -16,7 +17,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, UserCircle, Edit, Heart, Bookmark, UserPlus } from 'lucide-react';
-import { useDoc, useCollection } from '@/firebase/firestore/use-collection';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { GenericCard } from '@/components/feed/generic-card';
@@ -283,5 +283,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-
-    
