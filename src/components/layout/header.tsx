@@ -60,7 +60,7 @@ export default function Header() {
           <Link href="/" className="mr-6 hidden items-center space-x-2 md:flex">
             <Logo />
           </Link>
-          <nav className="hidden md:flex items-center gap-1 lg:gap-2 p-1 rounded-md bg-muted/50 border">
+          <nav className="hidden md:flex items-center gap-1 lg:gap-2">
             {navLinks.map((link) => (
               <NavLink key={link.href} {...link} />
             ))}
