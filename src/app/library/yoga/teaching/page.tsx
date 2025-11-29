@@ -349,6 +349,7 @@ const QuizComponent = ({ quiz }: { quiz: QuizQuestion[] }) => {
               <RadioGroup
                 onValueChange={(value) => handleAnswerChange(index, value)}
                 disabled={submitted}
+                value={answers[index] || ''}
               >
                 {q.options.map(opt => {
                   const isSelected = answers[index] === opt.id;
