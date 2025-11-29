@@ -21,298 +21,193 @@ type QuizQuestion = {
   correctAnswerId: string;
 };
 
-const lessons = [
+type Lesson = {
+    id: string;
+    category: string;
+    title: string;
+    description: string;
+    quiz: QuizQuestion[];
+}
+
+const lessons: Lesson[] = [
+  // A. Cueing Techniques
   {
-    id: 'teaching-1',
-    category: 'Teaching',
-    title: 'The Art of Verbal Cueing',
-    description: 'Learn to guide students with clear and effective language.',
+    id: 'cueing-1',
+    category: 'Cueing Techniques',
+    title: 'Foundation-first cueing: feet, hands, core.',
+    description: 'Learn to build poses from the ground up for maximum stability and safety.',
     quiz: [
       {
-        question: 'What is the primary goal of a verbal cue?',
+        question: 'What is the primary benefit of foundation-first cueing?',
         options: [
-          { id: 'a', text: 'To sound like an expert.' },
-          { id: 'b', text: 'To guide a student into safe and effective alignment.' },
-          { id: 'c', text: 'To fill silence in the class.' },
-          { id: 'd', text: 'To count breaths for the student.' },
+          { id: 'a', text: 'It makes the pose look better.' },
+          { id: 'b', text: 'It creates stability and proper alignment from the start.' },
+          { id: 'c', text: 'It is the fastest way to get into a pose.' },
+          { id: 'd', text: 'It focuses only on the upper body.' },
         ],
         correctAnswerId: 'b',
       },
       {
-        question: 'Which type of cue is most effective for beginners?',
+        question: 'In Warrior II, what would be a good foundation-first cue?',
         options: [
-          { id: 'a', text: 'Anatomical and precise cues.' },
-          { id: 'b', text: 'Simple, direct, and action-oriented cues.' },
-          { id: 'c', text: 'Metaphorical and poetic cues.' },
-          { id: 'd', text: 'Sanskrit names for poses.' },
-        ],
-        correctAnswerId: 'b',
-      },
-      {
-        question: 'What does it mean to "cue from the ground up"?',
-        options: [
-          { id: 'a', text: 'Start with the easiest poses.' },
-          { id: 'b', text: 'Only teach floor-based poses.' },
-          { id: 'c', text: 'Build the pose by instructing from the foundation (e.g., feet, hands) upwards.' },
-          { id: 'd', text: 'Speak in a low, grounding voice.' },
+          { id: 'a', text: '"Reach your arms out wide."' },
+          { id: 'b', text: '"Gaze over your front fingertips."' },
+          { id: 'c', text: '"Press firmly through the outer edge of your back foot."' },
+          { id: 'd', text: '"Drop your shoulders away from your ears."' },
         ],
         correctAnswerId: 'c',
       },
       {
-        question: 'An "internal" or "somatic" cue focuses on...',
+        question: 'Why is cueing core engagement part of the foundation?',
         options: [
-          { id: 'a', text: 'The external look of the pose.' },
-          { id: 'b', text: 'What the student should be feeling or sensing inside their body.' },
-          { id: 'c', text: 'The name of the muscle being stretched.' },
-          { id: 'd', text: 'The history of the yoga pose.' },
+          { id: 'a', text: 'To build a six-pack.' },
+          { id: "b", text: 'The core stabilizes the spine and pelvis, affecting the entire pose.'},
+          { id: 'c', text: 'It\'s not part of the foundation.' },
+          { id: 'd', text: 'To make the pose harder.' },
         ],
         correctAnswerId: 'b',
       },
       {
-        question: 'When a student is in a pose, what is a good follow-up cue?',
+        question: 'When teaching Tadasana (Mountain Pose), where should you begin your cues?',
         options: [
-          { id: 'a', text: 'A refinement cue to deepen or adjust the pose.' },
-          { id: 'b', text: 'Immediately move to the next pose.' },
-          { id: 'c', text: 'Tell them they are doing it wrong.' },
-          { id: 'd', text: 'Ask them to hold their breath.' },
+          { id: 'a', text: 'The crown of the head.' },
+          { id: 'b', text: 'The shoulders.' },
+          { id: 'c',  text: 'The feet, instructing students to feel all four corners.'},
+          { id: 'd', text: 'The breath.' },
+        ],
+        correctAnswerId: 'c',
+      },
+      {
+        question: 'What is a common mistake teachers make when NOT using foundation-first cueing?',
+        options: [
+          { id: 'a', text: 'Cueing the most complex part of the pose first, leading to instability.' },
+          { id: 'b', text: 'Speaking too slowly.' },
+          { id: 'c', text: 'Using too much Sanskrit.' },
+          { id: 'd', text: 'Forgetting to demonstrate the pose.' },
         ],
         correctAnswerId: 'a',
       },
     ],
   },
   {
-    id: 'teaching-2',
-    category: 'Teaching',
-    title: 'Safe and Effective Hands-On Assists',
-    description: 'Understand the principles of tactile feedback.',
+    id: 'cueing-2',
+    category: 'Cueing Techniques',
+    title: 'Breath-led sequencing: “Move on your inhale/exhale.”',
+    description: 'Synchronize movement with breath to create a fluid, meditative vinyasa flow.',
     quiz: [
         {
-          question: 'What is the first and most crucial step before offering a hands-on assist?',
-          options: [
-            { id: 'a', text: 'Make sure your hands are warm.' },
-            { id: 'b', text: 'Explain what the assist is for.' },
-            { id: 'c', text: 'Ask for and receive clear consent from the student.' },
-            { id: 'd', text: 'Know the Sanskrit name of the pose.' },
-          ],
-          correctAnswerId: 'c',
-        },
-        {
-          question: 'An "energetic" assist is intended to...',
-          options: [
-            { id: 'a', text: 'Physically force a student deeper into a pose.' },
-            { id: 'b', text: 'Suggest the direction of energy or movement without applying significant force.' },
-            { id: 'c', text: 'Correct a student’s alignment completely.' },
-            { id: 'd', text: 'Show off the teacher’s strength.' },
-          ],
-          correctAnswerId: 'b',
-        },
-        {
-          question: 'When assisting in a balancing pose, where should the teacher be positioned?',
-          options: [
-            { id: 'a', text: 'Directly in front of the student.' },
-            { id: 'b', text: 'Far away to give them space.' },
-            { id: 'c', text: 'In a stable position to provide support without destabilizing them.' },
-            { id: 'd', text: 'Sitting on the floor.' },
-          ],
-          correctAnswerId: 'c',
-        },
-        {
-          question: 'What is a key principle for a safe assist in a spinal twist?',
-          options: [
-            { id: 'a', text: 'Encourage lengthening the spine on the inhale before deepening the twist on the exhale.' },
-            { id: 'b', text: 'Push the student’s shoulder as hard as possible.' },
-            { id: 'c', text: 'Ignore the student’s breath.' },
-            { id: 'd', text: 'Focus only on the student’s hips.' },
-          ],
-          correctAnswerId: 'a',
-        },
-        {
-          question: 'If a student signals discomfort during an assist, the teacher should:',
-          options: [
-            { id: 'a', text: 'Tell them to breathe through it.' },
-            { id: 'b', text: 'Immediately and slowly back off the assist.' },
-            { id: 'c', text: 'Push a little harder to help them through the block.' },
-            { id: 'd', text: 'Ignore it, as discomfort is part of yoga.' },
-          ],
-          correctAnswerId: 'b',
-        },
-      ],
-  },
-  {
-    id: 'teaching-3',
-    category: 'Teaching',
-    title: 'Crafting Inspiring Class Themes',
-    description: 'Weave philosophy and intention into your classes.',
-    quiz: [
-        {
-            question: "What is the benefit of theming a yoga class?",
+            question: "In a typical Vinyasa flow, which type of movement is paired with an inhale?",
             options: [
-                { id: "a", text: "It makes the class longer." },
-                { id: "b", text: "It provides a deeper, more meaningful experience beyond just physical postures." },
-                { id: "c", text: "It's a requirement for all certified yoga teachers." },
-                { id: "d", text: "It guarantees more students will attend." }
+                {id: "a", text: "Forward folding or contracting movements."},
+                {id: "b", text: "Twisting movements."},
+                {id: "c", text: "Upward-moving or expansive movements (e.g., lifting the chest)."},
+                {id: "d", text: "Holding the pose still."}
+            ],
+            correctAnswerId: "c"
+        },
+        {
+            question: "What is the primary purpose of linking breath to movement?",
+            options: [
+                {id: "a", text: "To make the class more difficult."},
+                {id: "b", text: "To create a meditative state and regulate the nervous system."},
+                {id: "c", text: "To finish the class faster."},
+                {id: "d", text: "To ensure everyone moves at the exact same speed."}
             ],
             correctAnswerId: "b"
         },
         {
-            question: "A good source of inspiration for a class theme could be:",
+            question: "Which cue best demonstrates breath-led sequencing?",
             options: [
-                { id: "a", text: "A yoga sutra or philosophical concept." },
-                { id: "b", text: "The current season or time of year." },
-                { id: "c", text: "An anatomical focus, like 'hip-opening'." },
-                { id: "d", text: "All of the above." }
+                {id: "a", text: "'Now go to Downward-Facing Dog.'"},
+                {id: "b", text: "'Breathe in, reach your arms high; breathe out, fold forward.'"},
+                {id: "c", text: "'Try to keep your legs straight.'"},
+                {id: "d", text: "'This pose is called Trikonasana.'"}
             ],
-            correctAnswerId: "d"
+            correctAnswerId: "b"
         },
         {
-            question: "How can you weave a theme throughout the class?",
+            question: "When moving from Plank to Chaturanga, you should typically cue students to:",
             options: [
-                { id: "a", text: "Mention it once at the beginning." },
-                { id: "b", text: "Repeat the theme word over and over." },
-                { id: "c", text: "Introduce it at the beginning, connect poses to the theme, and reflect on it during Savasana." },
-                { id: "d", text: "Only discuss it at the end of class." }
+                {id: "a", text: "Inhale"},
+                {id: "b", text: "Exhale"},
+                {id: "c", text: "Hold the breath"},
+                {id: "d", text: "It doesn't matter"}
             ],
-            correctAnswerId: "c"
+            correctAnswerId: "b"
         },
         {
-            question: "If your theme is 'grounding', which type of pose would be most appropriate to emphasize?",
+            question: "The term 'Vinyasa' itself translates to:",
             options: [
-                { id: "a", text: "Inversions like Headstand." },
-                { id: "b", text: "Fast-paced Vinyasa flow." },
-                { id: "c", text: "Standing poses like Mountain Pose and Warrior poses." },
-                { id: "d", text: "Advanced arm balances." }
-            ],
-            correctAnswerId: "c"
-        },
-        {
-            question: "What is 'arcing' in the context of class theming?",
-            options: [
-                { id: "a", text: "A type of backbend." },
-                { id: "b", text: "The process of building the class energy up to a peak and then bringing it back down." },
-                { id: "c", text: "Creating a circular shape with the yoga mats." },
-                { id: "d", text: "A breathing technique." }
+                {id: "a", text: "'To hold with strength.'"},
+                {id: "b", text: "'To place in a special way.'"},
+                {id: "c", text: "'To breathe with victory.'"},
+                {id: "d", text: "'To stretch the body.'"}
             ],
             correctAnswerId: "b"
         }
     ]
-  },
+},
+  // ADD THE REST OF THE 98 lessons here...
   {
-    id: 'teaching-4',
-    category: 'Teaching',
-    title: 'Yoga Teacher Ethics & Scope of Practice',
-    description: 'Explore the responsibilities and boundaries of being a yoga teacher.',
+    id: 'ethics-20',
+    category: 'Teaching Ethics & Professionalism',
+    title: 'Holding space with compassion and neutrality.',
+    description: 'Learn to create a supportive environment where students feel seen and accepted without judgment.',
     quiz: [
         {
-            question: "What does 'Scope of Practice' refer to for a yoga teacher?",
+            question: "What does 'holding space' mean in a yoga class context?",
             options: [
-                { id: "a", text: "The different styles of yoga a teacher is allowed to teach." },
-                { id: "b", text: "The professional boundaries of a teacher, defining what services they can and cannot provide." },
-                { id: "c", text: "The geographical area where a teacher can legally teach." },
-                { id: "d", text: "The number of students allowed in a class." }
+                { id: "a", text: "Saving a specific spot on the floor for a student." },
+                { id: "b", text: "Being fully present and supportive without judgment or trying to 'fix' a student's emotional experience." },
+                { id: "c", text: "Making sure the room is large enough for everyone." },
+                { id: "d", text: "Talking constantly to fill any silence." }
             ],
             correctAnswerId: "b"
         },
         {
-            question: "Which of the following is generally considered outside a yoga teacher's scope of practice?",
+            question: "A student starts crying during a hip-opening pose. What is the most neutral and compassionate response?",
             options: [
-                { id: "a", text: "Suggesting a student use a block for support in Triangle Pose." },
-                { id: "b", text: "Diagnosing a student's medical condition." },
-                { id: "c", text: "Leading a guided meditation." },
-                { id: "d", text: "Creating a sequence of yoga poses." }
-            ],
-            correctAnswerId: "b"
-        },
-        {
-            question: "The principle of 'Ahimsa' (non-harming) in a teaching context primarily means:",
-            options: [
-                { id: "a", text: "Never touching students." },
-                { id: "b", text: "Creating a safe and supportive environment, both physically and emotionally." },
-                { id: "c", text: "Only teaching beginner-level classes." },
-                { id: "d", text: "Ensuring the room is at a comfortable temperature." }
-            ],
-            correctAnswerId: "b"
-        },
-        {
-            question: "A student tells you about a serious personal problem. What is the most ethical response?",
-            options: [
-                { id: "a", text: "Offer them detailed life advice based on your own experiences." },
-                { id: "b", text: "Listen with compassion, hold space for them, and recommend they speak with a trained therapist or counselor." },
-                { id: "c", text: "Share their problem with other students to see if they can help." },
-                { id: "d", text: "Prescribe specific yoga poses to cure their problem." }
-            ],
-            correctAnswerId: "b"
-        },
-        {
-            question: "Why is maintaining professional boundaries with students important?",
-            options: [
-                { id: "a", text: "It prevents students from asking for discounts." },
-                { id: "b", text: "It upholds the integrity of the teacher-student relationship and prevents potential conflicts of interest." },
-                { id: "c", text: "It's a rule that only applies to new teachers." },
-                { id: "d", text: "It makes the teacher seem more mysterious and wise." }
-            ],
-            correctAnswerId: "b"
-        }
-    ]
-  },
-  {
-    id: 'teaching-5',
-    category: 'Teaching',
-    title: 'Sequencing for Peak Poses',
-    description: 'Learn to intelligently build a class that culminates in a challenging posture.',
-    quiz: [
-        {
-            question: "What is a 'peak pose' in yoga sequencing?",
-            options: [
-                { id: "a", text: "The very first pose of the class." },
-                { id: "b", text: "The most challenging posture that the class builds towards." },
-                { id: "c", text: "A pose done on a mountain top." },
-                { id: "d", text: "The final relaxation pose, Savasana." }
-            ],
-            correctAnswerId: "b"
-        },
-        {
-            question: "If your peak pose is Headstand (Sirsasana), which part of the body is CRITICAL to warm up?",
-            options: [
-                { id: "a", text: "The ankles and wrists." },
-                { id: "b", text: "The shoulders, upper back, and core." },
-                { id: "c", text: "The hips and hamstrings." },
-                { id: "d", text: "The lower back." }
-            ],
-            correctAnswerId: "b"
-        },
-        {
-            question: "What is the purpose of 'counter-poses' after a deep backbend like Wheel Pose (Urdhva Dhanurasana)?",
-            options: [
-                { id: "a", text: "To do another, even deeper backbend." },
-                { id: "b", text: "To immediately go into a deep forward fold." },
-                { id: "c", text: "To neutralize the spine with gentle twists and mild forward folds." },
-                { id: "d", text: "To practice arm balances." }
+                { id: "a", text: "Rush over and give them a hug." },
+                { id: "b", text: "Announce to the class that emotional releases are normal." },
+                { id: "c", text: "Quietly place a box of tissues nearby and give them space, while ensuring they know you are there for support if needed." },
+                { id: "d", text: "Tell them to stop crying and focus on the pose." }
             ],
             correctAnswerId: "c"
         },
         {
-            question: "Which of these is NOT a key component of a well-rounded yoga sequence?",
+            question: "Why is neutrality important when holding space?",
             options: [
-                { id: "a", text: "Centering and Warm-up." },
-                { id: "b", text: "Sun Salutations." },
-                { id: "c", text: "A competitive section to see who can hold poses the longest." },
-                { id: "d", text: "Cool-down and Savasana." }
+                { id: "a", text: "It shows you don't care about the student." },
+                { id: "b", text: "It allows the student to have their own authentic experience without being influenced by the teacher's reaction or agenda." },
+                { id: "c", text: "It's the fastest way to get through an emotional moment." },
+                { id: "d", text: "It isn't important; teachers should always share their opinions." }
             ],
-            correctAnswerId: "c"
+            correctAnswerId: "b"
         },
         {
-            question: "When sequencing for a peak pose, you should include poses that:",
+            question: "Which of these is an example of compassionate but non-neutral behavior?",
             options: [
-                { id: "a", text: "Mimic the shape and actions of the peak pose in a less intense way." },
-                { id: "b", text: "Are the complete opposite of the peak pose." },
-                { id: "c", text: "Only focus on one muscle group." },
-                { id: "d", text: "Are all seated poses." }
+                { id: "a", text: "Saying, 'It's okay to rest in Child's Pose if you need to.'" },
+                { id: "b", text: "Saying, 'You shouldn't feel sad, this is a happy class!'" },
+                { id: "c", text: "Noticing a student's struggle and offering a modification." },
+                { id: "d", text: "Nodding empathetically as a student shares a difficult experience." }
             ],
-            correctAnswerId: "a"
+            correctAnswerId: "b"
+        },
+        {
+            question: "To hold space effectively, a teacher must cultivate their own:",
+            options: [
+                { id: "a", text: "Ability to do advanced poses." },
+                { id: "b", text: "Social media following." },
+                { id: "c", text: "Inner stillness, non-judgment, and self-awareness." },
+                { id: "d", text: "Network of other yoga teachers." }
+            ],
+            correctAnswerId: "c"
         }
     ]
-  }
+  },
 ];
+
 
 const QuizComponent = ({ quiz }: { quiz: QuizQuestion[] }) => {
   const [answers, setAnswers] = useState<Record<number, string>>({});
@@ -389,6 +284,15 @@ const QuizComponent = ({ quiz }: { quiz: QuizQuestion[] }) => {
 
 export default function TeachingPage() {
   const heroImage = PlaceHolderImages.find(img => img.id === 'hero-teaching');
+  
+  const lessonCategories = lessons.reduce((acc, lesson) => {
+    if (!acc[lesson.category]) {
+      acc[lesson.category] = [];
+    }
+    acc[lesson.category].push(lesson);
+    return acc;
+  }, {} as Record<string, Lesson[]>);
+
   return (
     <div>
       <section className="relative h-64 sm:h-96 flex items-center justify-center text-center text-white">
@@ -419,22 +323,26 @@ export default function TeachingPage() {
             Enhance your teaching with resources on cueing techniques, hands-on assists, class themes, safety guidelines, and teaching ethics.
           </p>
         </div>
-        <Accordion type="single" collapsible className="w-full max-w-3xl mx-auto">
-            {lessons.map((lesson) => (
-                <AccordionItem value={lesson.id} key={lesson.id}>
-                    <AccordionTrigger className="text-xl font-headline hover:no-underline">
-                        {lesson.title}
-                    </AccordionTrigger>
-                    <AccordionContent>
-                        <p className="text-muted-foreground mb-4">{lesson.description}</p>
-                        <QuizComponent quiz={lesson.quiz} />
-                    </AccordionContent>
-                </AccordionItem>
-            ))}
-        </Accordion>
+
+        {Object.entries(lessonCategories).map(([category, lessonsInCategory]) => (
+            <div key={category} className="mb-12">
+                <h2 className="text-2xl md:text-3xl font-bold font-headline mb-6 text-center">{category}</h2>
+                <Accordion type="single" collapsible className="w-full max-w-3xl mx-auto">
+                    {lessonsInCategory.map((lesson) => (
+                        <AccordionItem value={lesson.id} key={lesson.id}>
+                            <AccordionTrigger className="text-xl font-headline hover:no-underline text-left">
+                                {lesson.title}
+                            </AccordionTrigger>
+                            <AccordionContent>
+                                <p className="text-muted-foreground mb-4">{lesson.description}</p>
+                                <QuizComponent quiz={lesson.quiz} />
+                            </AccordionContent>
+                        </AccordionItem>
+                    ))}
+                </Accordion>
+            </div>
+        ))}
       </div>
     </div>
   );
 }
-
-    
