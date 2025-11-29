@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState } from 'react';
@@ -25,31 +26,8 @@ export default function LibraryPage() {
     };
 
     return (
-        <div className="flex flex-col lg:flex-row min-h-screen">
-            <aside className="w-full lg:w-60 shrink-0 p-4 lg:p-6 border-b lg:border-b-0 lg:border-r">
-                <h2 className="text-sm font-semibold tracking-wider uppercase text-muted-foreground mb-3">Browse</h2>
-                <ul className="space-y-2 mb-6">
-                    <li><Link href="/library" className="font-semibold text-primary">Overview</Link></li>
-                    <li><Link href="/class-vibes" className="text-muted-foreground hover:text-primary transition-colors">Radio</Link></li>
-                </ul>
-                
-                <h2 className="text-sm font-semibold tracking-wider uppercase text-muted-foreground mb-3">Your Music</h2>
-                <ul className="space-y-2 mb-6">
-                    <li><Link href="/library/yoga" className="text-muted-foreground hover:text-primary transition-colors">Yoga</Link></li>
-                    <li><Link href="/library/meditation" className="text-muted-foreground hover:text-primary transition-colors">Audio Meditations</Link></li>
-                    <li><Link href="/library/video-meditation" className="text-muted-foreground hover:text-primary transition-colors">Video Meditations</Link></li>
-                    <li><Link href="/library/podcast" className="text-muted-foreground hover:text-primary transition-colors">Podcasts</Link></li>
-                    <li><Link href="/library/video" className="text-muted-foreground hover:text-primary transition-colors">Videos</Link></li>
-                </ul>
-                
-                <h2 className="text-sm font-semibold tracking-wider uppercase text-muted-foreground mb-3">Playlists</h2>
-                <ul className="space-y-2 text-muted-foreground">
-                    <li>Liked from Radio</li>
-                    <li>Indie Pop</li>
-                    <li>Roadtrip</li>
-                </ul>
-            </aside>
-            <main className="flex-1 p-4 md:p-8">
+        <div className="min-h-screen">
+            <main className="container mx-auto p-4 md:p-8">
                 <header className="mb-8">
                     <h1 className="text-4xl md:text-5xl font-extrabold font-headline tracking-tight">Browse</h1>
                 </header>
