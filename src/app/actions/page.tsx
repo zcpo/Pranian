@@ -1,11 +1,16 @@
 
+'use client';
+
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   Rss, BookOpen, Store, Calendar, DollarSign, BookText, Music4, User, Upload,
   Camera, Heart, Wind, Brain, Scroll, Bone, Shuffle, Sparkles, Gem, ToyBrick,
-  Leaf, Briefcase, FileText, Bot, Clapperboard, Mic
+  Leaf, Briefcase, FileText, Bot, Clapperboard, Mic, Loader2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useUser } from '@/firebase';
 
 const mainActions = [
   { href: '/feed', label: 'Feed', icon: Rss },
@@ -39,9 +44,26 @@ const mediaActions = [
     { href: '/library/meditation', label: 'Audio Meditations', icon: Mic },
     { href: '/library/video-meditation', label: 'Video Meditations', icon: Clapperboard },
     { href: '/library/podcast', label: 'Podcasts', icon: Bot },
-]
+];
 
 export default function ActionsPage() {
+  const { user, isUserLoading } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isUserLoading && !user) {
+      router.push('/login?redirect=/actions');
+    }
+  }, [user, isUserLoading, router]);
+
+  if (isUserLoading || !user) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+      </div>
+    );
+  }
+
   const ActionButton = ({ href, label, icon: Icon }: { href: string; label: string; icon: React.ElementType }) => (
     <Button
       asChild
@@ -49,7 +71,9 @@ export default function ActionsPage() {
       className="flex flex-col items-center justify-center h-24 w-24 p-2 rounded-lg text-center"
     >
       <Link href={href}>
-        <Icon className="h-8 w-8 mb-2 text-primary" />
+        <div className="flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 mb-2 transition-colors group-hover:bg-primary/20">
+          <Icon className="h-6 w-6 text-primary" />
+        </div>
         <span className="text-xs text-muted-foreground">{label}</span>
       </Link>
     </Button>
