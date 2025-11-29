@@ -195,7 +195,7 @@ export default function UploadPage() {
             <CardDescription>You need to be logged in to upload a post.</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button onClick={() => router.push('/login')}>Go to Login</Button>
+            <Button onClick={() => router.push('/login?redirect=/upload')}>Go to Login</Button>
           </CardContent>
         </Card>
       </div>
