@@ -68,8 +68,34 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur-sm">
       <div className="container flex h-14 max-w-screen-2xl items-center">
-        <div className="mr-4 flex">
-          <Link href="/" className="mr-6 flex items-center space-x-2">
+        <div className="mr-4 md:flex">
+           <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="md:hidden"
+                aria-label="Toggle Navigation"
+              >
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left">
+              <SheetHeader>
+                <SheetTitle>
+                   <Link href="/" className="flex items-center" onClick={() => setOpen(false)}>
+                    <Logo />
+                  </Link>
+                </SheetTitle>
+              </SheetHeader>
+              <div className="flex flex-col gap-4 py-4">
+                {navLinks.map((link) => (
+                  <NavLink key={link.href} {...link} className="text-base" />
+                ))}
+              </div>
+            </SheetContent>
+          </Sheet>
+          <Link href="/" className="mr-6 hidden items-center space-x-2 md:flex">
             <Logo />
           </Link>
           <nav className="hidden md:flex items-center gap-4 lg:gap-6">
