@@ -3,20 +3,13 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { UserCircle, Menu, BookOpen, Store, Calendar, DollarSign, BookText, Music4, Rss as FeedIcon } from 'lucide-react';
+import { UserCircle, BookOpen, Store, Calendar, DollarSign, BookText, Music4, Rss as FeedIcon } from 'lucide-react';
 import * as React from "react"
 import { signOut } from 'firebase/auth';
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import Logo from '@/components/logo';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,7 +34,6 @@ const navLinks = [
 
 export default function Header() {
   const pathname = usePathname();
-  const [open, setOpen] = React.useState(false);
   const { user } = useUser();
   const auth = useAuth();
 
@@ -55,7 +47,6 @@ export default function Header() {
     <Button asChild variant="ghost" className={cn("text-sm font-medium", pathname === href ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:text-foreground", className)}>
         <Link
         href={href}
-        onClick={() => setOpen(false)}
         >
         {label}
         </Link>
@@ -66,36 +57,6 @@ export default function Header() {
     <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur-sm">
       <div className="container flex h-14 max-w-screen-2xl items-center">
         <div className="mr-4 flex items-center">
-           <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="md:hidden mr-2"
-                aria-label="Toggle Navigation"
-              >
-                <Menu className="h-5 w-5" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left">
-              <SheetHeader>
-                <SheetTitle>
-                   <Link href="/" className="flex items-center" onClick={() => setOpen(false)}>
-                    <Logo />
-                  </Link>
-                </SheetTitle>
-              </SheetHeader>
-              <div className="flex flex-col gap-4 py-4">
-                {navLinks.map((link) => (
-                   <Button asChild variant="ghost" className="justify-start text-base" key={link.href}>
-                        <Link href={link.href} onClick={() => setOpen(false)}>
-                           {link.label}
-                        </Link>
-                   </Button>
-                ))}
-              </div>
-            </SheetContent>
-          </Sheet>
           <Link href="/" className="mr-6 hidden items-center space-x-2 md:flex">
             <Logo />
           </Link>
@@ -106,7 +67,12 @@ export default function Header() {
           </nav>
         </div>
         
-        <div className="flex flex-1 items-center justify-end">
+        <div className="flex flex-1 items-center justify-start md:justify-end">
+          <div className="md:hidden">
+            <Link href="/" className="flex items-center space-x-2">
+                <Logo />
+            </Link>
+          </div>
           <div className="flex items-center gap-2">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
