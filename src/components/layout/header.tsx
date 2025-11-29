@@ -125,34 +125,6 @@ export default function Header() {
                   )}
                 </DropdownMenuContent>
               </DropdownMenu>
-             
-            <Sheet open={open} onOpenChange={setOpen}>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="md:hidden">
-                  <Menu className="h-5 w-5" />
-                  <span className="sr-only">Open menu</span>
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right">
-                  <SheetHeader className="border-b pb-4 mb-4">
-                    <SheetTitle>
-                        <Link href="/" onClick={() => setOpen(false)}>
-                            <Logo />
-                        </Link>
-                    </SheetTitle>
-                  </SheetHeader>
-                  <div className="flex flex-col gap-4">
-                    {navLinks.map((link) => (
-                      <NavLink
-                        key={link.href}
-                        href={link.href}
-                        label={link.label}
-                        className="text-lg"
-                      />
-                    ))}
-                  </div>
-              </SheetContent>
-            </Sheet>
           </div>
         </div>
       </div>
