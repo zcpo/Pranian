@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState } from 'react';
@@ -28,18 +27,12 @@ export default function LibraryPage() {
     return (
         <div className="flex flex-col lg:flex-row min-h-screen">
             <aside className="w-full lg:w-60 shrink-0 p-4 lg:p-6 border-b lg:border-b-0 lg:border-r">
-                <nav className="mb-6">
-                    <h2 className="text-sm font-semibold tracking-wider uppercase text-muted-foreground mb-3">Browse</h2>
-                    <ul className="space-y-2">
-                        <li><Link href="/library" className="font-semibold text-primary">Overview</Link></li>
-                        <li><Link href="#" className="text-muted-foreground hover:text-primary transition-colors">Charts</Link></li>
-                        <li><Link href="/library/yoga/styles" className="text-muted-foreground hover:text-primary transition-colors">Genres & Moods</Link></li>
-                        <li><Link href="/feed" className="text-muted-foreground hover:text-primary transition-colors">New Releases</Link></li>
-                    </ul>
-                </nav>
+                <h2 className="text-sm font-semibold tracking-wider uppercase text-muted-foreground mb-3">Browse</h2>
                 <ul className="space-y-2 mb-6">
+                    <li><Link href="/library" className="font-semibold text-primary">Overview</Link></li>
                     <li><Link href="/class-vibes" className="text-muted-foreground hover:text-primary transition-colors">Radio</Link></li>
                 </ul>
+                
                 <h2 className="text-sm font-semibold tracking-wider uppercase text-muted-foreground mb-3">Your Music</h2>
                 <ul className="space-y-2 mb-6">
                     <li><Link href="/library/yoga" className="text-muted-foreground hover:text-primary transition-colors">Yoga</Link></li>
@@ -48,6 +41,7 @@ export default function LibraryPage() {
                     <li><Link href="/library/podcast" className="text-muted-foreground hover:text-primary transition-colors">Podcasts</Link></li>
                     <li><Link href="/library/video" className="text-muted-foreground hover:text-primary transition-colors">Videos</Link></li>
                 </ul>
+                
                 <h2 className="text-sm font-semibold tracking-wider uppercase text-muted-foreground mb-3">Playlists</h2>
                 <ul className="space-y-2 text-muted-foreground">
                     <li>Liked from Radio</li>
