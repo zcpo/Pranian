@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import {
   Rss, BookOpen, Store, Calendar, DollarSign, BookText, Music4, User, Upload,
-  Camera, Heart, Wind, Brain, Scroll, Bone, Shuffle, Sparkles, Gem, Brick,
+  Camera, Heart, Wind, Brain, Scroll, Bone, Shuffle, Sparkles, Gem, ToyBrick,
   Leaf, Briefcase, FileText, Bot, Clapperboard, Mic
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -29,7 +29,7 @@ const yogaActions = [
     { href: '/library/yoga/sequencing', label: 'Sequencing', icon: Shuffle },
     { href: '/library/yoga/styles', label: 'Yoga Styles', icon: Sparkles },
     { href: '/library/yoga/chakras', label: 'Chakras', icon: Gem },
-    { href: '/library/yoga/props', label: 'Props', icon: Brick },
+    { href: '/library/yoga/props', label: 'Props', icon: ToyBrick },
     { href: '/library/yoga/lifestyle', label: 'Lifestyle', icon: Leaf },
     { href: '/library/yoga/teaching', label: 'Teaching', icon: Briefcase },
     { href: '/library/yoga/glossary', label: 'Glossary', icon: FileText },
