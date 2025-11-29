@@ -66,15 +66,15 @@ export default function Header() {
   );
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur-sm">
+    <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur-sm">
       <div className="container flex h-14 max-w-screen-2xl items-center">
-        <div className="mr-4 md:flex">
+        <div className="mr-4 flex items-center">
            <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <Button
                 variant="ghost"
                 size="icon"
-                className="md:hidden"
+                className="md:hidden mr-2"
                 aria-label="Toggle Navigation"
               >
                 <Menu className="h-5 w-5" />
