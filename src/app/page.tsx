@@ -32,10 +32,10 @@ export default function Home() {
               Discover a sanctuary of calm with our guided meditations, yoga flows, and a community dedicated to mindful living.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
-              <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
+              <Button asChild size="lg" className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90">
                 <Link href="/pricing">Start Free Trial</Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-black">
+              <Button asChild size="lg" variant="outline" className="rounded-full bg-transparent border-white text-white hover:bg-white hover:text-black">
                 <Link href="/library">Explore Library</Link>
               </Button>
             </div>
