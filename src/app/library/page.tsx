@@ -27,9 +27,17 @@ export default function LibraryPage() {
 
     return (
         <div className="flex flex-col lg:flex-row min-h-screen">
-            <aside className="w-full lg:w-52 shrink-0 p-4 lg:p-6 border-b lg:border-b-0 lg:border-r">
+            <aside className="w-full lg:w-60 shrink-0 p-4 lg:p-6 border-b lg:border-b-0 lg:border-r">
+                <nav className="mb-6">
+                    <h2 className="text-sm font-semibold tracking-wider uppercase text-muted-foreground mb-3">Browse</h2>
+                    <ul className="space-y-2">
+                        <li><Link href="/library" className="font-semibold text-primary">Overview</Link></li>
+                        <li><Link href="#" className="text-muted-foreground hover:text-primary transition-colors">Charts</Link></li>
+                        <li><Link href="/library/yoga/styles" className="text-muted-foreground hover:text-primary transition-colors">Genres & Moods</Link></li>
+                        <li><Link href="/feed" className="text-muted-foreground hover:text-primary transition-colors">New Releases</Link></li>
+                    </ul>
+                </nav>
                 <ul className="space-y-2 mb-6">
-                    <li><Link href="/library" className="font-semibold text-foreground hover:text-primary transition-colors">Browse</Link></li>
                     <li><Link href="/class-vibes" className="text-muted-foreground hover:text-primary transition-colors">Radio</Link></li>
                 </ul>
                 <h2 className="text-sm font-semibold tracking-wider uppercase text-muted-foreground mb-3">Your Music</h2>
@@ -51,14 +59,6 @@ export default function LibraryPage() {
                 <header className="mb-8">
                     <h1 className="text-4xl md:text-5xl font-extrabold font-headline tracking-tight">Browse</h1>
                 </header>
-                <nav className="border-b mb-8">
-                    <div className="flex gap-4 sm:gap-6 -mb-px">
-                        <Link href="/library" className="pb-3 border-b-2 border-primary text-primary font-semibold text-sm">Overview</Link>
-                        <Link href="#" className="pb-3 border-b-2 border-transparent text-muted-foreground hover:text-primary hover:border-primary/50 transition-colors text-sm">Charts</Link>
-                        <Link href="/library/yoga/styles" className="pb-3 border-b-2 border-transparent text-muted-foreground hover:text-primary hover:border-primary/50 transition-colors text-sm">Genres & Moods</Link>
-                        <Link href="/feed" className="pb-3 border-b-2 border-transparent text-muted-foreground hover:text-primary hover:border-primary/50 transition-colors text-sm">New Releases</Link>
-                    </div>
-                </nav>
 
                 <div className="mb-8">
                     <form onSubmit={handleSearch} className="relative">
