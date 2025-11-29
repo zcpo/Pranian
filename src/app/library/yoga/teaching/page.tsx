@@ -102,7 +102,7 @@ const lessons = [
             { id: 'a', text: 'Physically force a student deeper into a pose.' },
             { id: 'b', text: 'Suggest the direction of energy or movement without applying significant force.' },
             { id: 'c', text: 'Correct a student’s alignment completely.' },
-            { id_key: 'd', text: 'Show off the teacher’s strength.' },
+            { id: 'd', text: 'Show off the teacher’s strength.' },
           ],
           correctAnswerId: 'b',
         },
@@ -130,7 +130,7 @@ const lessons = [
           question: 'If a student signals discomfort during an assist, the teacher should:',
           options: [
             { id: 'a', text: 'Tell them to breathe through it.' },
-            { id:a: 'b', text: 'Immediately and slowly back off the assist.' },
+            { id: 'b', text: 'Immediately and slowly back off the assist.' },
             { id: 'c', text: 'Push a little harder to help them through the block.' },
             { id: 'd', text: 'Ignore it, as discomfort is part of yoga.' },
           ],
