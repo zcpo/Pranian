@@ -1,9 +1,8 @@
+
 {
   "rules": {
-    ".read": false,
-    ".write": false,
     "feed_items": {
-      ".read": "auth != null",
+      ".read": true,
       ".write": "auth != null",
       ".indexOn": ["createdAt"],
       "$postId": {
