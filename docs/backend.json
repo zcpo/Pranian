@@ -162,34 +162,34 @@
         "createdAt"
       ]
     },
-    "Session": {
+    "JournalEntry": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Session",
+      "title": "JournalEntry",
       "type": "object",
-      "description": "Represents a user's yoga or meditation session.",
+      "description": "Represents a user's journal entry.",
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the session."
+          "description": "Unique identifier for the journal entry."
         },
         "date": {
           "type": "string",
-          "description": "The date and time the session occurred.",
+          "description": "The date and time the entry was created.",
           "format": "date-time"
         },
-        "duration": {
-          "type": "number",
-          "description": "The duration of the session in minutes."
+        "text": {
+          "type": "string",
+          "description": "The text content of the journal entry."
         },
-        "intensity": {
-          "type": "number",
-          "description": "The user-rated intensity of the session (1-5)."
+        "mood": {
+          "type": "string",
+          "description": "The user-reported mood for the entry."
         }
       },
       "required": [
         "id",
         "date",
-        "duration"
+        "text"
       ]
     },
     "HomePage": {
@@ -457,21 +457,21 @@
         }
       },
       {
-        "path": "/users/{userId}/sessions/{sessionId}",
+        "path": "/users/{userId}/journal_entries/{entryId}",
         "definition": {
-          "entityName": "Session",
+          "entityName": "JournalEntry",
           "schema": {
-            "$ref": "#/backend/entities/Session"
+            "$ref": "#/backend/entities/JournalEntry"
           },
-          "description": "Stores session analytics data for each user.",
+          "description": "Stores journal entries for each user.",
           "params": [
             {
               "name": "userId",
               "description": "The unique identifier for the user."
             },
             {
-              "name": "sessionId",
-              "description": "The unique identifier for the user's session."
+              "name": "entryId",
+              "description": "The unique identifier for the journal entry."
             }
           ]
         }
