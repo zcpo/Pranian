@@ -156,7 +156,7 @@ export const lessons: Lesson[] = [
         question: 'Which of these is a "refinement" cue for Warrior II?',
         options: [
           { id: 'a', text: '"Step your feet wide apart."' },
-          { id: 'b', text: '"Bend your front knee so it\\'s over your ankle."' },
+          { id: 'b', text: '"Bend your front knee so it is over your ankle."' },
           { id: 'c', text: '"Soften your shoulders away from your ears."' },
           { id: 'd', text: '"Turn your back foot parallel to the back of the mat."' },
         ],
@@ -3796,7 +3796,7 @@ export const lessons: Lesson[] = [
   {
     id: 'safety-6',
     category: 'Safety Guidelines',
-    title: 'Avoid forcing range of motion.',
+    title: 'Avoiding forcing range of motion.',
     description: 'Understand the difference between healthy stretching and dangerous forcing of joints.',
     quiz: [
         {
