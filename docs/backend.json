@@ -167,62 +167,6 @@
         "name"
       ]
     },
-    "Content": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Content",
-      "type": "object",
-      "description": "Represents a piece of yoga or meditation content in the library.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the content."
-        },
-        "title": {
-          "type": "string",
-          "description": "Title of the content."
-        },
-        "description": {
-          "type": "string",
-          "description": "Description of the content."
-        },
-        "contentTypeId": {
-          "type": "string",
-          "description": "Reference to ContentType. (Relationship: Content 1:1 ContentType)"
-        },
-        "url": {
-          "type": "string",
-          "description": "URL of the content.",
-          "format": "uri"
-        }
-      },
-      "required": [
-        "id",
-        "title",
-        "description",
-        "contentTypeId",
-        "url"
-      ]
-    },
-    "ContentType": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "ContentType",
-      "type": "object",
-      "description": "Represents the type of content (e.g., Article, Video, Audio).",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the content type."
-        },
-        "name": {
-          "type": "string",
-          "description": "Name of the content type."
-        }
-      },
-      "required": [
-        "id",
-        "name"
-      ]
-    },
     "Session": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Session",
@@ -283,6 +227,95 @@
         "title",
         "sections",
         "visible"
+      ]
+    },
+    "LibraryContent": {
+      "title": "Library Content",
+      "description": "Represents a piece of content in the media library.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "The type of content.",
+          "enum": [
+            "audio",
+            "video",
+            "podcast",
+            "yoga_video"
+          ]
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the content."
+        },
+        "description": {
+          "type": "string",
+          "description": "A short description of the content."
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "The URL to the media file."
+        },
+        "tags": {
+          "type": "array",
+          "description": "A list of tags for categorization.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "duration": {
+          "type": "number",
+          "description": "The duration of the content in seconds."
+        },
+        "level": {
+          "type": "string",
+          "description": "The difficulty level of the content.",
+          "enum": [
+            "beginner",
+            "intermediate",
+            "advanced",
+            "all_levels"
+          ]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of when the content was created."
+        },
+        "createdBy": {
+          "type": "string",
+          "description": "The ID of the user who created the content."
+        },
+        "section": {
+          "type": "string",
+          "description": "The library section this content belongs to.",
+          "enum": [
+            "Asana",
+            "Pranayama",
+            "Meditation",
+            "Philosophy",
+            "Anatomy",
+            "Sequencing",
+            "Styles",
+            "Chakras",
+            "Props",
+            "Lifestyle",
+            "Teaching",
+            "Glossary"
+          ]
+        }
+      },
+      "required": [
+        "type",
+        "title",
+        "description",
+        "url",
+        "duration",
+        "level",
+        "createdAt",
+        "createdBy",
+        "section"
       ]
     }
   },
@@ -400,38 +433,6 @@
         }
       },
       {
-        "path": "/content/{contentId}",
-        "definition": {
-          "entityName": "Content",
-          "schema": {
-            "$ref": "#/backend/entities/Content"
-          },
-          "description": "Stores yoga and meditation content. Includes denormalized 'subscriptionTierId' field for authorization independence.",
-          "params": [
-            {
-              "name": "contentId",
-              "description": "The unique identifier for the content."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/contentTypes/{contentTypeId}",
-        "definition": {
-          "entityName": "ContentType",
-          "schema": {
-            "$ref": "#/backend/entities/ContentType"
-          },
-          "description": "Stores content types (e.g., Article, Video, Audio).",
-          "params": [
-            {
-              "name": "contentTypeId",
-              "description": "The unique identifier for the content type."
-            }
-          ]
-        }
-      },
-      {
         "path": "/pages/home",
         "definition": {
           "entityName": "HomePage",
@@ -440,6 +441,22 @@
           },
           "description": "Stores the content and configuration for the home page.",
           "params": []
+        }
+      },
+      {
+        "path": "/library_content/{contentId}",
+        "definition": {
+          "entityName": "LibraryContent",
+          "schema": {
+            "$ref": "#/backend/entities/LibraryContent"
+          },
+          "description": "Stores all media content for the library.",
+          "params": [
+            {
+              "name": "contentId",
+              "description": "The unique identifier for the library content."
+            }
+          ]
         }
       }
     ]
