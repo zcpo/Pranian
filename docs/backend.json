@@ -381,6 +381,34 @@
         "price",
         "maxAttendees"
       ]
+    },
+    "Vibe": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Vibe",
+      "type": "object",
+      "description": "Represents a mood or vibe for a class, including associated color and description.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the vibe."
+        },
+        "description": {
+          "type": "string",
+          "description": "A short description of the vibe."
+        },
+        "mood": {
+          "type": "string",
+          "description": "The mood associated with the vibe (e.g., energetic, calm, focused)."
+        },
+        "color": {
+          "type": "string",
+          "description": "A hex color code associated with the vibe."
+        }
+      },
+      "required": [
+        "name",
+        "description"
+      ]
     }
   },
   "auth": {
@@ -535,6 +563,22 @@
             {
               "name": "eventId",
               "description": "The unique identifier for the event."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/vibes/{vibeId}",
+        "definition": {
+          "entityName": "Vibe",
+          "schema": {
+            "$ref": "#/backend/entities/Vibe"
+          },
+          "description": "Stores different vibes for class music.",
+          "params": [
+            {
+              "name": "vibeId",
+              "description": "The unique identifier for the vibe."
             }
           ]
         }
