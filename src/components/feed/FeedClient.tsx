@@ -34,14 +34,11 @@ export default function FeedClient({ initialItems = [] }: { initialItems: FeedIt
       (snapshot) => {
         const data = snapshot.val();
         if (data && typeof data === 'object') {
-          // When querying, Firebase returns an array-like object.
-          // Convert it to an array and reverse it to show newest items first.
           const newItems: FeedItem[] = Object.keys(data)
             .map((key) => ({ id: key, ...data[key] }))
             .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)); // Sort descending
           setItems(newItems);
         } else {
-          // Handle the case where the database is empty or returns no data
           setItems([]);
         }
         setLoading(false);
@@ -73,18 +70,13 @@ export default function FeedClient({ initialItems = [] }: { initialItems: FeedIt
               <FeedCardPlaceholder />
               <FeedCardPlaceholder />
             </>
-          ) : (
+          ) : items.length > 0 ? (
             items.map((item) => <FeedCard key={item.id} item={item} />)
+          ) : (
+             <p className="text-center text-muted-foreground py-8">The feed is empty. Create the first post!</p>
           )}
         </div>
       </div>
-
-      {!loading && items.length === 0 && (
-        <p className="text-center text-muted-foreground py-8">The feed is empty. Create the first post!</p>
-      )}
     </div>
   );
 }
-
-    
-    
