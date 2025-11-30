@@ -1,4 +1,4 @@
-import data from './placeholder-images.json';
+import { placeholderImages } from './placeholder-images-data';
 
 export type ImagePlaceholder = {
   id: string;
@@ -16,4 +16,4 @@ const mapData = (item: any) => ({
 });
 
 
-export const PlaceHolderImages = data.placeholderImages.map(mapData);
+export const PlaceHolderImages = placeholderImages.map(mapData);
