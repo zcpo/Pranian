@@ -6,7 +6,7 @@ import Link from 'next/link';
 import {
   Rss, BookOpen, Store, Calendar, DollarSign, BookText, Music4, User, Upload,
   Camera, Heart, Wind, Brain, Scroll, Bone, Shuffle, Sparkles, Gem, ToyBrick,
-  Leaf, Briefcase, FileText, Bot, Clapperboard, Mic, Loader2, Home, Search, Shield
+  Leaf, Briefcase, FileText, Bot, Clapperboard, Mic, Loader2, Home, Search, Shield, UserCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useUser } from '@/firebase';
