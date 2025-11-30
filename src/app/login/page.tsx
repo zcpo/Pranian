@@ -12,7 +12,6 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   User,
-  FirebaseError,
 } from 'firebase/auth';
 import {
   initiateEmailSignUp,
@@ -126,18 +125,8 @@ export default function LoginPage() {
       await initiateEmailSignUp(auth, data.email, data.password);
       toast({ title: 'Creating account...', description: 'Please wait a moment.' });
     } catch (err: any) {
-        if (err instanceof FirebaseError) {
-            setError(err.message);
-        } else {
-            setError('An unexpected error occurred during sign up.');
-        }
-    } finally {
-        // We don't set isSubmitting to false here because the onAuthStateChanged listener
-        // will trigger a redirect, and we want the UI to remain in a 'submitting' state.
-        // It will only be set to false if an error occurs.
-        if (error) {
-            setIsSubmitting(false);
-        }
+      setError(err.message || 'An unexpected error occurred during sign up.');
+      setIsSubmitting(false);
     }
   };
 
@@ -146,18 +135,14 @@ export default function LoginPage() {
     setError(null);
     setIsSubmitting(true);
     try {
-        await initiateEmailSignIn(auth, data.email, data.password);
-        toast({ title: 'Signing in...', description: 'Please wait a moment.' });
+      await initiateEmailSignIn(auth, data.email, data.password);
+      toast({ title: 'Signing in...', description: 'Please wait a moment.' });
     } catch (err: any) {
-        if (err instanceof FirebaseError) {
-            const friendlyMessage = err.code === 'auth/invalid-credential' 
-                ? 'Invalid email or password. Please try again.'
-                : err.message;
-            setError(friendlyMessage);
-        } else {
-            setError('An unexpected error occurred during sign in.');
-        }
-        setIsSubmitting(false); // Only set to false on error
+      const friendlyMessage = err.code === 'auth/invalid-credential' 
+          ? 'Invalid email or password. Please try again.'
+          : err.message;
+      setError(friendlyMessage || 'An unexpected error occurred during sign in.');
+      setIsSubmitting(false);
     }
   };
   
@@ -169,13 +154,14 @@ export default function LoginPage() {
       // signInWithPopup is an exception; it needs to be awaited to handle the popup flow.
       const result = await signInWithPopup(auth, provider);
       await handleUserCreation(result.user);
-      setIsSubmitting(false);
       // The redirect will be handled by the useEffect.
     } catch (err: any) {
       if (err.code !== 'auth/popup-closed-by-user') {
         setError(err.message);
       }
-      setIsSubmitting(false); // Only set submitting to false on error here
+      setIsSubmitting(false);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
