@@ -16,12 +16,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, UserCircle, Edit, Heart, Bookmark, UserPlus } from 'lucide-react';
+import { 
+  Loader2, UserCircle, Edit, Heart, Bookmark, UserPlus, Shield, Users, Star, Award,
+  Store, ShoppingBag, MessageSquare, BarChart, Bell, Settings
+} from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { GenericCard } from '@/components/feed/generic-card';
 import type { FeedItem } from '@/lib/feed-items';
 import { useRouter, useParams } from 'next/navigation';
+import { ADMIN_EMAILS } from '@/lib/admins';
 
 const profileSchema = z.object({
   displayName: z.string().min(1, 'Display name is required'),
@@ -53,7 +57,6 @@ function ProfileSocialStats({ userId }: { userId: string }) {
 }
 
 function ProfileContentTabs({ userId }: { userId: string }) {
-    // This is a placeholder for liked posts. A real implementation would be more complex.
     const [likedPosts, setLikedPosts] = useState<FeedItem[]>([]);
     const [savedPosts, setSavedPosts] = useState<FeedItem[]>([]);
 
@@ -77,6 +80,50 @@ function ProfileContentTabs({ userId }: { userId: string }) {
     );
 }
 
+const adminActions = [
+  { label: 'Admin', icon: Shield, href: '#' },
+  { label: 'Users', icon: Users, href: '#' },
+  { label: 'Points', icon: Star, href: '#' },
+  { label: 'Membership', icon: Award, href: '#' },
+  { label: 'Stores', icon: Store, href: '#' },
+  { label: 'In-App', icon: ShoppingBag, href: '#' },
+  { label: 'Messaging', icon: MessageSquare, href: '#' },
+  { label: 'Analytics', icon: BarChart, href: '#' },
+  { label: 'Notifications', icon: Bell, href: '#' },
+  { label: 'Settings', icon: Settings, href: '#' },
+];
+
+function AdminDashboard() {
+  const ActionButton = ({ label, icon: Icon, href }: { label: string; icon: React.ElementType; href: string }) => (
+    <Button
+      asChild
+      variant="ghost"
+      className="flex flex-col items-center justify-center h-24 w-24 p-2 rounded-lg text-center"
+    >
+      <a href={href}>
+        <div className="flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 mb-2 transition-colors">
+          <Icon className="h-6 w-6 text-primary" />
+        </div>
+        <span className="text-xs text-muted-foreground">{label}</span>
+      </a>
+    </Button>
+  );
+
+  return (
+    <Card className="mt-8">
+      <CardHeader>
+        <CardTitle>Admin Dashboard</CardTitle>
+        <CardDescription>Quick access to administrative functions.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-3 sm:grid-cols-5 gap-4">
+          {adminActions.map(action => <ActionButton key={action.label} {...action} />)}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 
 export default function ProfilePage() {
   const params = useParams();
@@ -89,6 +136,8 @@ export default function ProfilePage() {
   const [isSaving, setIsSaving] = useState(false);
   
   const isOwnProfile = currentUser?.uid === userId;
+  const isAdmin = currentUser && ADMIN_EMAILS.includes(currentUser.email || '');
+
 
   useEffect(() => {
     if (!isUserLoading && !currentUser) {
@@ -194,7 +243,6 @@ export default function ProfilePage() {
   };
 
   const handleFollow = async () => {
-      // This is a placeholder for following another user.
       if (!currentUser || isOwnProfile) return;
       toast({ title: "Follow clicked!", description: `You followed ${userProfile?.displayName}` });
   }
@@ -262,9 +310,13 @@ export default function ProfilePage() {
           </div>
         </CardContent>
       </Card>
+      
+      {isOwnProfile && isAdmin && <AdminDashboard />}
 
       <ProfileContentTabs userId={userId} />
 
     </div>
   );
 }
+
+    
