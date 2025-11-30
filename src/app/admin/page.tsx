@@ -9,8 +9,10 @@ import {
   Leaf, Briefcase, FileText, Bot, Clapperboard, Mic, Loader2, Home, Search, Shield, UserCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useUser } from '@/firebase';
+import { useUser, useFirebaseApp } from '@/firebase';
 import { ADMIN_EMAILS } from '@/lib/admins';
+import { getFunctions, httpsCallable } from 'firebase/functions';
+import { useToast } from '@/hooks/use-toast';
 
 const mainPages = [
   { href: '/', label: 'Home', icon: Home },
@@ -59,6 +61,8 @@ const userPages = [
 export default function AdminDashboardPage() {
   const { user, isUserLoading } = useUser();
   const router = useRouter();
+  const app = useFirebaseApp();
+  const { toast } = useToast();
 
   const isAdmin = user && ADMIN_EMAILS.includes(user.email || '');
 
@@ -67,6 +71,26 @@ export default function AdminDashboardPage() {
       router.push('/login?redirect=/admin');
     }
   }, [user, isUserLoading, isAdmin, router]);
+  
+  const handleMakeAdmin = async () => {
+    try {
+      const functions = getFunctions(app);
+      const makeSuperAdmin = httpsCallable(functions, 'makeSuperAdmin');
+      const result = await makeSuperAdmin();
+      toast({
+        title: 'Success!',
+        description: (result.data as any).message,
+      });
+    } catch (error: any) {
+      console.error('Error calling makeSuperAdmin function:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: error.message,
+      });
+    }
+  };
+
 
   if (isUserLoading || !isAdmin) {
     return (
@@ -99,6 +123,12 @@ export default function AdminDashboardPage() {
             <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
                 A complete overview of all pages and sections in the application. Links open in a new tab.
             </p>
+        </div>
+
+        <div className="mb-8 p-4 border rounded-lg bg-card">
+          <h3 className="text-lg font-semibold mb-2">Admin Actions</h3>
+          <p className="text-sm text-muted-foreground mb-4">Run administrative functions on your project.</p>
+          <Button onClick={handleMakeAdmin}>Make Super Admin</Button>
         </div>
 
         <section className="mb-12">
