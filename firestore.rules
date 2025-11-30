@@ -12,15 +12,11 @@ service cloud.firestore {
 
       match /followers/{followerId} {
         allow get: if request.auth != null;
-      }
-      match /followers {
         allow list: if request.auth != null;
       }
 
       match /following/{followingId} {
         allow get: if request.auth != null;
-      }
-      match /following {
         allow list: if request.auth != null;
       }
     }
