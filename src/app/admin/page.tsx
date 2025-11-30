@@ -57,6 +57,10 @@ const userPages = [
   { href: '/login', label: 'Login Page', icon: UserCircle },
 ];
 
+const adminDashboardFeatures = [
+    { href: '/admin/users', label: 'Users', icon: User },
+];
+
 
 export default function AdminDashboardPage() {
   const { user, isUserLoading } = useUser();
@@ -130,6 +134,13 @@ export default function AdminDashboardPage() {
           <p className="text-sm text-muted-foreground mb-4">Run administrative functions on your project.</p>
           <Button onClick={handleMakeAdmin}>Make Super Admin</Button>
         </div>
+        
+        <section className="mb-12">
+            <h2 className="text-xl font-bold font-headline mb-4 text-primary">Admin Features</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-4">
+                {adminDashboardFeatures.map(action => <ActionButton key={action.href} {...action} />)}
+            </div>
+        </section>
 
         <section className="mb-12">
             <h2 className="text-xl font-bold font-headline mb-4 text-primary">Main Pages</h2>
