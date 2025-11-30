@@ -12,6 +12,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   User,
+  FirebaseError,
 } from 'firebase/auth';
 import {
   initiateEmailSignUp,
@@ -121,20 +122,43 @@ export default function LoginPage() {
     if (!auth) return;
     setError(null);
     setIsSubmitting(true);
-    // Non-blocking call
-    initiateEmailSignUp(auth, data.email, data.password);
-    // The useEffect will handle the redirect on successful login.
-    // We can add a toast here for immediate feedback if desired.
-    toast({ title: 'Creating account...', description: 'Please wait a moment.' });
+    try {
+      await initiateEmailSignUp(auth, data.email, data.password);
+      toast({ title: 'Creating account...', description: 'Please wait a moment.' });
+    } catch (err: any) {
+        if (err instanceof FirebaseError) {
+            setError(err.message);
+        } else {
+            setError('An unexpected error occurred during sign up.');
+        }
+    } finally {
+        // We don't set isSubmitting to false here because the onAuthStateChanged listener
+        // will trigger a redirect, and we want the UI to remain in a 'submitting' state.
+        // It will only be set to false if an error occurs.
+        if (error) {
+            setIsSubmitting(false);
+        }
+    }
   };
 
   const onSignIn: SubmitHandler<SignInFormValues> = async (data) => {
     if (!auth) return;
     setError(null);
     setIsSubmitting(true);
-    // Non-blocking call
-    initiateEmailSignIn(auth, data.email, data.password);
-    toast({ title: 'Signing in...', description: 'Please wait a moment.' });
+    try {
+        await initiateEmailSignIn(auth, data.email, data.password);
+        toast({ title: 'Signing in...', description: 'Please wait a moment.' });
+    } catch (err: any) {
+        if (err instanceof FirebaseError) {
+            const friendlyMessage = err.code === 'auth/invalid-credential' 
+                ? 'Invalid email or password. Please try again.'
+                : err.message;
+            setError(friendlyMessage);
+        } else {
+            setError('An unexpected error occurred during sign in.');
+        }
+        setIsSubmitting(false); // Only set to false on error
+    }
   };
   
   const handleGoogleSignIn = async () => {
@@ -187,7 +211,7 @@ export default function LoginPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  {error && <p className="text-destructive text-sm my-2">{error}</p>}
+                  {error && <p className="text-destructive text-sm my-2 text-center bg-destructive/10 p-2 rounded-md">{error}</p>}
                   <form onSubmit={handleSignInSubmit(onSignIn)} noValidate className="space-y-4">
                      <div className="space-y-2">
                       <Label htmlFor="signin-email">Email</Label>
@@ -232,7 +256,7 @@ export default function LoginPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                   {error && <p className="text-destructive text-sm my-2">{error}</p>}
+                   {error && <p className="text-destructive text-sm my-2 text-center bg-destructive/10 p-2 rounded-md">{error}</p>}
                    <form onSubmit={handleSignUpSubmit(onSignUp)} noValidate className="space-y-4">
                      <div className="space-y-2">
                       <Label htmlFor="signup-email">Email</Label>
@@ -286,5 +310,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-    
