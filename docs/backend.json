@@ -317,6 +317,33 @@
         "createdBy",
         "section"
       ]
+    },
+    "YogaSection": {
+      "title": "Yoga Section",
+      "description": "Represents a section within the yoga library (e.g., Asana, Pranayama).",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the yoga section."
+        },
+        "description": {
+          "type": "string",
+          "description": "A short description of the section."
+        },
+        "contentCount": {
+          "type": "number",
+          "description": "The number of content items in this section."
+        },
+        "visible": {
+          "type": "boolean",
+          "description": "Whether this section is visible to users."
+        }
+      },
+      "required": [
+        "name",
+        "description"
+      ]
     }
   },
   "auth": {
@@ -455,6 +482,22 @@
             {
               "name": "contentId",
               "description": "The unique identifier for the library content."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/yoga_sections/{sectionId}",
+        "definition": {
+          "entityName": "YogaSection",
+          "schema": {
+            "$ref": "#/backend/entities/YogaSection"
+          },
+          "description": "Stores metadata for each section of the yoga library.",
+          "params": [
+            {
+              "name": "sectionId",
+              "description": "The unique identifier for the yoga section."
             }
           ]
         }
