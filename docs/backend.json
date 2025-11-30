@@ -252,6 +252,38 @@
         "date",
         "duration"
       ]
+    },
+    "HomePage": {
+      "title": "Home Page",
+      "description": "Represents the content and configuration for the home page.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "The main title of the home page."
+        },
+        "sections": {
+          "type": "array",
+          "description": "An array of sections to be displayed on the home page."
+        },
+        "theme": {
+          "type": "string",
+          "description": "The theme of the home page."
+        },
+        "visible": {
+          "type": "boolean",
+          "description": "Whether the home page is visible to users."
+        },
+        "lastUpdatedBy": {
+          "type": "string",
+          "description": "The ID of the user who last updated the page."
+        }
+      },
+      "required": [
+        "title",
+        "sections",
+        "visible"
+      ]
     }
   },
   "auth": {
@@ -397,6 +429,17 @@
               "description": "The unique identifier for the content type."
             }
           ]
+        }
+      },
+      {
+        "path": "/pages/home",
+        "definition": {
+          "entityName": "HomePage",
+          "schema": {
+            "$ref": "#/backend/entities/HomePage"
+          },
+          "description": "Stores the content and configuration for the home page.",
+          "params": []
         }
       }
     ]
