@@ -339,6 +339,48 @@
         "name",
         "description"
       ]
+    },
+    "Event": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Event",
+      "type": "object",
+      "description": "Represents a schedulable event like a workshop or retreat.",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "The title of the event."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of the event."
+        },
+        "startDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The start date and time of the event."
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The end date and time of the event."
+        },
+        "price": {
+          "type": "number",
+          "description": "The cost to attend the event."
+        },
+        "maxAttendees": {
+          "type": "number",
+          "description": "The maximum number of attendees for the event."
+        }
+      },
+      "required": [
+        "title",
+        "description",
+        "startDate",
+        "endDate",
+        "price",
+        "maxAttendees"
+      ]
     }
   },
   "auth": {
@@ -477,6 +519,22 @@
             {
               "name": "sectionId",
               "description": "The unique identifier for the yoga section."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/events/{eventId}",
+        "definition": {
+          "entityName": "Event",
+          "schema": {
+            "$ref": "#/backend/entities/Event"
+          },
+          "description": "Stores all schedulable events like workshops or retreats.",
+          "params": [
+            {
+              "name": "eventId",
+              "description": "The unique identifier for the event."
             }
           ]
         }
