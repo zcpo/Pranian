@@ -50,8 +50,8 @@ export const lessons: Lesson[] = [
         question: 'Why is cueing core engagement part of the foundation?',
         options: [
           { id: 'a', text: 'To build a six-pack.' },
-          { id: 'b', text: 'The core stabilizes the spine and pelvis, affecting the entire pose.'},
-          { id: 'c', text: 'It\'s not part of the foundation.' },
+          { id: 'b', text: "The core stabilizes the spine and pelvis, affecting the entire pose."},
+          { id: 'c', text: "It's not part of the foundation." },
           { id: 'd', text: 'To make the pose harder.' },
         ],
         correctAnswerId: 'b',
