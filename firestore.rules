@@ -9,6 +9,7 @@ service cloud.firestore {
       allow write: if request.auth != null && (request.resource.data.userId == request.auth.uid || get(/databases/$(database)/documents/admins/$(request.auth.token.email)) != null);
       allow delete: if get(/databases/$(database)/documents/admins/$(request.auth.token.email)) != null;
     }
+    // This rule allows anyone to query the feed_items collection.
     match /feed_items {
         allow list: if true;
     }

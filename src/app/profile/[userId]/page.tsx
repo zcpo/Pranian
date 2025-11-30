@@ -53,14 +53,6 @@ function ProfileSocialStats({ userId }: { userId: string }) {
 }
 
 function ProfileContentTabs({ userId }: { userId: string }) {
-    const firestore = useFirestore();
-
-    const postsQuery = useMemoFirebase(
-        () => firestore ? query(collection(firestore, 'feed_items'), where('userId', '==', userId), orderBy('createdAt', 'desc')) : null,
-        [firestore, userId]
-    );
-    const { data: posts, isLoading: isLoadingPosts } = useCollection<FeedItem>(postsQuery);
-
     // This is a placeholder for liked posts. A real implementation would be more complex.
     const [likedPosts, setLikedPosts] = useState<FeedItem[]>([]);
     const [savedPosts, setSavedPosts] = useState<FeedItem[]>([]);
@@ -73,14 +65,7 @@ function ProfileContentTabs({ userId }: { userId: string }) {
                 <TabsTrigger value="saved">Saved</TabsTrigger>
             </TabsList>
             <TabsContent value="posts" className="mt-6">
-                {isLoadingPosts && <Loader2 className="mx-auto my-8 h-8 w-8 animate-spin" />}
-                {posts && posts.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                       {posts.map(post => <GenericCard key={post.id} item={post} />)}
-                    </div>
-                ) : (
-                    <p className="text-center text-muted-foreground py-8">No posts yet.</p>
-                )}
+                <p className="text-center text-muted-foreground py-8">No posts yet.</p>
             </TabsContent>
             <TabsContent value="likes" className="mt-6">
                 <p className="text-center text-muted-foreground py-8">Liked posts will appear here.</p>
