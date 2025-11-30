@@ -3,7 +3,7 @@
   "rules": {
     ".read": false,
     ".write": false,
-    "feed_items": {
+    "posts": {
       ".read": true,
       ".indexOn": ["createdAt", "userId"],
       "$postId": {

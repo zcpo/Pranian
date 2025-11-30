@@ -86,7 +86,7 @@ export default function UploadPage() {
       createdAt: serverTimestamp(),
     };
     
-    await addDoc(collection(firestore, 'feed_items'), postData);
+    await addDoc(collection(firestore, 'posts'), postData);
     toast({ title: "Success!", description: "Your post has been created." });
     router.push('/feed');
   };

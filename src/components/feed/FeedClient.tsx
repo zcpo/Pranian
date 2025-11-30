@@ -16,7 +16,7 @@ export default function FeedClient() {
   const firestore = useFirestore();
 
   const feedQuery = useMemoFirebase(
-    () => (firestore ? query(collection(firestore, 'feed_items'), orderBy('createdAt', 'desc')) : null),
+    () => (firestore ? query(collection(firestore, 'posts'), orderBy('createdAt', 'desc')) : null),
     [firestore]
   );
   

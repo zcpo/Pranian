@@ -56,7 +56,7 @@ export function GenericCard({ item }: { item: FeedItem }) {
 
     if (confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
       try {
-        const postRef = doc(firestore, `feed_items/${item.id}`);
+        const postRef = doc(firestore, `posts/${item.id}`);
         await deleteDoc(postRef);
         toast({
           title: 'Post Deleted',
