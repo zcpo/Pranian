@@ -112,59 +112,54 @@
         "price"
       ]
     },
-    "Product": {
+    "StoreItem": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Product",
+      "title": "StoreItem",
       "type": "object",
-      "description": "Represents a product sold in the Pranian store.",
+      "description": "Represents an item available for sale in the store.",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the product."
-        },
         "name": {
           "type": "string",
-          "description": "Name of the product."
-        },
-        "description": {
-          "type": "string",
-          "description": "Description of the product."
+          "description": "The name of the item."
         },
         "price": {
           "type": "number",
-          "description": "Price of the product."
+          "description": "The price of the item."
         },
-        "productCategoryId": {
+        "images": {
+          "type": "array",
+          "description": "A list of image URLs for the item.",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "inventory": {
+          "type": "number",
+          "description": "The current stock level of the item."
+        },
+        "description": {
           "type": "string",
-          "description": "Reference to ProductCategory. (Relationship: Product 1:1 ProductCategory)"
+          "description": "A detailed description of the item."
+        },
+        "category": {
+          "type": "string",
+          "description": "The category the item belongs to."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp when the item was created."
         }
       },
       "required": [
-        "id",
         "name",
-        "description",
         "price",
-        "productCategoryId"
-      ]
-    },
-    "ProductCategory": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "ProductCategory",
-      "type": "object",
-      "description": "Represents a category of products (e.g., Podcasts, Merchandise, Events, Books, Videos, Online Learning).",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the product category."
-        },
-        "name": {
-          "type": "string",
-          "description": "Name of the product category."
-        }
-      },
-      "required": [
-        "id",
-        "name"
+        "images",
+        "inventory",
+        "description",
+        "category",
+        "createdAt"
       ]
     },
     "Session": {
@@ -428,33 +423,17 @@
         }
       },
       {
-        "path": "/products/{productId}",
+        "path": "/store_items/{itemId}",
         "definition": {
-          "entityName": "Product",
+          "entityName": "StoreItem",
           "schema": {
-            "$ref": "#/backend/entities/Product"
+            "$ref": "#/backend/entities/StoreItem"
           },
-          "description": "Stores product information for the e-commerce store.",
+          "description": "Stores all items available in the e-commerce store.",
           "params": [
             {
-              "name": "productId",
-              "description": "The unique identifier for the product."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/productCategories/{productCategoryId}",
-        "definition": {
-          "entityName": "ProductCategory",
-          "schema": {
-            "$ref": "#/backend/entities/ProductCategory"
-          },
-          "description": "Stores product categories (e.g., Podcasts, Merchandise, Events).",
-          "params": [
-            {
-              "name": "productCategoryId",
-              "description": "The unique identifier for the product category."
+              "name": "itemId",
+              "description": "The unique identifier for the store item."
             }
           ]
         }
