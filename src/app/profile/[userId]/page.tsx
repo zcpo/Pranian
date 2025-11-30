@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useCallback, useEffect } from 'react';
@@ -26,6 +25,7 @@ import { GenericCard } from '@/components/feed/generic-card';
 import type { FeedItem } from '@/lib/feed-items';
 import { useRouter, useParams } from 'next/navigation';
 import { ADMIN_EMAILS } from '@/lib/admins';
+import Link from 'next/link';
 
 const profileSchema = z.object({
   displayName: z.string().min(1, 'Display name is required'),
@@ -57,9 +57,6 @@ function ProfileSocialStats({ userId }: { userId: string }) {
 }
 
 function ProfileContentTabs({ userId }: { userId: string }) {
-    const [likedPosts, setLikedPosts] = useState<FeedItem[]>([]);
-    const [savedPosts, setSavedPosts] = useState<FeedItem[]>([]);
-
     return (
         <Tabs defaultValue="posts" className="w-full mt-8">
             <TabsList className="grid w-full grid-cols-3">
@@ -81,7 +78,7 @@ function ProfileContentTabs({ userId }: { userId: string }) {
 }
 
 const adminActions = [
-  { label: 'Admin', icon: Shield, href: '#' },
+  { label: 'Admin', icon: Shield, href: '/admin' },
   { label: 'Users', icon: Users, href: '#' },
   { label: 'Points', icon: Star, href: '#' },
   { label: 'Membership', icon: Award, href: '#' },
@@ -100,12 +97,12 @@ function AdminDashboard() {
       variant="ghost"
       className="flex flex-col items-center justify-center h-24 w-24 p-2 rounded-lg text-center"
     >
-      <a href={href}>
+      <Link href={href}>
         <div className="flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 mb-2 transition-colors">
           <Icon className="h-6 w-6 text-primary" />
         </div>
         <span className="text-xs text-muted-foreground">{label}</span>
-      </a>
+      </Link>
     </Button>
   );
 
@@ -318,5 +315,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-
-    
