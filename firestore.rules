@@ -11,13 +11,11 @@ service cloud.firestore {
                    || request.auth.token.role == "super_admin";
 
       match /followers/{followerId} {
-        allow get: if request.auth != null;
-        allow list: if request.auth != null;
+        allow read: if request.auth != null;
       }
 
       match /following/{followingId} {
-        allow get: if request.auth != null;
-        allow list: if request.auth != null;
+        allow read: if request.auth != null;
       }
     }
 
