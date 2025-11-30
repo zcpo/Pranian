@@ -4,17 +4,16 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    match /feed_items {
-      allow list: if true;
+    match /feed_items/{document=**} {
+      allow read: if true;
     }
 
     match /feed_items/{itemId} {
-      allow get: if true;
-      allow write: if request.auth != null;
+      allow write: if request.auth != null && (request.resource.data.userId == request.auth.uid || get(/databases/$(database)/documents/admins/$(request.auth.token.email)) != null);
+      allow delete: if get(/databases/$(database)/documents/admins/$(request.auth.token.email)) != null;
     }
 
     match /users/{userId} {
-      // A user can read their own profile, and can create and update it.
       allow read: if request.auth.uid == userId;
       allow write: if request.auth.uid == userId;
 
@@ -26,7 +25,6 @@ service cloud.firestore {
         allow read, write: if request.auth.uid == userId;
       }
       
-      // Rules for following/followers
       match /following/{followingId} {
         allow read: if true;
         allow write: if request.auth.uid == userId;
@@ -36,7 +34,6 @@ service cloud.firestore {
         allow write: if request.auth.uid == followerId;
       }
 
-      // Rule for posts a user has liked
       match /likes/{likeId} {
         allow read: if request.auth.uid == userId;
         allow write: if request.auth.uid == userId;
@@ -60,6 +57,10 @@ service cloud.firestore {
     }
 
     match /subscriptionTiers/{subscriptionTierId} {
+      allow read: if true;
+    }
+
+    match /admins/{email} {
       allow read: if true;
     }
   }

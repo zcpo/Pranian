@@ -10,8 +10,8 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Heart, MessageCircle, Repeat2, UserPlus, Bookmark, Trash2 } from 'lucide-react';
 import { Button } from '../ui/button';
-import { useUser, useDatabase } from '@/firebase';
-import { ref, remove } from "firebase/database";
+import { useUser, useFirestore } from '@/firebase';
+import { doc, deleteDoc } from "firebase/firestore";
 import { ADMIN_EMAILS } from '@/lib/admins';
 import { useToast } from '@/hooks/use-toast';
 
@@ -19,9 +19,20 @@ dayjs.extend(relativeTime);
 
 export function GenericCard({ item }: { item: FeedItem }) {
   const { user } = useUser();
-  const database = useDatabase();
+  const firestore = useFirestore();
   const { toast } = useToast();
-  const timeAgo = item.createdAt ? dayjs(item.createdAt).fromNow() : 'just now';
+
+  const getCreatedAt = () => {
+    if (item.createdAt && typeof item.createdAt === 'object' && 'seconds' in item.createdAt) {
+      return dayjs.unix((item.createdAt as any).seconds).fromNow();
+    }
+    if(typeof item.createdAt === 'string') {
+        return dayjs(item.createdAt).fromNow();
+    }
+    return 'just now';
+  }
+
+  const timeAgo = getCreatedAt();
   const isVideo = item.image && (item.image.includes('youtube.com') || item.image.includes('vimeo.com'));
   const isAdmin = user && ADMIN_EMAILS.includes(user.email || '');
 
@@ -31,7 +42,7 @@ export function GenericCard({ item }: { item: FeedItem }) {
 
   const handleLike = async () => {
     if (!user || !item.id) return;
-    console.log("Like functionality needs to be adapted for RTDB.");
+    console.log("Like functionality needs to be implemented for Firestore.");
     setIsLiked(!isLiked);
   };
   
@@ -41,12 +52,12 @@ export function GenericCard({ item }: { item: FeedItem }) {
   };
 
   const handleDelete = async () => {
-    if (!isAdmin || !database || !item.id) return;
+    if (!isAdmin || !firestore || !item.id) return;
 
     if (confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
       try {
-        const postRef = ref(database, `feed_items/${item.id}`);
-        await remove(postRef);
+        const postRef = doc(firestore, `feed_items/${item.id}`);
+        await deleteDoc(postRef);
         toast({
           title: 'Post Deleted',
           description: 'The post has been successfully removed from the feed.',
@@ -89,7 +100,7 @@ export function GenericCard({ item }: { item: FeedItem }) {
               <CardTitle className="text-base">{item.userName || 'User'}</CardTitle>
               <p className="text-xs text-muted-foreground">{timeAgo}</p>
             </div>
-            {user && item.userId && user.uid !== item.userId && !isAdmin && (
+            {user && item.userId && user.uid !== item.userId && (
                  <Button size="sm" variant="outline" onClick={handleFollow}>
                     <UserPlus className="h-4 w-4" />
                 </Button>

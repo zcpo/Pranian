@@ -1,9 +1,9 @@
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { useDatabase, useUser } from '@/firebase';
-import { ref, onValue, query, orderByChild, limitToLast } from 'firebase/database';
+import React, { useEffect } from 'react';
+import { useFirestore, useUser, useCollection, useMemoFirebase } from '@/firebase';
+import { collection, query, orderBy } from 'firebase/firestore';
 import type { FeedItem } from '@/lib/feed-items';
 import { FeedCard } from '@/components/feed/feed-card';
 import { Button } from '@/components/ui/button';
@@ -11,47 +11,16 @@ import { Loader2 } from 'lucide-react';
 import { FeedCardPlaceholder } from './feed-card-placeholder';
 import Link from 'next/link';
 
-const PAGE_SIZE = 50;
-
-export default function FeedClient({ initialItems = [] }: { initialItems: FeedItem[] }) {
+export default function FeedClient() {
   const { user } = useUser();
-  const database = useDatabase();
-  const [items, setItems] = useState<FeedItem[]>(initialItems);
-  const [loading, setLoading] = useState(true);
+  const firestore = useFirestore();
 
-  useEffect(() => {
-    if (!database) {
-      setLoading(false);
-      return;
-    }
-
-    setLoading(true);
-    const feedRef = ref(database, 'feed_items');
-    const feedQuery = query(feedRef, orderByChild('createdAt'), limitToLast(PAGE_SIZE));
-
-    const unsubscribe = onValue(
-      feedQuery,
-      (snapshot) => {
-        const data = snapshot.val();
-        if (data && typeof data === 'object') {
-          const newItems: FeedItem[] = Object.keys(data)
-            .map((key) => ({ id: key, ...data[key] }))
-            .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)); // Sort descending
-          setItems(newItems);
-        } else {
-          setItems([]);
-        }
-        setLoading(false);
-      },
-      (error) => {
-        console.error("Error fetching real-time feed:", error);
-        setItems([]);
-        setLoading(false);
-      }
-    );
-
-    return () => unsubscribe();
-  }, [database]);
+  const feedQuery = useMemoFirebase(
+    () => (firestore ? query(collection(firestore, 'feed_items'), orderBy('createdAt', 'desc')) : null),
+    [firestore]
+  );
+  
+  const { data: items, isLoading } = useCollection<FeedItem>(feedQuery);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -64,13 +33,13 @@ export default function FeedClient({ initialItems = [] }: { initialItems: FeedIt
       )}
       <div className="flex flex-col items-center w-full">
         <div className="w-full max-w-xl space-y-8">
-          {loading ? (
+          {isLoading ? (
             <>
               <FeedCardPlaceholder />
               <FeedCardPlaceholder />
               <FeedCardPlaceholder />
             </>
-          ) : items.length > 0 ? (
+          ) : items && items.length > 0 ? (
             items.map((item) => <FeedCard key={item.id} item={item} />)
           ) : (
              <p className="text-center text-muted-foreground py-8">The feed is empty. Create the first post!</p>

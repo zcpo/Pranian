@@ -6,9 +6,9 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useDropzone } from 'react-dropzone';
-import { useUser, useDatabase } from '@/firebase';
-import { ref as dbRef, push, set } from 'firebase/database';
-import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL, UploadTask } from 'firebase/storage';
+import { useUser, useFirestore } from '@/firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -23,7 +23,6 @@ import { FeedCard } from '@/components/feed/feed-card';
 import type { FeedItem } from '@/lib/feed-items';
 import { Progress } from '@/components/ui/progress';
 
-
 const feedSchema = z.object({
   title: z.string().min(1, 'Title is required').max(100, 'Title is too long'),
   subtitle: z.string().min(1, 'Content is required').max(500, 'Content is too long'),
@@ -34,7 +33,7 @@ type FeedFormValues = z.infer<typeof feedSchema>;
 
 export default function UploadPage() {
   const { user, isUserLoading } = useUser();
-  const database = useDatabase();
+  const firestore = useFirestore();
   const storage = getStorage();
   const router = useRouter();
   const { toast } = useToast();
@@ -74,9 +73,7 @@ export default function UploadPage() {
   });
 
   const createPostInDb = async (data: FeedFormValues, mediaUrl?: string) => {
-    if (!user || !database) return;
-    const feedRef = dbRef(database, 'feed_items');
-    const newPostRef = push(feedRef);
+    if (!user || !firestore) return;
     
     const postData = {
       title: data.title,
@@ -86,17 +83,16 @@ export default function UploadPage() {
       userId: user.uid,
       userName: user.displayName,
       userAvatar: user.photoURL,
-      createdAt: { ".sv": "timestamp" }, // Correct timestamp for RTDB
+      createdAt: serverTimestamp(),
     };
     
-    await set(newPostRef, postData);
+    await addDoc(collection(firestore, 'feed_items'), postData);
     toast({ title: "Success!", description: "Your post has been created." });
     router.push('/feed');
   };
 
-
   const onSubmit = async (data: FeedFormValues) => {
-    if (!user || !database) {
+    if (!user || !firestore) {
       toast({
         variant: 'destructive',
         title: 'Authentication Error',
@@ -330,5 +326,3 @@ export default function UploadPage() {
     </div>
   );
 }
-
-    
