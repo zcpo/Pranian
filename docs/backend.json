@@ -6,31 +6,43 @@
       "type": "object",
       "description": "Represents a user of the Pranian application.",
       "properties": {
-        "id": {
+        "name": {
           "type": "string",
-          "description": "Unique identifier for the user."
+          "description": "User's full name."
         },
         "email": {
           "type": "string",
           "description": "User's email address.",
           "format": "email"
         },
-        "firstName": {
+        "role": {
           "type": "string",
-          "description": "User's first name."
+          "description": "User's role.",
+          "enum": [
+            "user",
+            "admin",
+            "super_admin"
+          ]
         },
-        "lastName": {
+        "createdAt": {
           "type": "string",
-          "description": "User's last name."
+          "format": "date-time",
+          "description": "Timestamp of user creation."
         },
-        "subscriptionId": {
-          "type": "string",
-          "description": "Reference to Subscription. (Relationship: User 1:1 Subscription)"
+        "journalCount": {
+          "type": "number",
+          "description": "The number of journal entries a user has created."
+        },
+        "postsCount": {
+          "type": "number",
+          "description": "The number of posts a user has created."
         }
       },
       "required": [
-        "id",
-        "email"
+        "name",
+        "email",
+        "role",
+        "createdAt"
       ]
     },
     "Subscription": {
