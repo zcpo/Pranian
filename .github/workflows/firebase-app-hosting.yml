@@ -30,7 +30,6 @@ jobs:
       - name: 'Deploy to App Hosting'
         uses: 'firebase/actions/deploy@v0'
         with:
-          repoId: '${{ github.repository }}'
+          repoId: 'zcpo/Pranian'
           branchName: '${{ github.ref_name }}'
           projectId: '${{ secrets.PROJECT_ID }}'
-
