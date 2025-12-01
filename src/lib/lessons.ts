@@ -71,40 +71,6 @@ export const lessons: Lesson[] = [
       },
     ]
   },
-  {
-    id: 'cueing-4',
-    category: 'Cueing Techniques',
-    title: 'Action cues vs. shape cues (what to DO vs. what it LOOKS like).',
-    description: 'Focus on the internal actions that create the pose, rather than just the external form.',
-    quiz: [
-      {
-        question: 'Which of the following is an ACTION cue?',
-        options: [
-          { id: 'a', text: '"Make your body look like a triangle."' },
-          { id: 'b', text: '"Press down firmly through your big toe mound."' },
-          { id: 'c', text: '"Your arms should be straight."' },
-        ],
-        correctAnswerId: 'b',
-      },
-    ]
-  },
-  {
-    id: 'cueing-5',
-    category: 'Cueing Techniques',
-    title: 'Anatomical cueing using plain language.',
-    description: 'Use clear, simple terms for body parts and actions, avoiding overly technical jargon.',
-    quiz: [
-      {
-        question: 'Instead of "Externally rotate your femur," a better cue is:',
-        options: [
-          { id: 'a', text: '"Activate your gluteus medius."' },
-          { id: 'b', text: '"Wrap your outer hip down and forward."' },
-          { id: 'c', text: '"Abduct your femur in the acetabulum."' },
-        ],
-        correctAnswerId: 'b',
-      },
-    ]
-  },
   // 👐 B. Hands-On Assists
   {
     id: 'assists-1',
@@ -270,7 +236,7 @@ export const lessons: Lesson[] = [
       description: 'Learn the fundamental structure of a well-balanced yoga class.',
       quiz: [
           {
-              question: "The 'peak' of the class is:",
+              question: 'The "peak" of the class is:',
               options: [
                   {id: 'a', text: 'The very beginning of class.'},
                   {id: 'b', text: 'The most challenging pose or sequence that the class has been building towards.'},
