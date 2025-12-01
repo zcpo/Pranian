@@ -1,3 +1,4 @@
+
 {
   "entities": {
     "User": {
@@ -409,6 +410,54 @@
         "name",
         "description"
       ]
+    },
+    "Lesson": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Lesson",
+      "type": "object",
+      "description": "Represents a yoga teaching lesson with a quiz.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the lesson."
+        },
+        "category": {
+          "type": "string",
+          "description": "The category of the lesson (e.g., Cueing Techniques)."
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the lesson."
+        },
+        "description": {
+          "type": "string",
+          "description": "A short description of the lesson."
+        },
+        "quiz": {
+          "type": "array",
+          "description": "An array of quiz questions for the lesson.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "question": { "type": "string" },
+              "options": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "text": { "type": "string" }
+                  },
+                  "required": ["id", "text"]
+                }
+              },
+              "correctAnswerId": { "type": "string" }
+            },
+            "required": ["question", "options", "correctAnswerId"]
+          }
+        }
+      },
+      "required": ["id", "category", "title", "description", "quiz"]
     }
   },
   "auth": {
@@ -582,7 +631,25 @@
             }
           ]
         }
+      },
+      {
+        "path": "/lessons/{lessonId}",
+        "definition": {
+          "entityName": "Lesson",
+          "schema": {
+            "$ref": "#/backend/entities/Lesson"
+          },
+          "description": "Stores yoga teaching lessons and quizzes.",
+          "params": [
+            {
+              "name": "lessonId",
+              "description": "The unique identifier for the lesson."
+            }
+          ]
+        }
       }
     ]
   }
 }
+
+    
