@@ -256,7 +256,7 @@ export const lessons: Lesson[] = [
           {
               question: 'Why is finding a niche helpful for a new teacher?',
               options: [
-                  {id: 'a', text: 'It\'s not helpful; you should be everything to everyone.'},
+                  {id: 'a', text: 'It isn\'t helpful; you should be everything to everyone.'},
                   {id: 'b', text: 'It allows you to focus your marketing and become known as an expert in a specific area.'},
                   {id: 'c', text: 'It limits your career opportunities.'},
               ],
