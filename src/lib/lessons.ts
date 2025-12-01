@@ -150,9 +150,9 @@ export const lessons: Lesson[] = [
         {
             question: 'A good verbal cue for this theme could be:',
             options: [
-                {id: 'a', text: "'If you fall, you have bad balance.'"},
-                {id: 'b', text: "'Just as we find steadiness here by focusing our gaze, we can find stability in life by focusing our intention.'"},
-                {id: 'c', text: "'Hurry up and balance.'"},
+                {id: 'a', text: '\'If you fall, you have bad balance.\''},
+                {id: 'b', text: '\'Just as we find steadiness here by focusing our gaze, we can find stability in life by focusing our intention.\''},
+                {id: 'c', text: '\'Hurry up and balance.\''},
             ],
             correctAnswerId: 'b'
         },
@@ -283,3 +283,5 @@ export const lessons: Lesson[] = [
       ]
   }
 ];
+
+    
