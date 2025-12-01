@@ -156,7 +156,7 @@ export const lessons: Lesson[] = [
         question: 'Which of these is a "refinement" cue for Warrior II?',
         options: [
           { id: 'a', text: '"Step your feet wide apart."' },
-          { id: 'b', text: '"Bend your front knee so it is over your ankle."' },
+          { id: 'b', text: '"Bend your front knee so it\'s over your ankle."' },
           { id: 'c', text: '"Soften your shoulders away from your ears."' },
           { id: 'd', text: '"Turn your back foot parallel to the back of the mat."' },
         ],
@@ -675,12 +675,12 @@ export const lessons: Lesson[] = [
             correctAnswerId: "a"
         },
         {
-            question: "How can you rephrase 'Don\\'t let your knee collapse inward' positively?",
+            question: "How can you rephrase 'Don't let your knee collapse inward' positively?",
             options: [
                 {id: "a", text: "'Your knee is collapsing, fix it.'"},
                 {id: "b", text: "'Stop doing that with your knee.'"},
                 {id: "c", text: "'Guide your knee to track in the same direction as your middle toe.'"},
-                {id: "d", text: "'You\\'ll injure yourself if your knee collapses.'"}
+                {id: "d", text: "'You'll injure yourself if your knee collapses.'"}
             ],
             correctAnswerId: "c"
         },
@@ -695,7 +695,7 @@ export const lessons: Lesson[] = [
             correctAnswerId: "b"
         },
         {
-            question: "Instead of saying 'Don\\'t round your back,' a better cue is:",
+            question: "Instead of saying 'Don't round your back,' a better cue is:",
             options: [
                 {id: "a", text: "'Your back is too round.'"},
                 {id: "b", text: "'Lengthen through your spine, from your tailbone to the crown of your head.'"},
@@ -1200,7 +1200,7 @@ export const lessons: Lesson[] = [
       {
         question: 'Which of the following is an example of a clear, verbal consent protocol?',
         options: [
-          { id: 'a', text: "I\\'ll be assisting today, so let me know if you don\\'t want it." },
+          { id: 'a', text: "I'll be assisting today, so let me know if you don't want it." },
           { id: 'b', text: '"If you are open to receiving hands-on assists today, please give me a clear thumbs up."' },
           { id: 'c', text: 'Assuming students are okay with assists unless they say something.' },
           { id: 'd', text: '"Is everyone cool with assists?"' },
@@ -1417,7 +1417,7 @@ export const lessons: Lesson[] = [
     id: 'assists-5',
     category: 'Hands-On Assists',
     title: 'Breath-based assists synchronized with student inhalation/exhalation.',
-    description: 'Time your assists with the student\\'s breath to work with their body, not against it.',
+    description: 'Time your assists with the student\'s breath to work with their body, not against it.',
     quiz: [
         {
             question: "When should you typically apply an assist to help a student go deeper into a pose (like a forward fold or twist)?",
@@ -2171,7 +2171,7 @@ export const lessons: Lesson[] = [
     id: 'assists-18',
     category: 'Hands-On Assists',
     title: 'How to assist without shifting their balance.',
-    description: 'Learn to apply pressure and support in a way that doesn\\'t knock students off-center.',
+    description: "Learn to apply pressure and support in a way that doesn't knock students off-center.",
     quiz: [
         {
             question: "When assisting a balancing pose like Tree Pose, where should you apply touch?",
@@ -4493,7 +4493,7 @@ export const lessons: Lesson[] = [
     id: 'safety-18',
     category: 'Safety Guidelines',
     title: 'Monitoring student breath for safety.',
-    description: 'Learn how the sound and rhythm of students\\' breath can be a key indicator of their state.',
+    description: "Learn how the sound and rhythm of students' breath can be a key indicator of their state.",
     quiz: [
         {
             question: "If you hear a student holding their breath in a challenging pose, it is often a sign of:",
@@ -5246,7 +5246,7 @@ export const lessons: Lesson[] = [
     id: 'ethics-11',
     category: 'Teaching Ethics & Professionalism',
     title: 'Class start/end punctuality.',
-    description: 'Respecting students\\' time is a fundamental part of professionalism.',
+    description: 'Respecting students\' time is a fundamental part of professionalism.',
     quiz: [
         {
             question: "Why is it important to start and end class on time?",
@@ -5571,10 +5571,10 @@ export const lessons: Lesson[] = [
         {
             question: "The Sanskrit word 'guru' literally means:",
             options: [
-                {id: "a", text: 'Perfect one.'},
-                {id: "b", text: 'Dispeller of darkness.'},
-                {id: "c", text: 'Flexible person.'},
-                {id: "d", text: 'Rich person.'}
+                {id: "a", text: "'Perfect one.'"},
+                {id: "b", text: "'Dispeller of darkness.'"},
+                {id: "c", text: "'Flexible person.'"},
+                {id: "d", text: "'Rich person.'"}
             ],
             correctAnswerId: "b"
         },
