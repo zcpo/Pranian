@@ -64,7 +64,7 @@ export const lessons: Lesson[] = [
         question: 'Which of these is a "refinement" cue for Warrior II?',
         options: [
           { id: 'a', text: '"Step your feet wide apart."' },
-          { id: 'b', text: '"Bend your front knee so it is over your ankle."' },
+          { id: 'b', text: '"Bend your front knee so it\'s over your ankle."' },
           { id: 'c', text: '"Soften your shoulders away from your ears."' },
         ],
         correctAnswerId: 'c',
@@ -256,7 +256,7 @@ export const lessons: Lesson[] = [
           {
               question: 'Why is finding a niche helpful for a new teacher?',
               options: [
-                  {id: 'a', text: 'It is not helpful; you should be everything to everyone.'},
+                  {id: 'a', text: 'It\'s not helpful; you should be everything to everyone.'},
                   {id: 'b', text: 'It allows you to focus your marketing and become known as an expert in a specific area.'},
                   {id: 'c', text: 'It limits your career opportunities.'},
               ],
@@ -283,5 +283,3 @@ export const lessons: Lesson[] = [
       ]
   }
 ];
-
-    

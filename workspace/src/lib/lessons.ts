@@ -1339,13 +1339,13 @@ export const lessons: Lesson[] = [
     description: 'Learn how the sound and rhythm of students\' breath can be a key indicator of their state.',
     quiz: [
         {
-            question: "What is a good verbal cue if you notice a student holding their breath?",
+            question: "If you hear a student holding their breath in a challenging pose, it is often a sign of:",
             options: [
-                {id: "a", text: "'Stop holding your breath!'"},
-                {id: "b", text: "A general reminder to the whole class, like 'Check in with your breath. Is it still flowing smoothly?'"},
-                {id: "c", text: "Ignore it, they will figure it out."},
+                {id: "a", text: "Straining or struggling."},
+                {id: "b", text: "Deep relaxation."},
+                {id: "c", text: "Proper technique."}
             ],
-            correctAnswerId: "b"
+            correctAnswerId: "a"
         },
     ]
   },
@@ -1788,7 +1788,7 @@ export const lessons: Lesson[] = [
               question: "How can you introduce a philosophical theme without sounding preachy?",
               options: [
                   {id: "a", text: "By quoting long, complex texts that no one understands."},
-                  {id:ag", text: "By relating the concept to a simple, universal human experience."},
+                  {id: "ag", text: "By relating the concept to a simple, universal human experience."},
                   {id: "c", text: "By telling students they must believe what you believe."},
               ],
               correctAnswerId: "b"
