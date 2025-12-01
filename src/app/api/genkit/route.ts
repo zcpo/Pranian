@@ -4,7 +4,7 @@
 // When running in development, the Genkit API is exposed on a separate port
 // and the Next.js dev server is configured to proxy requests to it.
 
-import {nextHandler} from '@genkit-ai/next';
+import { createNextHandler } from '@genkit-ai/next';
 import '@/ai/dev';
 
-export const POST = nextHandler();
+export const POST = createNextHandler();
