@@ -1,4 +1,3 @@
-
 'use client';
 
 import Image from 'next/image';
@@ -105,7 +104,14 @@ export default function TeachingResourcesPage() {
 
   const categories = useMemo(() => {
     if (!lessons) return [];
-    return Array.from(new Set(lessons.map(l => l.category)));
+    const categoryMap: { [key: string]: Lesson[] } = {};
+    lessons.forEach(lesson => {
+      if (!categoryMap[lesson.category]) {
+        categoryMap[lesson.category] = [];
+      }
+      categoryMap[lesson.category].push(lesson);
+    });
+    return Object.entries(categoryMap).map(([name, lessons]) => ({ name, lessons }));
   }, [lessons]);
 
   return (
@@ -139,10 +145,10 @@ export default function TeachingResourcesPage() {
             </div>
         ) : (
             categories.map(category => (
-                <div key={category} className="mb-12">
-                    <h2 className="text-2xl md:text-3xl font-bold font-headline mb-6 text-primary">{category}</h2>
+                <div key={category.name} className="mb-12">
+                    <h2 className="text-2xl md:text-3xl font-bold font-headline mb-6 text-primary">{category.name}</h2>
                     <Accordion type="single" collapsible className="w-full space-y-4">
-                        {lessons?.filter(l => l.category === category).map((lesson) => (
+                        {category.lessons.map((lesson) => (
                             <AccordionItem value={lesson.id} key={lesson.id} className="border-b-0">
                                <AccordionTrigger className="bg-card p-6 rounded-lg text-lg font-semibold hover:no-underline hover:bg-muted/50 transition-colors text-left">
                                  {lesson.title}
@@ -161,5 +167,3 @@ export default function TeachingResourcesPage() {
     </div>
   );
 }
-
-    
