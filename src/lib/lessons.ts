@@ -35,15 +35,6 @@ export const lessons: Lesson[] = [
         ],
         correctAnswerId: 'b',
       },
-      {
-        question: 'In Warrior II, what would be a good foundation-first cue?',
-        options: [
-          { id: 'a', text: '"Reach your arms out wide."' },
-          { id: 'b', text: '"Gaze over your front fingertips."' },
-          { id: 'c', text: '"Press firmly through the outer edge of your back foot."' },
-        ],
-        correctAnswerId: 'c',
-      },
     ],
   },
   {
@@ -61,15 +52,6 @@ export const lessons: Lesson[] = [
             ],
             correctAnswerId: "c"
         },
-        {
-            question: "What is the primary purpose of linking breath to movement?",
-            options: [
-                {id: "a", text: "To make the class more difficult."},
-                {id: "b", text: "To create a meditative state and regulate the nervous system."},
-                {id: "c", text: "To finish the class faster."},
-            ],
-            correctAnswerId: "b"
-        },
     ]
   },
   {
@@ -78,15 +60,6 @@ export const lessons: Lesson[] = [
     title: 'Layered cueing: foundational → alignment → refinement.',
     description: 'Build a pose progressively, allowing students to integrate each instruction before adding the next.',
     quiz: [
-      {
-        question: "What is the goal of layered cueing?",
-        options: [
-          { id: 'a', text: 'To confuse the student with as many cues as possible.' },
-          { id: 'b', text: 'To provide instructions in a logical, digestible sequence.' },
-          { id: 'c', text: 'To focus only on advanced students.' },
-        ],
-        correctAnswerId: 'b',
-      },
       {
         question: 'Which of these is a "refinement" cue for Warrior II?',
         options: [
@@ -113,15 +86,6 @@ export const lessons: Lesson[] = [
         ],
         correctAnswerId: 'b',
       },
-      {
-        question: 'Why are action cues often more effective than shape cues?',
-        options: [
-          { id: 'a', text: 'They are shorter and easier to say.' },
-          { id: 'b', text: 'They are better for Instagram photos.' },
-          { id: 'c', text: 'They empower students to create the pose from within and are accessible to all body types.' },
-        ],
-        correctAnswerId: 'c',
-      },
     ]
   },
   {
@@ -139,15 +103,6 @@ export const lessons: Lesson[] = [
         ],
         correctAnswerId: 'b',
       },
-      {
-        question: 'Why should you generally avoid complex anatomical terms in a public class?',
-        options: [
-          { id: 'a', text: 'It can be exclusionary and confusing for students.' },
-          { id: 'b', text: 'Because you might pronounce them wrong.' },
-          { id: 'c', text: 'It makes the teacher sound less intelligent.' },
-        ],
-        correctAnswerId: 'a',
-      },
     ]
   },
   {
@@ -156,15 +111,6 @@ export const lessons: Lesson[] = [
     title: 'Using directional cues (toward/away/lengthen/activate).',
     description: 'Guide students effectively with clear, directional language that creates a sense of movement and energy.',
     quiz: [
-      {
-        question: 'Which of these is the most effective directional cue?',
-        options: [
-          { id: 'a', text: '"Your hand is on the floor."' },
-          { id: 'b', text: '"Move your hand."' },
-          { id: 'c', text: '"Press your hand down into the floor."' },
-        ],
-        correctAnswerId: 'c',
-      },
       {
         question: 'What is the purpose of using the cue "lengthen"?',
         options: [
@@ -183,15 +129,6 @@ export const lessons: Lesson[] = [
     description: 'Use cues that encourage students to decompress joints and lengthen the spine.',
     quiz: [
       {
-        question: 'Which cue helps create space in the spine?',
-        options: [
-          { id: 'a', text: '"Hunch your back."' },
-          { id: 'b', text: '"Imagine a string pulling the crown of your head toward the ceiling."' },
-          { id: 'c', text: '"Squeeze everything together."' },
-        ],
-        correctAnswerId: 'b',
-      },
-      {
         question: 'In a twist, a good decompression cue is:',
         options: [
           { id: 'a', text: '"Crank yourself around as far as possible."' },
@@ -209,15 +146,6 @@ export const lessons: Lesson[] = [
     description: 'Ensure students are stable and engaged before guiding them deeper into a stretch.',
     quiz: [
       {
-        question: 'Why should you cue stability before flexibility?',
-        options: [
-          { id: 'a', text: 'To protect joints from injury by ensuring supporting muscles are active.' },
-          { id: 'b', text: 'To make the class harder and more of a workout.' },
-          { id: 'c', text: 'Flexibility is not as important as strength.' },
-        ],
-        correctAnswerId: 'a',
-      },
-      {
         question: 'In Triangle Pose, which is a good stability cue before cueing the stretch?',
         options: [
           { id: 'a', text: '"Reach down and touch your toes."' },
@@ -234,15 +162,6 @@ export const lessons: Lesson[] = [
     title: 'Cueing for different learning styles (visual, auditory, kinesthetic).',
     description: 'Vary your cueing to include demonstrations, clear verbal instructions, and sensory-based cues.',
     quiz: [
-      {
-        question: 'Which teaching method appeals primarily to VISUAL learners?',
-        options: [
-          { id: 'a', text: 'Giving detailed verbal alignment cues.' },
-          { id: 'b', text: 'Demonstrating the pose clearly.' },
-          { id: 'c', text: 'Describing how the pose should feel.' },
-        ],
-        correctAnswerId: 'b',
-      },
       {
         question: 'A cue like "Feel the weight shifting into your front foot" is best for which type of learner?',
         options: [
@@ -269,15 +188,6 @@ export const lessons: Lesson[] = [
             ],
             correctAnswerId: "b"
         },
-        {
-            question: "When would a longer, more detailed cue be most useful?",
-            options: [
-                {id: "a", text: "During Savasana."},
-                {id: "b", text: "When holding a pose for several breaths to explore alignment."},
-                {id: "c", text: "While transitioning quickly between poses."},
-            ],
-            correctAnswerId: "b"
-        },
     ]
   },
   {
@@ -287,20 +197,11 @@ export const lessons: Lesson[] = [
     description: 'Guide students beyond mechanics by inviting them to notice internal sensations.',
     quiz: [
         {
-            question: "Which of the following is a sensory cue?",
-            options: [
-                {id: "a", text: "'Place your right foot forward.'"},
-                {id: "b", text: "'Notice the sensation of stretch along the back of your thigh.'"},
-                {id: "c", text: "'Your knee should be at a 90-degree angle.'"},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "What is the main goal of sensory cueing?",
             options: [
                 {id: "a", text: "To make sure the pose looks perfect from the outside."},
-                {id: "b", text: "To guide the student's attention inward, fostering mindfulness and interoception."},
-                {id: "c", text: "To test the student's knowledge of anatomy."},
+                {id: "b", text: "To guide the student\'s attention inward, fostering mindfulness and interoception."},
+                {id: "c", text: "To test the student\'s knowledge of anatomy."},
             ],
             correctAnswerId: "b"
         },
@@ -313,20 +214,11 @@ export const lessons: Lesson[] = [
     description: 'Use invitational and encouraging language instead of negative or restrictive commands.',
     quiz: [
         {
-            question: "Which cue is an example of FEAR-BASED language?",
-            options: [
-                {id: "a", text: "'Be careful not to hurt your back here.'"},
-                {id: "b", text: "'Engage your core to support your lower back.'"},
-                {id: "c", text: "'Listen to your body.'"},
-            ],
-            correctAnswerId: "a"
-        },
-        {
-            question: "How can you rephrase 'Don't let your knee collapse inward' positively?",
+            question: "How can you rephrase 'Don\'t let your knee collapse inward' positively?",
             options: [
                 {id: "a", text: "'Your knee is collapsing, fix it.'"},
                 {id: "b", text: "'Guide your knee to track in the same direction as your middle toe.'"},
-                {id: "c", text: "'You'll injure yourself if your knee collapses.'"}
+                {id: "c", text: "'You\'ll injure yourself if your knee collapses.'"}
             ],
             correctAnswerId: "b"
         },
@@ -338,15 +230,6 @@ export const lessons: Lesson[] = [
     title: 'Cueing transitions smoothly between poses.',
     description: 'Make the space between the poses as mindful as the poses themselves.',
     quiz: [
-        {
-            question: "Why is it important to cue transitions?",
-            options: [
-                {id: "a", text: "To give students a break."},
-                {id: "b", text: "To maintain the flow and meditative quality of the practice, and to ensure safety."},
-                {id: "c", text: "It's not important; just call out the next pose."}
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "Which cue helps a transition from Downward Dog to a lunge?",
             options: [
@@ -365,15 +248,6 @@ export const lessons: Lesson[] = [
     description: 'Weave your theme into your cues to create a cohesive and meaningful experience.',
     quiz: [
         {
-            question: "If your class theme is 'grounding,' which cue would be most appropriate?",
-            options: [
-                {id: "a", text: "'Feel light and airy.'"},
-                {id: "b", text: "'Notice the connection between your feet and the earth beneath you.'"},
-                {id: "c", text: "'Float to the top of your mat.'"},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "For a 'heart-opening' theme, a good cue in Cobra pose would be:",
             options: [
                 {id: "a", text: "'Lift your chest.'"},
@@ -390,15 +264,6 @@ export const lessons: Lesson[] = [
     title: 'Breath cueing to regulate intensity.',
     description: 'Use the breath as a tool to help students ramp up or calm down the energy of their practice.',
     quiz: [
-        {
-            question: "To increase energy and heat in a class, what kind of breath would you cue?",
-            options: [
-                {id: "a", text: "Slow, deep belly breaths."},
-                {id: "b", text: "A more vigorous Ujjayi breath or Kapalabhati."},
-                {id: "c", text: "Normal, shallow breathing."}
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "What cue would help a student calm their nervous system?",
             options: [
@@ -417,15 +282,6 @@ export const lessons: Lesson[] = [
     description: 'Offer layered cues and modifications so everyone feels challenged and supported.',
     quiz: [
         {
-            question: "What is the best way to offer a modification for beginners?",
-            options: [
-                {id: "a", text: "Point them out and correct them individually in front of everyone."},
-                {id: "b", text: "Offer the modification as a valid and intelligent option for everyone, not just for beginners."},
-                {id: "c", text: "Tell them to just watch."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "How can you challenge advanced students in a mixed-level class?",
             options: [
                 {id: "a", text: "Encourage them to do a completely different pose."},
@@ -442,15 +298,6 @@ export const lessons: Lesson[] = [
     title: 'Predictive cueing (“prepare for…”) for safe transitions.',
     description: 'Give students a heads-up about what is coming next so they can move with more awareness.',
     quiz: [
-        {
-            question: "What is predictive cueing?",
-            options: [
-                {id: "a", text: "Guessing what a student is thinking."},
-                {id: "b", text: "Telling students what the next pose or transition will be before they do it."},
-                {id: "c", text: "Only teaching poses students already know."},
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "Why is predictive cueing important for safety?",
             options: [
@@ -469,15 +316,6 @@ export const lessons: Lesson[] = [
     description: 'Learn that the space between cues is as important as the cues themselves.',
     quiz: [
         {
-            question: "What is the purpose of using silence in a yoga class?",
-            options: [
-                {id: "a", text: "The teacher forgot what to say next."},
-                {id: "b", text: "To give students space to have their own internal experience and feel the effects of the pose."},
-                {id: "c", text: "To make the class more awkward."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "When is a good time to be silent?",
             options: [
                 {id: "a", text: "During a fast-paced, complex Vinyasa sequence."},
@@ -495,15 +333,6 @@ export const lessons: Lesson[] = [
     description: 'Use invitational language and avoid commanding tones to create a safe environment.',
     quiz: [
         {
-            question: "What is a key principle of trauma-sensitive yoga cueing?",
-            options: [
-                {id: "a", text: "Using a loud, commanding voice to ensure compliance."},
-                {id: "b", text: "Using invitational language that offers choices and empowers the student."},
-                {id: "c", text: "Making sure everyone does the pose perfectly."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "Which cue is most trauma-informed?",
             options: [
                 {id: "a", text: "'You must close your eyes now.'"},
@@ -520,15 +349,6 @@ export const lessons: Lesson[] = [
     title: 'Avoiding over-cueing (letting students explore).',
     description: 'Strike a balance between providing guidance and allowing for personal discovery.',
     quiz: [
-        {
-            question: "What is 'over-cueing'?",
-            options: [
-                {id: "a", text: "Giving too few instructions."},
-                {id: "b", text: "Talking nonstop and filling every moment with instruction."},
-                {id: "c", text: "Using cues that are too loud."},
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "Why is it important to let students explore a pose?",
             options: [
@@ -548,15 +368,6 @@ export const lessons: Lesson[] = [
     description: 'Learn how to create a safe and respectful environment by establishing clear consent for hands-on assists.',
     quiz: [
       {
-        question: 'What is the most important reason for establishing consent before giving assists?',
-        options: [
-          { id: 'a', text: 'To avoid lawsuits.' },
-          { id: 'b', text: 'To respect student autonomy and create a safe, trauma-informed space.' },
-          { id: 'c', text: 'To show you are a professional teacher.' },
-        ],
-        correctAnswerId: 'b',
-      },
-      {
         question: 'Which of the following is an example of a clear, verbal consent protocol?',
         options: [
           { id: 'a', text: '"If you are open to receiving hands-on assists today, please give me a clear thumbs up."' },
@@ -573,15 +384,6 @@ export const lessons: Lesson[] = [
     title: 'Stabilizing assists (prevent collapse).',
     description: 'Learn how to provide supportive touch that helps students find stability and prevent joint collapse.',
     quiz: [
-        {
-            question: "What is the primary goal of a stabilizing assist?",
-            options: [
-                {id: "a", text: "To push a student deeper into a pose."},
-                {id: "b", text: "To help a student maintain balance and prevent them from collapsing in a direction of weakness."},
-                {id: "c", text: "To stretch the student's muscles for them."},
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "A stabilizing assist should feel like:",
             options: [
@@ -600,18 +402,9 @@ export const lessons: Lesson[] = [
     description: 'Understand how to use gentle traction to help students create space and decompress joints.',
     quiz: [
         {
-            question: "What is the primary goal of a lengthening assist?",
-            options: [
-                {id: "a", text: "To make the student's limbs longer permanently."},
-                {id: "b", text: "To help the student create a sense of space in their joints and along their spine."},
-                {id: "c", text: "To test the student's flexibility limit."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "In a seated forward fold (Paschimottanasana), a safe lengthening assist involves:",
             options: [
-                {id: "a", text: "Pushing down hard on the student's back."},
+                {id: "a", text: "Pushing down hard on the student\'s back."},
                 {id: "b", text: "Placing hands on their lower back and gently guiding the tissue away from the sacrum as they hinge forward."},
                 {id: "c", text: "Pulling their hands to touch their toes."},
             ],
@@ -626,18 +419,9 @@ export const lessons: Lesson[] = [
     description: 'Learn to use touch to help students feel and activate specific muscles.',
     quiz: [
         {
-            question: "What is the goal of a strength-activation assist?",
-            options: [
-                {id: "a", text: "To do the work for the student."},
-                {id: "b", text: "To provide tactile feedback that helps a student find and engage a specific muscle."},
-                {id: "c", text: "To deeply stretch the muscle."}
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "In plank pose, where could you provide a strength-activation assist for the core?",
             options: [
-                {id: "a", text: "By lifting the student's hips into the air."},
+                {id: "a", text: "By lifting the student\'s hips into the air."},
                 {id: "b", text: "By lightly tapping their abdomen and cueing them to draw their navel to their spine."},
                 {id: "c", text: "By pressing down on their back."},
             ],
@@ -660,15 +444,6 @@ export const lessons: Lesson[] = [
             ],
             correctAnswerId: "b"
         },
-        {
-            question: "Why is assisting on the exhale effective for deepening a stretch?",
-            options: [
-                {id: "a", text: "The body naturally tenses on the exhale."},
-                {id: "b", text: "The body and nervous system are naturally more relaxed and releasing on the exhale."},
-                {id: "c", text: "The student is distracted and won't notice the assist."},
-            ],
-            correctAnswerId: "b"
-        },
     ]
   },
   {
@@ -677,15 +452,6 @@ export const lessons: Lesson[] = [
     title: 'Common assists in downward dog.',
     description: 'Learn effective and safe ways to assist students in Adho Mukha Svanasana.',
     quiz: [
-        {
-            question: "A common assist in Downward Dog is to apply gentle pressure to the student's sacrum to:",
-            options: [
-                {id: "a", text: "Push their heels to the floor."},
-                {id: "b", text: "Encourage them to lengthen their spine and send their hips up and back."},
-                {id: "c", text: "Round their upper back."}
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "If a student has tight shoulders in Downward Dog, a helpful assist is to:",
             options: [
@@ -704,18 +470,9 @@ export const lessons: Lesson[] = [
     description: 'Learn to assist Warrior I, II, and III with stability and alignment in mind.',
     quiz: [
         {
-            question: "In Warrior II, what is a common misalignment that can be assisted?",
-            options: [
-                {id: "a", text: "The front knee collapsing inward."},
-                {id: "b", text: "The back arm being too low."},
-                {id: "c", text: "The gaze being in the wrong direction."},
-            ],
-            correctAnswerId: "a"
-        },
-        {
             question: "A safe assist for deepening the lunge in Warrior I is:",
             options: [
-                {id: "a", text: "Pushing on the student's front knee."},
+                {id: "a", text: "Pushing on the student\'s front knee."},
                 {id: "b", text: "Applying gentle, downward pressure on the front of the back hip/thigh."},
                 {id: "c", text: "Stepping on their back foot."}
             ],
@@ -729,15 +486,6 @@ export const lessons: Lesson[] = [
     title: 'Assisting forward folds without pushing.',
     description: 'Learn safe, effective assists for forward folds that prioritize spinal length.',
     quiz: [
-        {
-            question: "Why is it generally unsafe to push down on a student's back in a forward fold?",
-            options: [
-                {id: "a", text: "It can compress the lumbar spine and lead to injury."},
-                {id: "b", text: "It doesn't feel good."},
-                {id: "c", text: "It makes the student too flexible."}
-            ],
-            correctAnswerId: "a"
-        },
         {
             question: "A safer alternative to pushing on the back in Paschimottanasana is:",
             options: [
@@ -756,15 +504,6 @@ export const lessons: Lesson[] = [
     description: 'Learn techniques to support, not force, students in poses like Camel and Wheel.',
     quiz: [
         {
-            question: "What is the most important safety consideration when assisting a backbend?",
-            options: [
-                {id: "a", text: "Getting the student into the deepest version of the pose."},
-                {id: "b", text: "Ensuring the student does not compress their lumbar (lower) spine."},
-                {id: "c", text: "Making sure their arms and legs are perfectly straight."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "In Camel Pose (Ustrasana), a good assist is to:",
             options: [
                 {id: "a", text: "Push their hips forward aggressively."},
@@ -782,18 +521,9 @@ export const lessons: Lesson[] = [
     description: 'Learn to assist twists by encouraging length and rotation, not force.',
     quiz: [
         {
-            question: "What is the primary danger of an improper twist assist?",
-            options: [
-                {id: "a", text: "The student won't get a good stretch."},
-                {id: "b", text: "Applying excessive torque or pressure on the spine, especially the sacrum and lumbar region."},
-                {id: "c", text: "The student will fall over."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "A safe and effective assist for a seated twist (e.g., Ardha Matsyendrasana) involves:",
             options: [
-                {id: "a", text: "Using your body weight to crank the student's shoulder around."},
+                {id: "a", text: "Using your body weight to crank the student\'s shoulder around."},
                 {id: "b", text: "Gently grounding their opposite sitting bone and guiding their rib cage to rotate on an exhale."},
                 {id: "c", text: "Pulling their head to look further behind them."},
             ],
@@ -807,15 +537,6 @@ export const lessons: Lesson[] = [
     title: 'Hip-opening assists with joint protection.',
     description: 'Learn to assist Pigeon, Lizard, and Baddha Konasana while keeping the knees and hips safe.',
     quiz: [
-        {
-            question: "In Pigeon Pose, what is a key safety concern to watch for?",
-            options: [
-                {id: "a", text: "The back leg not being straight enough."},
-                {id: "b", text: "The front shin not being parallel to the mat."},
-                {id: "c", text: "Torque or sickling of the front knee."},
-            ],
-            correctAnswerId: "c"
-        },
         {
             question: "A safe assist in Pigeon Pose is to:",
             options: [
@@ -834,18 +555,9 @@ export const lessons: Lesson[] = [
     description: 'Learn the art of gentle, supportive touch and prop arrangement in restorative yoga.',
     quiz: [
         {
-            question: "What is the primary goal of an assist in restorative yoga?",
-            options: [
-                {id: "a", text: "To create a deeper stretch."},
-                {id: "b", text: "To help the student feel more supported, secure, and relaxed."},
-                {id: "c", text: "To correct their alignment."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "An effective restorative assist in Savasana is:",
             options: [
-                {id: "a", text: "Shaking the student's legs."},
+                {id: "a", text: "Shaking the student\'s legs."},
                 {id: "b", text: "Gently pressing down on their shoulders or placing a weighted blanket on their hips."},
                 {id: "c", text: "Lifting their head to tuck their chin."},
             ],
@@ -859,15 +571,6 @@ export const lessons: Lesson[] = [
     title: 'Assists using only props—hands-free assisting.',
     description: 'Learn how to use blocks, straps, and blankets to assist students without direct physical contact.',
     quiz: [
-        {
-            question: "What is a primary benefit of a hands-free, prop-based assist?",
-            options: [
-                {id: "a", text: "It is always better than a hands-on assist."},
-                {id: "b", text: "It respects students who do not want physical touch while still providing support."},
-                {id: "c", text: "It requires more props."}
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "How can you use a block to assist a student in Triangle Pose?",
             options: [
@@ -886,20 +589,11 @@ export const lessons: Lesson[] = [
     description: 'Explore how to safely and effectively teach partner-based assists.',
     quiz: [
         {
-            question: "What is the most important instruction to give before starting partner work?",
-            options: [
-                {id: "a", text: "'Find the person closest to you.'"},
-                {id: "b", text: "'Decide who will go first.'"},
-                {id: "c", text: "'Communicate clearly and respectfully with your partner at all times.'"},
-            ],
-            correctAnswerId: "c"
-        },
-        {
             question: "In a partner forward fold assist, the assisting partner should:",
             options: [
-                {id: "a", text: "Sit on their partner's back."},
-                {id: "b", text: "Use their body weight to gently press on their partner's sacrum."},
-                {id: "c", text: "Pull their partner's arms as hard as they can."},
+                {id: "a", text: "Sit on their partner\'s back."},
+                {id: "b", text: "Use their body weight to gently press on their partner\'s sacrum."},
+                {id: "c", text: "Pull their partner\'s arms as hard as they can."},
             ],
             correctAnswerId: "b"
         },
@@ -911,15 +605,6 @@ export const lessons: Lesson[] = [
     title: 'When not to assist (injury, uncertainty, discomfort).',
     description: 'The most important assist is knowing when to hold back.',
     quiz: [
-        {
-            question: "If a student has informed you of a specific injury (e.g., a herniated disc), you should:",
-            options: [
-                {id: "a", text: "Give them extra deep assists to help heal the injury."},
-                {id: "b", text: "Generally avoid assisting them in that area unless they explicitly ask for a specific, supportive touch."},
-                {id: "c", text: "Assist them just like everyone else."},
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "If you are uncertain about how to safely assist a particular pose or body type, what is the best course of action?",
             options: [
@@ -938,15 +623,6 @@ export const lessons: Lesson[] = [
     description: 'Understand the principles of giving assists in a way that promotes safety and avoids triggering trauma responses.',
     quiz: [
         {
-            question: "What is a key principle of trauma-informed touch?",
-            options: [
-                {id: "a", text: "Surprising the student with an assist."},
-                {id: "b", text: "Approaching the student from within their field of vision so they are aware of your presence."},
-                {id: "c", text: "Using light, ticklish touch."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "Which quality of touch is generally considered more grounding and less activating?",
             options: [
                 {id: "a", text: "A quick, light tap."},
@@ -964,20 +640,11 @@ export const lessons: Lesson[] = [
     description: 'Learn how to spot and support students in headstand, handstand, and forearm stand.',
     quiz: [
         {
-            question: "What is the primary role of a teacher when 'assisting' an inversion like handstand?",
-            options: [
-                {id: "a", text: "To hold the student's full body weight."},
-                {id: "b", text: "To act as a 'spotter,' providing stability and preventing a fall, not lifting the student."},
-                {id: "c", text: "To push the student's legs into a straight line."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "When assisting a headstand, where should a teacher NEVER place their hands?",
             options: [
-                {id: "a", text: "On the student's hips."},
-                {id: "b", text: "On the student's legs."},
-                {id: "c", text: "On the student's head or neck."},
+                {id: "a", text: "On the student\'s hips."},
+                {id: "b", text: "On the student\'s legs."},
+                {id: "c", text: "On the student\'s head or neck."},
             ],
             correctAnswerId: "c"
         },
@@ -990,18 +657,9 @@ export const lessons: Lesson[] = [
     description: 'Learn to apply pressure and support in a way that doesn\'t knock students off-center.',
     quiz: [
         {
-            question: "When assisting a balancing pose like Tree Pose, where should you apply touch?",
-            options: [
-                {id: "a", text: "On the student's arms."},
-                {id: "b", text: "On the student's standing leg or hips, which are closer to their center of gravity."},
-                {id: "c", text: "On their head."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "What is the concept of 'meeting their energy'?",
             options: [
-                {id: "a", text: "Matching the student's personality."},
+                {id: "a", text: "Matching the student\'s personality."},
                 {id: "b", text: "Applying an equal and opposite pressure to what the student is exerting, creating stability."},
                 {id: "c", text: "Pushing the student in the direction they are already going."},
             ],
@@ -1015,15 +673,6 @@ export const lessons: Lesson[] = [
     title: 'Grounding assists during savasana.',
     description: 'Learn the art of the Savasana assist to help students relax more deeply.',
     quiz: [
-        {
-            question: "What is the primary intention of a Savasana assist?",
-            options: [
-                {id: "a", text: "To wake the student up."},
-                {id: "b", text: "To help the student feel grounded, safe, and release final bits of tension."},
-                {id: "c", text: "To give them a deep stretch."},
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "A common and effective Savasana assist is a gentle pressure on the:",
             options: [
@@ -1042,18 +691,9 @@ export const lessons: Lesson[] = [
     description: 'Learn to observe and interpret student non-verbal cues to know if your assist is welcome and effective.',
     quiz: [
         {
-            question: "If a student's breathing becomes shallow or they hold their breath when you assist, it may indicate:",
-            options: [
-                {id: "a", text: "They are deeply relaxed."},
-                {id: "b", text: "They are uncomfortable or the assist is too intense."},
-                {id: "c", text: "They are trying to help you."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "What does 'tensing against' an assist mean?",
             options: [
-                {id: "a", text: "The student's muscles are actively resisting your touch."},
+                {id: "a", text: "The student\'s muscles are actively resisting your touch."},
                 {id: "b", text: "The student is enjoying the assist."},
                 {id: "c", text: "The student is weak."},
             ],
@@ -1068,15 +708,6 @@ export const lessons: Lesson[] = [
     title: 'Breath awareness (pranayama focus).',
     description: 'Structure a class around the central theme of the breath as a guide and anchor.',
     quiz: [
-        {
-            question: "What is a good peak pose for a breath-awareness themed class?",
-            options: [
-                {id: "a", text: "A complex arm balance that might make students hold their breath."},
-                {id: "b", text: "Any pose where students can comfortably focus on the rhythm of their breath."},
-                {id: "c", text: "The longest hold you can think of."},
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "Which pranayama technique would be a good starting point for this theme?",
             options: [
@@ -1095,15 +726,6 @@ export const lessons: Lesson[] = [
     description: 'Use balancing poses as a metaphor for finding balance in daily life.',
     quiz: [
         {
-            question: "What is a good peak pose for a balance-themed class?",
-            options: [
-                {id: "a", text: "Child's Pose."},
-                {id: "b", text: "Handstand or Dancer's Pose."},
-                {id: "c", text: "Savasana."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "A good verbal cue for this theme could be:",
             options: [
                 {id: "a", text: "'If you fall, you have bad balance.'"},
@@ -1120,15 +742,6 @@ export const lessons: Lesson[] = [
     title: 'Heart-opening and emotional resilience.',
     description: 'Focus on backbends and chest openers to cultivate vulnerability and compassion.',
     quiz: [
-        {
-            question: "Which part of the body is anatomically associated with a 'heart-opening' theme?",
-            options: [
-                {id: "a", text: "The hamstrings."},
-                {id: "b", text: "The thoracic spine, chest, and shoulders."},
-                {id: "c", text: "The feet."},
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "A good peak pose for a heart-opening class would be:",
             options: [
@@ -1147,15 +760,6 @@ export const lessons: Lesson[] = [
     description: 'Connect with the earth and find your foundation through standing poses and core stability.',
     quiz: [
         {
-            question: "Which poses are best for a grounding-themed class?",
-            options: [
-                {id: "a", text: "Inversions like headstand."},
-                {id: "b", text: "Standing poses like Mountain, Warrior, and Tree Pose."},
-                {id: "c", text: "Complex arm balances."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "The Muladhara (Root) Chakra is associated with what element?",
             options: [
                 {id: "a", text: "Fire."},
@@ -1172,15 +776,6 @@ export const lessons: Lesson[] = [
     title: 'Sacral creativity flow (svadhisthana).',
     description: 'Focus on fluid movements and hip-opening to tap into creative and emotional energy.',
     quiz: [
-        {
-            question: "The Svadhisthana (Sacral) Chakra is associated with which element?",
-            options: [
-                {id: "a", text: "Earth."},
-                {id: "b", text: "Fire."},
-                {id: "c", text: "Water."},
-            ],
-            correctAnswerId: "c"
-        },
         {
             question: "What types of movements are best for a Sacral Chakra themed class?",
             options: [
@@ -1199,15 +794,6 @@ export const lessons: Lesson[] = [
     description: 'Build inner fire and confidence with core work and powerful poses.',
     quiz: [
         {
-            question: "Which chakra is the solar plexus theme focused on?",
-            options: [
-                {id: "a", text: "Anahata (Heart)."},
-                {id: "b", text: "Manipura (Solar Plexus)."},
-                {id: "c", text: "Vishuddha (Throat)."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "What types of poses are central to a solar plexus-themed class?",
             options: [
                 {id: "a", text: "Restorative poses."},
@@ -1224,15 +810,6 @@ export const lessons: Lesson[] = [
     title: 'Heart chakra compassion.',
     description: 'Cultivate love and connection through chest-opening poses and loving-kindness meditation.',
     quiz: [
-        {
-            question: "The Anahata (Heart) Chakra is associated with which element?",
-            options: [
-                {id: "a", text: "Fire."},
-                {id: "b", text: "Earth."},
-                {id: "c", text: "Air."},
-            ],
-            correctAnswerId: "c"
-        },
         {
             question: "What is the primary emotional focus of a heart chakra-themed class?",
             options: [
@@ -1251,15 +828,6 @@ export const lessons: Lesson[] = [
     description: 'Use neck stretches, mantras, and specific poses to encourage authentic self-expression.',
     quiz: [
         {
-            question: "The Vishuddha (Throat) Chakra is associated with:",
-            options: [
-                {id: "a", text: "Grounding and stability."},
-                {id: "b", text: "Communication, self-expression, and truth."},
-                {id: "c", text: "Love and compassion."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "Which of these poses can help to stimulate the throat chakra?",
             options: [
                 {id: "a", text: "Warrior II."},
@@ -1276,15 +844,6 @@ export const lessons: Lesson[] = [
     title: 'Third eye intuition.',
     description: 'Use focus points (drishti), meditation, and balancing poses to connect with inner wisdom.',
     quiz: [
-        {
-            question: "The Ajna (Third Eye) Chakra is located:",
-            options: [
-                {id: "a", text: "At the heart center."},
-                {id: "b", text: "At the base of the spine."},
-                {id: "c", text: "Between the eyebrows."},
-            ],
-            correctAnswerId: "c"
-        },
         {
             question: "What is the primary function associated with the third eye chakra?",
             options: [
@@ -1303,16 +862,7 @@ export const lessons: Lesson[] = [
     description: 'Focus on meditation and Savasana to cultivate a sense of unity and spiritual connection.',
     quiz: [
         {
-            question: "The Sahasrara (Crown) Chakra is associated with:",
-            options: [
-                {id: "a", text: "Physical strength."},
-                {id: "b", text: "Personal will."},
-                {id: "c", text: "Consciousness, enlightenment, and connection to a higher power."},
-            ],
-            correctAnswerId: "c"
-        },
-        {
-            question: "Which pose is considered the ultimate expression of the crown chakra's energy?",
+            question: "Which pose is considered the ultimate expression of the crown chakra\'s energy?",
             options: [
                 {id: "a", text: "Plank Pose."},
                 {id: "b", text: "Warrior II."},
@@ -1328,15 +878,6 @@ export const lessons: Lesson[] = [
     title: 'Seasonal themes (winter grounding, spring awakening).',
     description: 'Align the practice with the energy of the current season.',
     quiz: [
-        {
-            question: "A yoga class themed for winter would likely emphasize:",
-            options: [
-                {id: "a", text: "Fast-paced, energetic flows."},
-                {id: "b", text: "Grounding, warming, and introspective practices."},
-                {id: "c", text: "Cooling breaths and heart openers."},
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "Which poses would be suitable for a 'Spring Awakening' theme?",
             options: [
@@ -1355,15 +896,6 @@ export const lessons: Lesson[] = [
     description: 'Align the class with the energy of the lunar cycle.',
     quiz: [
         {
-            question: "A class themed around the New Moon would likely focus on:",
-            options: [
-                {id: "a", text: "High-energy, celebratory movements."},
-                {id: "b", text: "Introspection, setting intentions, and gentle, releasing movements."},
-                {id: "c", text: "A physically challenging workout."}
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "A Full Moon-themed class is often associated with:",
             options: [
                 {id: "a", text: "Quiet, inward energy."},
@@ -1380,15 +912,6 @@ export const lessons: Lesson[] = [
     title: 'Yoga philosophy theme — Aparigraha (non-grasping).',
     description: 'Focus on the yama of non-attachment by encouraging students to let go of outcomes.',
     quiz: [
-        {
-            question: "What is Aparigraha?",
-            options: [
-                {id: "a", text: "Non-harming."},
-                {id: "b", text: "Truthfulness."},
-                {id: "c", text: "Non-possessiveness or non-grasping."},
-            ],
-            correctAnswerId: "c"
-        },
         {
             question: "How can Aparigraha be applied to asana practice?",
             options: [
@@ -1407,18 +930,9 @@ export const lessons: Lesson[] = [
     description: 'Cultivate a sense of contentment and gratitude for where you are right now.',
     quiz: [
         {
-            question: "What is the principle of Santosha?",
-            options: [
-                {id: "a", text: "Self-discipline."},
-                {id: "b", text: "Contentment; finding joy and acceptance in the present moment."},
-                {id: "c", text: "Self-study."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "How can a yoga practice cultivate Santosha?",
             options: [
-                {id: "a", text: "By focusing only on what you can't do."},
+                {id: "a", text: "By focusing only on what you can\'t do."},
                 {id: "b", text: "By celebrating what your body can do today, without judgment."},
                 {id: "c", text: "By comparing yourself to the teacher."}
             ],
@@ -1433,19 +947,10 @@ export const lessons: Lesson[] = [
     description: 'Focus on self-compassion, listening to the body, and moving in a way that is kind and supportive.',
     quiz: [
         {
-            question: "Ahimsa, the first yama, translates to:",
-            options: [
-                {id: "a", text: "Truthfulness."},
-                {id: "b", text: "Non-harming or non-violence."},
-                {id: "c", text: "Non-stealing."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "How does Ahimsa apply to a physical yoga practice?",
             options: [
                 {id: "a", text: "By pushing through pain to get the 'full expression' of a pose."},
-                {id: "b", text: "By listening to the body's signals and backing off when something causes pain."},
+                {id: "b", text: "By listening to the body\'s signals and backing off when something causes pain."},
                 {id: "c", text: "By judging others in the class."},
             ],
             correctAnswerId: "b"
@@ -1458,15 +963,6 @@ export const lessons: Lesson[] = [
     title: 'Gratitude flow.',
     description: 'Weave expressions of gratitude throughout the practice for a heart-centered experience.',
     quiz: [
-        {
-            question: "What is the main intention of a gratitude-themed yoga class?",
-            options: [
-                {id: "a", text: "To focus on what is lacking in life."},
-                {id: "b", text: "To cultivate an appreciation for the body, the breath, and the present moment."},
-                {id: "c", text: "To achieve a difficult physical pose."},
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "How can you introduce a gratitude theme at the beginning of class?",
             options: [
@@ -1485,15 +981,6 @@ export const lessons: Lesson[] = [
     description: 'Explore the idea that true strength comes from a balance of effort and ease, not rigidity.',
     quiz: [
         {
-            question: "What is the core concept of a 'Strength through Softness' theme?",
-            options: [
-                {id: "a", text: "That practice should be as soft and easy as possible."},
-                {id: "b", text: "That true strength is adaptable and fluid, not just rigid and forceful."},
-                {id: "c", text: "That softness is a sign of weakness."}
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "Which yogic concept does this theme directly relate to?",
             options: [
                 {id: "a", text: "Ahimsa (non-harm)."},
@@ -1510,15 +997,6 @@ export const lessons: Lesson[] = [
     title: 'Slow flow for nervous system regulation.',
     description: 'Use slow, mindful movements and long holds to calm the nervous system.',
     quiz: [
-        {
-            question: "What is the primary goal of a slow flow class for nervous system regulation?",
-            options: [
-                {id: "a", text: "To get a cardiovascular workout."},
-                {id: "b", text: "To activate the parasympathetic nervous system (rest and digest)."},
-                {id: "c", text: "To learn as many new poses as possible."}
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "Which of the following is a key component of this type of class?",
             options: [
@@ -1537,15 +1015,6 @@ export const lessons: Lesson[] = [
     description: 'Build internal heat and discipline with a challenging, core-focused class.',
     quiz: [
         {
-            question: "The Sanskrit word 'Tapas' in this context refers to:",
-            options: [
-                {id: "a", text: "Small Spanish snacks."},
-                {id: "b", text: "The fiery discipline or determination to practice."},
-                {id: "c", text: "Contentment."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "A fire flow class would likely include many of which type of pose?",
             options: [
                 {id: "a", text: "Restorative poses."},
@@ -1562,15 +1031,6 @@ export const lessons: Lesson[] = [
     title: 'Yin/Yang balance.',
     description: 'Combine dynamic, active (Yang) sequences with passive, long-held (Yin) poses in one class.',
     quiz: [
-        {
-            question: "In a Yin/Yang class, the 'Yang' portion typically consists of:",
-            options: [
-                {id: "a", text: "Long, passive stretches on the floor."},
-                {id: "b", text: "Dynamic, rhythmic, and active yoga like a Vinyasa flow."},
-                {id: "c", text: "Meditation."},
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "The 'Yin' portion of the class focuses on:",
             options: [
@@ -1590,15 +1050,6 @@ export const lessons: Lesson[] = [
     description: 'Learn to observe students and recognize signs of struggle, pain, or medical issues.',
     quiz: [
         {
-            question: "What is a major 'red flag' that a student is in pain, not just feeling a stretch?",
-            options: [
-                {id: "a", text: "Steady, deep breathing."},
-                {id: "b", text: "A sharp intake of breath, wincing, or immediately backing out of a pose."},
-                {id: "c", text: "A look of calm focus."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "If a student tells you they have a herniated disc, you should advise them to avoid:",
             options: [
                 {id: "a", text: "All physical activity."},
@@ -1615,15 +1066,6 @@ export const lessons: Lesson[] = [
     title: 'Joint stacking principles.',
     description: 'Learn the importance of stacking joints (e.g., knee over ankle) for stability and safety.',
     quiz: [
-        {
-            question: "In a lunge or Warrior pose, why is it important to stack the front knee over the ankle?",
-            options: [
-                {id: "a", text: "It looks better in photos."},
-                {id: "b", text: "To minimize pressure and torque on the knee joint."},
-                {id: "c", text: "It creates a deeper stretch in the hamstring."},
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "In Tabletop Pose, the shoulders should be stacked over the ______, and hips over the ______.",
             options: [
@@ -1642,15 +1084,6 @@ export const lessons: Lesson[] = [
     description: 'Learn cues and modifications to keep the lumbar spine safe.',
     quiz: [
         {
-            question: "What is a key instruction to protect the lower back in a forward fold?",
-            options: [
-                {id: "a", text: "Round the back as much as possible."},
-                {id: "b", text: "Bend the knees and hinge from the hips, not the waist."},
-                {id: "c", text: "Hold your breath."}
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "In a backbend like Cobra or Upward-Facing Dog, how can you protect the lower back?",
             options: [
                 {id: "a", text: "By pushing all the weight into the lower back."},
@@ -1668,16 +1101,7 @@ export const lessons: Lesson[] = [
     description: 'Learn to cue proper alignment to protect the delicate knee joint.',
     quiz: [
         {
-            question: "A common misalignment in Warrior II that stresses the front knee is:",
-            options: [
-                {id: "a", text: "The knee tracking directly over the ankle."},
-                {id: "b", text: "The knee collapsing inward, inside the ankle."},
-                {id: "c", text: "The back leg being too straight."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
-            question: "To protect the knee in poses like Pigeon, it's important to:",
+            question: "To protect the knee in poses like Pigeon, it\'s important to:",
             options: [
                 {id: "a", text: "Point the front foot."},
                 {id: "b", text: "Keep the front foot flexed to stabilize the knee joint."},
@@ -1693,15 +1117,6 @@ export const lessons: Lesson[] = [
     title: 'Shoulder safety in chaturanga.',
     description: 'Break down one of the most common poses to cause injury and learn to teach it safely.',
     quiz: [
-        {
-            question: "A common mistake in Chaturanga that injures the shoulders is:",
-            options: [
-                {id: "a", text: "Keeping the elbows hugged in to the ribs."},
-                {id: "b", text: "Lowering down with the shoulders dipping below the elbows."},
-                {id: "c", text: "Engaging the core."},
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "In a proper Chaturanga, the elbows should be:",
             options: [
@@ -1720,20 +1135,11 @@ export const lessons: Lesson[] = [
     description: 'Understand the difference between healthy stretching and dangerous forcing of joints.',
     quiz: [
         {
-            question: "What is the difference between a 'stretch' sensation and a 'pain' sensation?",
-            options: [
-                {id: "a", text: "There is no difference."},
-                {id: "b", text: "A stretch is typically a dull, manageable sensation of tension, while pain is often sharp, shooting, or burning."},
-                {id: "c", text: "Pain is good, it means you are making progress."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "Why should you never bounce in a deep stretch (ballistic stretching)?",
             options: [
-                {id: "a", text: "It's an advanced technique that helps you get more flexible."},
-                {id: "b", text: "It can trigger the muscle's stretch reflex, causing it to tighten and potentially tear."},
-                {id: "c", text: "It's boring."},
+                {id: "a", text: "It\'s an advanced technique that helps you get more flexible."},
+                {id: "b", text: "It can trigger the muscle\'s stretch reflex, causing it to tighten and potentially tear."},
+                {id: "c", text: "It\'s boring."},
             ],
             correctAnswerId: "b"
         },
@@ -1745,15 +1151,6 @@ export const lessons: Lesson[] = [
     title: 'Spine neutral vs. flexion vs. extension cues.',
     description: 'Understand the three main positions of the spine and when to cue them.',
     quiz: [
-        {
-            question: "A 'neutral spine' means:",
-            options: [
-                {id: "a", text: "A perfectly flat back."},
-                {id: "b", text: "Maintaining the natural curves of the spine (cervical, thoracic, lumbar)."},
-                {id: "c", text: "A rounded back."},
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "Which pose is an example of spinal flexion?",
             options: [
@@ -1772,15 +1169,6 @@ export const lessons: Lesson[] = [
     description: 'Master the flow of the common Vinyasa sequence to prevent injury.',
     quiz: [
         {
-            question: "When transitioning from Plank to Downward-Facing Dog, you should cue students to:",
-            options: [
-                {id: "a", text: "Lift their hips up and back, leading with the tailbone."},
-                {id: "b", text: "Drop their hips down first."},
-                {id: "c", text: "Jump their feet forward."},
-            ],
-            correctAnswerId: "a"
-        },
-        {
             question: "A common mistake when moving from Chaturanga to Upward-Facing Dog is:",
             options: [
                 {id: "a", text: "Keeping the core engaged."},
@@ -1797,15 +1185,6 @@ export const lessons: Lesson[] = [
     title: 'Using props for injury prevention.',
     description: 'Understand how props are not a crutch, but a tool for safer and more effective practice.',
     quiz: [
-        {
-            question: "How can blocks help prevent injury in a forward fold?",
-            options: [
-                {id: "a", text: "By making the pose harder."},
-                {id: "b", text: "By bringing the floor closer, allowing a student to maintain a long spine instead of rounding to reach the floor."},
-                {id: "c", text: "By placing them on the student's back."},
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "A blanket rolled under the knees in Savasana helps to:",
             options: [
@@ -1824,15 +1203,6 @@ export const lessons: Lesson[] = [
     description: 'Learn techniques and cues to protect the wrists in weight-bearing poses.',
     quiz: [
         {
-            question: "A key cue to protect the wrists in poses like Downward Dog and Plank is:",
-            options: [
-                {id: "a", text: "Lift the base of the fingers off the mat."},
-                {id: "b", text: "Press down firmly through all four corners of the palm and the knuckles."},
-                {id: "c", text: "Put all the weight into the heel of the hand."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "What is 'doming' the palms?",
             options: [
                 {id: "a", text: "A sign of wrist strain."},
@@ -1849,15 +1219,6 @@ export const lessons: Lesson[] = [
     title: 'Modifying for pregnancy safely.',
     description: 'Learn key modifications for expectant mothers in a general yoga class.',
     quiz: [
-        {
-            question: "What is a general rule for twists for pregnant students?",
-            options: [
-                {id: "a", text: "They should do deeper twists to create space."},
-                {id: "b", text: "They should avoid deep, closed twists and practice open twists instead."},
-                {id: "c", text: "Twisting is completely forbidden."},
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "Why should pregnant students avoid lying flat on their back (supine) for extended periods, especially later in pregnancy?",
             options: [
@@ -1876,15 +1237,6 @@ export const lessons: Lesson[] = [
     description: 'Learn to use chairs and other props to make yoga accessible to all.',
     quiz: [
         {
-            question: "What is the primary benefit of Chair Yoga?",
-            options: [
-                {id: "a", text: "It's not real yoga."},
-                {id: "b", text: "It makes yoga accessible to those who cannot easily get up and down from the floor."},
-                {id: "c", text: "It's only for people who are lazy."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "For a student with limited mobility in a standing pose, a chair can be used for:",
             options: [
                 {id: "a", text: "A place to put their drink."},
@@ -1901,15 +1253,6 @@ export const lessons: Lesson[] = [
     title: 'Teaching overweight/plus-size modifications.',
     description: 'Learn to create a welcoming and effective practice for students in larger bodies.',
     quiz: [
-        {
-            question: "What is a common physical challenge for students in larger bodies in yoga?",
-            options: [
-                {id: "a", text: "They are always inflexible."},
-                {id: "b", text: "Body tissue, such as the belly or chest, can get in the way in certain poses."},
-                {id: "c", text: "They are always weaker than smaller students."},
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "A good modification for a student whose belly is compressed in a forward fold is to:",
             options: [
@@ -1928,15 +1271,6 @@ export const lessons: Lesson[] = [
     description: 'Learn to teach students with excessive flexibility how to engage muscles and protect their joints.',
     quiz: [
         {
-            question: "What is hypermobility?",
-            options: [
-                {id: "a", text: "The inability to move."},
-                {id: "b", text: "A condition where a person's joints have an unusually large range of motion."},
-                {id: "c", text: "Being extremely muscular."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "What is the main risk for hypermobile students in yoga?",
             options: [
                 {id: "a", text: "They are not at risk, as they are very flexible."},
@@ -1953,15 +1287,6 @@ export const lessons: Lesson[] = [
     title: 'Avoiding overstretching in yin classes.',
     description: 'Understand the difference between healthy stress on tissues and harmful pain.',
     quiz: [
-        {
-            question: "What is the primary target of Yin Yoga?",
-            options: [
-                {id: "a", text: "Muscles."},
-                {id: "b", text: "Deeper connective tissues like ligaments, tendons, and fascia."},
-                {id: "c", text: "Cardiovascular endurance."},
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "What is 'playing the edge' in Yin Yoga?",
             options: [
@@ -1980,18 +1305,9 @@ export const lessons: Lesson[] = [
     description: 'Learn how to properly prepare the body for a more active yoga practice.',
     quiz: [
         {
-            question: "What is the primary purpose of a warm-up?",
-            options: [
-                {id: "a", text: "To get to the peak pose as quickly as possible."},
-                {id: "b", text: "To gradually increase heart rate, warm up muscles, and mobilize joints."},
-                {id: "c", text: "To stretch muscles to their maximum length."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "What is 'dynamic stretching' and why is it good for a warm-up?",
             options: [
-                {id: "a", text: "Holding a passive stretch for a long time; it's not good for a warm-up."},
+                {id: "a", text: "Holding a passive stretch for a long time; it\'s not good for a warm-up."},
                 {id: "b", text: "Moving through a range of motion, like Cat-Cow or gentle Sun Salutations, which prepares the body for more intense movement."},
                 {id: "c", text: "Bouncing in a stretch."},
             ],
@@ -2006,19 +1322,10 @@ export const lessons: Lesson[] = [
     description: 'Learn how to sequence the end of class to neutralize the spine and calm the nervous system.',
     quiz: [
         {
-            question: "What is a counterpose?",
-            options: [
-                {id: "a", text: "A pose that is the exact opposite of the one you just did."},
-                {id: "b", text: "A pose that neutralizes or balances the effects of a previous, more intense pose."},
-                {id: "c", text: "The most difficult pose in the sequence."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "After a series of deep backbends, what is an appropriate counterpose?",
             options: [
                 {id: "a", text: "Another deep backbend."},
-                {id: "b", text: "A gentle forward fold like Child's Pose."},
+                {id: "b", text: "A gentle forward fold like Child\'s Pose."},
                 {id: "c", text: "Handstand."}
             ],
             correctAnswerId: "b"
@@ -2031,15 +1338,6 @@ export const lessons: Lesson[] = [
     title: 'Monitoring student breath for safety.',
     description: 'Learn how the sound and rhythm of students\' breath can be a key indicator of their state.',
     quiz: [
-        {
-            question: "If you hear a student holding their breath in a challenging pose, it is often a sign of:",
-            options: [
-                {id: "a", text: "Deep relaxation."},
-                {id: "b", text: "Straining or excessive effort."},
-                {id: "c", text: "Proper technique."},
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "What is a good verbal cue if you notice a student holding their breath?",
             options: [
@@ -2058,16 +1356,7 @@ export const lessons: Lesson[] = [
     description: 'Understand your role and responsibilities in a medical emergency.',
     quiz: [
         {
-            question: "What is the first step if a student appears to have a serious medical emergency (e.g., fainting, seizure)?",
-            options: [
-                {id: "a", text: "Try to diagnose the problem yourself."},
-                {id: "b", text: "Call for professional medical help (e.g., 911) immediately."},
-                {id: "c", text: "Offer them some water."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
-            question: "A yoga teacher's role in a medical emergency is to:",
+            question: "A yoga teacher\'s role in a medical emergency is to:",
             options: [
                 {id: "a", text: "Act as a doctor."},
                 {id: "b", text: "Keep the student and the space safe until a medical professional arrives."},
@@ -2083,15 +1372,6 @@ export const lessons: Lesson[] = [
     title: 'Creating safe spacing in a crowded room.',
     description: 'Learn strategies to manage a full class without compromising student safety.',
     quiz: [
-        {
-            question: "One way to create more space in a crowded room is to:",
-            options: [
-                {id: "a", text: "Tell some people to leave."},
-                {id: "b", text: "Stagger the mats brick-style, rather than in straight rows."},
-                {id: "c", text: "Ask everyone to practice with their eyes closed."},
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "Before teaching a pose with a wide range of motion (like Warrior II with arms out), you should:",
             options: [
@@ -2111,20 +1391,11 @@ export const lessons: Lesson[] = [
     description: 'Understand the importance of the teacher-student relationship and how to maintain its integrity.',
     quiz: [
         {
-            question: "Why is it important to establish professional boundaries with students?",
-            options: [
-                {id: "a", text: "To seem aloof and unfriendly."},
-                {id: "b", text: "To maintain a safe, respectful, and clear therapeutic container for the practice."},
-                {id: "c", text: "It's not important; teachers and students should be best friends."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "Which of the following is an example of a boundary crossing?",
             options: [
-                {id: "a", text: "Answering a student's question about a yoga pose after class."},
+                {id: "a", text: "Answering a student\'s question about a yoga pose after class."},
                 {id: "b", text: "Borrowing money from a student or engaging in a dual relationship where you are also their therapist."},
-                {id: "c", text: "Remembering a student's name."},
+                {id: "c", text: "Remembering a student\'s name."},
             ],
             correctAnswerId: "b"
         },
@@ -2137,18 +1408,9 @@ export const lessons: Lesson[] = [
     description: 'Navigate the nuances of connection and professionalism in the yoga space.',
     quiz: [
         {
-            question: "What is the inherent power dynamic in a teacher-student relationship?",
-            options: [
-                {id: "a", text: "The student has more power than the teacher."},
-                {id: "b", text: "The teacher is in a position of authority and trust, which comes with responsibility."},
-                {id: "c", text: "There is no power dynamic."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "Is it appropriate to date a current student?",
             options: [
-                {id: "a", text: "Yes, it's totally fine."},
+                {id: "a", text: "Yes, it\'s totally fine."},
                 {id: "b", text: "Most ethical guidelines strongly advise against it due to the power imbalance."},
                 {id: "c", text: "Only if you think they are 'the one'."},
             ],
@@ -2162,15 +1424,6 @@ export const lessons: Lesson[] = [
     title: 'Maintaining confidentiality & safe space.',
     description: 'Uphold student privacy and trust as a cornerstone of your teaching.',
     quiz: [
-        {
-            question: "If a student shares that they have a specific injury, you should:",
-            options: [
-                {id: "a", text: "Announce it to the class so everyone knows."},
-                {id: "b", text: "Keep that information confidential and use it only to offer them safe modifications."},
-                {id: "c", text: "Post about it on social media."},
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "What does creating a 'safe space' mean?",
             options: [
@@ -2189,20 +1442,11 @@ export const lessons: Lesson[] = [
     description: 'Go deeper into the different layers of consent required in a professional setting.',
     quiz: [
         {
-            question: "Consent for hands-on assists must be:",
-            options: [
-                {id: "a", text: "Assumed unless the student says no."},
-                {id: "b", text: "Given once at the beginning of the student's first class."},
-                {id: "c", text: "Clear, enthusiastic, and reversible at any time."},
-            ],
-            correctAnswerId: "c"
-        },
-        {
             question: "Before taking photos or videos in a class where students are visible, you must:",
             options: [
                 {id: "a", text: "Just do it quickly so no one notices."},
                 {id: "b", text: "Obtain explicit permission from every identifiable person."},
-                {id: "c", text: "Assume it's okay for marketing purposes."},
+                {id: "c", text: "Assume it\'s okay for marketing purposes."},
             ],
             correctAnswerId: "b"
         },
@@ -2215,19 +1459,11 @@ export const lessons: Lesson[] = [
     description: 'Learn to use language that is invitational, empowering, and avoids potential triggers.',
     quiz: [
         {
-            question: "Which phrase is more trauma-informed?",
-            options: [
-                {id: "a", text: "'Now, you are going to push yourself into wheel pose.'"},
-                {id: "b", text: "'If you'd like to explore wheel pose, you might begin by... And if not, supported bridge is a wonderful option.'"}
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "Why is invitational language ('you might try,' 'if it feels right for you') important?",
             options: [
                 {id: "a", text: "It makes the teacher sound less confident."},
                 {id: "b", text: "It gives agency back to the student, which can be empowering for trauma survivors."},
-                {id: "c", text: "It's only for beginners."}
+                {id: "c", text: "It\'s only for beginners."}
             ],
             correctAnswerId: "b"
         },
@@ -2240,20 +1476,11 @@ export const lessons: Lesson[] = [
     description: 'Learn to recognize and avoid using spiritual concepts to suppress or avoid difficult emotions and realities.',
     quiz: [
         {
-            question: "What is spiritual bypassing?",
-            options: [
-                {id: "a", text: "A shortcut to enlightenment."},
-                {id: "b", text: "Using spiritual beliefs to avoid dealing with painful feelings, unresolved wounds, and developmental needs."},
-                {id: "c", text: "A type of advanced meditation."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "Which of these statements is an example of spiritual bypassing?",
             options: [
-                {id: "a", text: "'It's okay to feel sad; allow yourself to be with that emotion.'"},
-                {id: "b", text: "'Don't be so negative, just think positive thoughts! Good vibes only!'"},
-                {id: "c", text: "'That sounds really difficult. I'm here to listen if you want to talk after class.'"},
+                {id: "a", text: "'It\'s okay to feel sad; allow yourself to be with that emotion.'"},
+                {id: "b", text: "'Don\'t be so negative, just think positive thoughts! Good vibes only!'"},
+                {id: "c", text: "'That sounds really difficult. I\'m here to listen if you want to talk after class.'"},
             ],
             correctAnswerId: "b"
         },
@@ -2265,15 +1492,6 @@ export const lessons: Lesson[] = [
     title: 'Respecting cultural origins of yoga.',
     description: 'Learn how to honor the South Asian roots of yoga without cultural appropriation.',
     quiz: [
-        {
-            question: "What is cultural appropriation in the context of yoga?",
-            options: [
-                {id: "a", text: "Learning about the history and philosophy of yoga."},
-                {id: "b", text: "Taking sacred elements from the culture of yoga, stripping them of their original meaning, and using them for personal profit or aesthetic."},
-                {id: "c", text: "Using Sanskrit pose names."},
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "A way to honor the roots of yoga is to:",
             options: [
@@ -2292,15 +1510,6 @@ export const lessons: Lesson[] = [
     description: 'Learn to create a welcoming space for all bodies, abilities, and backgrounds.',
     quiz: [
         {
-            question: "What is a key component of inclusive teaching?",
-            options: [
-                {id: "a", text: "Ensuring everyone does the same version of the pose."},
-                {id: "b", text: "Offering variations and modifications for poses, and using props."},
-                {id: "c", text: "Only teaching to students who are already flexible and strong."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "Body-positive language in a yoga class focuses on:",
             options: [
                 {id: "a", text: "How to get a 'bikini body'."},
@@ -2317,15 +1526,6 @@ export const lessons: Lesson[] = [
     title: 'Avoiding ableist language.',
     description: 'Learn to use language that does not discriminate against people with disabilities.',
     quiz: [
-        {
-            question: "What is ableist language?",
-            options: [
-                {id: "a", text: "Language that is very descriptive."},
-                {id: "b", text: "Language that is centered on the experiences of able-bodied people and can be offensive or exclusionary to people with disabilities."},
-                {id: "c", text: "Using too much Sanskrit."},
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "Instead of saying 'Stand up tall,' a more inclusive cue is:",
             options: [
@@ -2344,15 +1544,6 @@ export const lessons: Lesson[] = [
     description: 'Understand the ethical considerations of running a yoga business.',
     quiz: [
         {
-            question: "Which of the following is an example of ethical pricing?",
-            options: [
-                {id: "a", text: "Hiding fees and charges until after the student has signed up."},
-                {id: "b", text: "Clear, transparent pricing and cancellation policies."},
-                {id: "c", text: "A complicated and confusing contract that is difficult to cancel."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "A fair cancellation policy:",
             options: [
                 {id: "a", text: "Should make it impossible for a student to ever cancel."},
@@ -2369,15 +1560,6 @@ export const lessons: Lesson[] = [
     title: 'Class start/end punctuality.',
     description: 'Respecting students\' time is a fundamental part of professionalism.',
     quiz: [
-        {
-            question: "Why is it important to start and end class on time?",
-            options: [
-                {id: "a", text: "It's not, a few minutes here or there doesn't matter."},
-                {id: "b", text: "It shows respect for students' schedules and the teacher/class that comes after you."},
-                {id: "c", text: "Only the start time matters."}
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "Consistently running your classes long can be seen as:",
             options: [
@@ -2396,19 +1578,10 @@ export const lessons: Lesson[] = [
     description: 'Learn to offer the practice without being attached to how your students receive it or what they achieve.',
     quiz: [
         {
-            question: "What does 'non-attachment to student outcomes' mean?",
-            options: [
-                {id: "a", text: "Not caring if your students learn anything or are safe."},
-                {id: "b", text: "Teaching your best class and then letting go of any need for students to like it, 'get it', or achieve a certain pose."},
-                {id: "c", text: "Not looking at your students during class."}
-            ],
-            correctAnswerId: "b"
-        },
-        {
-            question: "If a student doesn't seem to be enjoying your class, you should:",
+            question: "If a student doesn\'t seem to be enjoying your class, you should:",
             options: [
                 {id: "a", text: "Take it personally and feel like a failure."},
-                {id: "b", text: "Recognize that the practice may not be for them today, and that's okay."},
+                {id: "b", text: "Recognize that the practice may not be for them today, and that\'s okay."},
                 {id: "c", text: "Change your entire sequence to please them."}
             ],
             correctAnswerId: "b"
@@ -2422,16 +1595,7 @@ export const lessons: Lesson[] = [
     description: 'Foster a space where students feel safe to be themselves, without fear of criticism.',
     quiz: [
         {
-            question: "How can a teacher's language foster a non-judgmental environment?",
-            options: [
-                {id: "a", text: "By using comparative words like 'better' or 'more advanced'."},
-                {id: "b", text: "By using inclusive, invitational language and emphasizing that every body is different."},
-                {id: "c", text: "By only praising the most flexible students."}
-            ],
-            correctAnswerId: "b"
-        },
-        {
-            question: "What is the danger of a teacher expressing frustration when a student 'doesn't get' a pose?",
+            question: "What is the danger of a teacher expressing frustration when a student 'doesn\'t get' a pose?",
             options: [
                 {id: "a", text: "It motivates the student to try harder."},
                 {id: "b", text: "It can create feelings of shame and inadequacy in the student."},
@@ -2448,20 +1612,11 @@ export const lessons: Lesson[] = [
     description: 'Effective communication is key to being a successful and respected teacher.',
     quiz: [
         {
-            question: "Which of the following is an example of clear communication?",
-            options: [
-                {id: "a", text: "Mumbling your cues."},
-                {id: "b", text: "Using simple, direct language and avoiding jargon."},
-                {id: "c", text: "Using vague, confusing metaphors for every pose."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
-            question: "If a student asks a question you don't know the answer to, you should:",
+            question: "If a student asks a question you don\'t know the answer to, you should:",
             options: [
                 {id: "a", text: "Make up an answer."},
-                {id: "b", text: "Respectfully say, 'That's a great question, and I don't know the answer, but I will find out and get back to you.'"},
-                {id: "c", text: "Tell them it's a stupid question."},
+                {id: "b", text: "Respectfully say, 'That\'s a great question, and I don\'t know the answer, but I will find out and get back to you.'"},
+                {id: "c", text: "Tell them it\'s a stupid question."},
             ],
             correctAnswerId: "b"
         },
@@ -2473,15 +1628,6 @@ export const lessons: Lesson[] = [
     title: 'Teacher presence & authenticity.',
     description: 'Learn to teach from a place of genuine presence and be authentically you.',
     quiz: [
-        {
-            question: "What is 'teacher presence'?",
-            options: [
-                {id: "a", text: "Just being physically in the room."},
-                {id: "b", text: "Being fully present, aware, and engaged with the students and the energy of the room."},
-                {id: "c", text: "Having a very loud voice."},
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "Authenticity in teaching means:",
             options: [
@@ -2500,15 +1646,6 @@ export const lessons: Lesson[] = [
     description: 'Understand the difference between being a guide and creating a cult of personality.',
     quiz: [
         {
-            question: "What is a sign of a teacher exhibiting 'guru-like' behavior in a negative sense?",
-            options: [
-                {id: "a", text: "Encouraging students to question things and find their own answers."},
-                {id: "b", text: "Positioning themselves as the sole source of wisdom and discouraging dissent."},
-                {id: "c", text: "Admitting when they don't know something."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "A healthy yoga teacher aims to:",
             options: [
                 {id: "a", text: "Empower their students."},
@@ -2525,15 +1662,6 @@ export const lessons: Lesson[] = [
     title: 'Professional self-care to avoid burnout.',
     description: 'Learn why taking care of yourself is essential to being a sustainable and effective teacher.',
     quiz: [
-        {
-            question: "What is teacher burnout?",
-            options: [
-                {id: "a", text: "A sign of a very popular teacher."},
-                {id: "b", text: "Emotional, physical, and mental exhaustion caused by prolonged stress."},
-                {id: "c", text: "A type of yoga."}
-            ],
-            correctAnswerId: "b"
-        },
         {
             question: "Which of these is a key aspect of self-care for a yoga teacher?",
             options: [
@@ -2552,15 +1680,6 @@ export const lessons: Lesson[] = [
     description: 'Learn to respectfully acknowledge your teachers and the sources of your knowledge.',
     quiz: [
         {
-            question: "What does 'lineage' mean in yoga?",
-            options: [
-                {id: "a", text: "Your family tree."},
-                {id: "b", text: "The direct line of teachers and traditions from which your knowledge comes."},
-                {id: "c", text: "A style of yoga pants."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "How can you honor your lineage?",
             options: [
                 {id: "a", text: "By claiming your teachers' knowledge as your own original thought."},
@@ -2578,19 +1697,10 @@ export const lessons: Lesson[] = [
     description: 'Learn how to make your class a welcoming and empowering entry point for new students.',
     quiz: [
         {
-            question: "What is a common fear for beginner yoga students?",
-            options: [
-                {id: "a", text: "That they will be too good at it."},
-                {id: "b", text: "That they will be judged, look silly, or won't be able to keep up."},
-                {id: "c", text: "That the class will be too easy."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "Which of these cues is most welcoming for a beginner?",
             options: [
                 {id: "a", text: "'This is a really simple pose, you should all be able to do it.'"},
-                {id: "b", text: "'It's totally normal if this feels awkward at first. Focus on how it feels, not how it looks.'"},
+                {id: "b", text: "'It\'s totally normal if this feels awkward at first. Focus on how it feels, not how it looks.'"},
                 {id: "c", text: "Calling out a beginner's mistake in front of the class."}
             ],
             correctAnswerId: "b"
@@ -2604,18 +1714,9 @@ export const lessons: Lesson[] = [
     description: 'Learn to create a supportive container for student experiences without judgment or taking on their emotions.',
     quiz: [
         {
-            question: "What does 'holding space' mean in a yoga context?",
-            options: [
-                {id: "a", text: "Booking the studio for a class."},
-                {id: "b", text: "Creating a safe, non-judgmental environment where students can have their own authentic experience."},
-                {id: "c", text: "Telling students what they should be feeling."},
-            ],
-            correctAnswerId: "b"
-        },
-        {
             question: "Why is neutrality important when holding space?",
             options: [
-                {id: "a", text: "It shows you don't care about your students."},
+                {id: "a", text: "It shows you don\'t care about your students."},
                 {id: "b", text: "It prevents you from becoming a therapist and allows students to process their own emotions without your agenda."},
                 {id: "c", text: "It is a way to remain detached and aloof."},
             ],
@@ -2630,15 +1731,6 @@ export const lessons: Lesson[] = [
       title: 'The Arc of a Class: Warm-up, Peak, Cool-down.',
       description: 'Learn the fundamental structure of a well-balanced yoga class.',
       quiz: [
-          {
-              question: "What is the primary purpose of the warm-up (Integration) phase?",
-              options: [
-                  {id: "a", text: "To get to the most difficult pose as quickly as possible."},
-                  {id: "b", text: "To gently prepare the body for movement and connect students to their breath."},
-                  {id: "c", text: "To cool the body down."},
-              ],
-              correctAnswerId: "b"
-          },
           {
               question: "The 'peak' of the class is:",
               options: [
@@ -2656,15 +1748,6 @@ export const lessons: Lesson[] = [
       title: 'Sequencing for a Peak Pose.',
       description: 'Learn how to intelligently sequence a class that safely prepares students for a specific challenging pose.',
       quiz: [
-          {
-              question: "When sequencing for a peak pose like Handstand, the warm-up should focus on:",
-              options: [
-                  {id: "a", text: "Deep hamstring stretches."},
-                  {id: "b", text: "Warming up the wrists, shoulders, and core."},
-                  {id: "c", text: "Hip openers."},
-              ],
-              correctAnswerId: "b"
-          },
           {
               question: "What does 'breaking down' a peak pose mean?",
               options: [
@@ -2684,18 +1767,9 @@ export const lessons: Lesson[] = [
       description: 'Define who you are as a teacher and who you want to serve.',
       quiz: [
           {
-              question: "What is a 'niche' in the context of yoga teaching?",
-              options: [
-                  {id: "a", text: "A specific style of yoga pants."},
-                  {id: "b", text: "A specialized area or population you focus on (e.g., yoga for athletes, prenatal yoga)."},
-                  {id: "c", text: "The name of a yoga studio."},
-              ],
-              correctAnswerId: "b"
-          },
-          {
               question: "Why is finding a niche helpful for a new teacher?",
               options: [
-                  {id: "a", text: "It's not helpful; you should be everything to everyone."},
+                  {id: "a", text: "It\'s not helpful; you should be everything to everyone."},
                   {id: "b", text: "It allows you to focus your marketing and become known as an expert in a specific area."},
                   {id: "c", text: "It limits your career opportunities."},
               ],
@@ -2711,15 +1785,6 @@ export const lessons: Lesson[] = [
       description: 'Learn to integrate yogic philosophy (like the Yamas or Niyamas) into a physical asana class.',
       quiz: [
           {
-              question: "If your theme is 'Satya' (truthfulness), how might you cue a pose?",
-              options: [
-                  {id: "a", text: "'Push yourself to the absolute limit.'"},
-                  {id: "b", text: "'Notice where your body is today with honesty, without pushing or forcing.'"},
-                  {id: "c", text: "'Try to look like the person next to you.'"},
-              ],
-              correctAnswerId: "b"
-          },
-          {
               question: "How can you introduce a philosophical theme without sounding preachy?",
               options: [
                   {id: "a", text: "By quoting long, complex texts that no one understands."},
@@ -2731,3 +1796,5 @@ export const lessons: Lesson[] = [
       ]
   }
 ];
+
+    

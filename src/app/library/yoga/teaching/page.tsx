@@ -108,7 +108,7 @@ export default function TeachingResourcesPage() {
                            <AccordionTrigger className="bg-card p-6 rounded-lg text-lg font-semibold hover:no-underline hover:bg-muted/50 transition-colors text-left">
                              {lesson.title}
                            </AccordionTrigger>
-                           <AccordionContent className="bg-card/50 p-6 rounded-b-lg mt-[-8px] border-t-0">
+                           <AccordionContent className="bg-card/50 p-6 rounded-b-lg -mt-2 border-t-0">
                                <p className="text-muted-foreground mb-6">{lesson.description}</p>
                                <LessonQuiz lesson={lesson} />
                            </AccordionContent>
@@ -121,3 +121,5 @@ export default function TeachingResourcesPage() {
     </div>
   );
 }
+
+    
