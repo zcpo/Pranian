@@ -11,8 +11,8 @@ export type ImagePlaceholder = {
 const mapData = (item: any) => ({
   id: item.id,
   description: item.description,
-  imageUrl: item.imageUrl || item.url,
-  imageHint: item.imageHint || item.hint,
+  imageUrl: item.imageUrl,
+  imageHint: item.imageHint,
 });
 
 
