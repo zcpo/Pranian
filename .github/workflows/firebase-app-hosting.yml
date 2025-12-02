@@ -28,7 +28,7 @@ jobs:
         with:
           credentials_json: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}'
       - name: 'Deploy to App Hosting'
-        uses: 'firebase/firebase-hosting-deploy@v0'
+        uses: 'FirebaseExtended/apphosting-deploy@v0'
         with:
           repoId: 'zcpo/Pranian'
           branchName: '${{ github.ref_name }}'
