@@ -72,7 +72,7 @@ export default function UploadPage() {
     multiple: false,
   });
 
-  const createPostInDb = async (data: FeedFormValues, mediaUrl?: string) => {
+  const createPostInDb = (data: FeedFormValues, mediaUrl?: string) => {
     if (!user || !firestore) return;
     
     const postData = {
@@ -86,7 +86,7 @@ export default function UploadPage() {
       createdAt: serverTimestamp(),
     };
     
-    await addDoc(collection(firestore, 'posts'), postData);
+    addDoc(collection(firestore, 'posts'), postData);
     toast({ title: "Success!", description: "Your post has been created." });
     router.push('/feed');
   };
@@ -143,7 +143,7 @@ export default function UploadPage() {
         });
       }
       
-      await createPostInDb(data, finalMediaUrl);
+      createPostInDb(data, finalMediaUrl);
 
     } catch (error) {
       console.error('Error creating post:', error);
