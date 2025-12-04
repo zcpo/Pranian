@@ -1,26 +1,42 @@
 
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { ContentCard } from '@/components/content-card';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { meditations } from '@/lib/meditations';
-import { videoMeditations } from '@/lib/video-meditations';
-import { videos } from '@/lib/videos';
-import { podcastEpisodes } from '@/lib/podcasts';
 import { LoaderCircle } from 'lucide-react';
+import type { meditations } from '@/lib/meditations';
+import type { videoMeditations } from '@/lib/video-meditations';
+import type { videos } from '@/lib/videos';
+import type { podcastEpisodes } from '@/lib/podcasts';
 
-const allContent = [
-  ...meditations.map(item => ({ ...item, type: 'Audio Meditation', href: `/library/meditation/${item.slug}` })),
-  ...videoMeditations.map(item => ({ ...item, type: 'Video Meditation', href: `/library/video-meditation/${item.slug}` })),
-  ...videos.map(item => ({ ...item, type: 'Video', href: `/library/video/${item.slug}` })),
-  ...podcastEpisodes.map(item => ({ ...item, imageId: 'product-podcast', type: 'Podcast', href: `/library/podcast/${item.slug}` })),
-];
+type ContentItem = (typeof meditations[0] | typeof videoMeditations[0] | typeof videos[0] | typeof podcastEpisodes[0]) & {
+    type: string;
+    href: string;
+};
 
 function SearchResults() {
   const searchParams = useSearchParams();
   const query = searchParams.get('q');
+  const [allContent, setAllContent] = useState<ContentItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchContent = async () => {
+        setIsLoading(true);
+        try {
+            const res = await fetch('/api/content');
+            const data = await res.json();
+            setAllContent(data.allContent);
+        } catch (error) {
+            console.error("Failed to fetch content", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    fetchContent();
+  }, []);
 
   if (!query) {
     return (
@@ -29,12 +45,18 @@ function SearchResults() {
       </div>
     );
   }
+  
+  if (isLoading) {
+      return (
+        <div className="flex justify-center items-center h-64"><LoaderCircle className="h-12 w-12 animate-spin text-primary" /></div>
+      );
+  }
 
   const lowerCaseQuery = query.toLowerCase();
   const filteredContent = allContent.filter(item => 
     item.title.toLowerCase().includes(lowerCaseQuery) ||
     item.description.toLowerCase().includes(lowerCaseQuery) ||
-    (item.author && item.author.toLowerCase().includes(lowerCaseQuery))
+    ('author' in item && item.author && item.author.toLowerCase().includes(lowerCaseQuery))
   );
 
   return (
@@ -49,13 +71,13 @@ function SearchResults() {
       {filteredContent.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {filteredContent.map((item, index) => {
-            const imageData = PlaceHolderImages.find(img => img.id === item.imageId);
-            const imageUrl = (item as any).posterUrl || imageData?.imageUrl.replace(/seed\/[^/]+/, `seed/${item.slug}${index}`) || 'https://picsum.photos/600/400';
+            const imageData = PlaceHolderImages.find(img => img.id === ('imageId' in item ? item.imageId : ''));
+            const imageUrl = ('posterUrl' in item && item.posterUrl) || imageData?.imageUrl.replace(/seed\/[^/]+/, `seed/${'slug' in item ? item.slug : ''}${index}`) || 'https://picsum.photos/600/400';
             const imageHint = imageData?.imageHint || 'yoga';
 
             return (
               <ContentCard
-                key={`${item.type}-${item.slug}`}
+                key={`${item.type}-${'slug' in item ? item.slug : index}`}
                 href={item.href}
                 imageUrl={imageUrl}
                 imageHint={imageHint}

@@ -1,19 +1,10 @@
-import { placeholderImages } from './placeholder-images-data';
+import placeholderData from '@/app/lib/placeholder-images.json';
 
 export type ImagePlaceholder = {
   id: string;
   description: string;
-  url: string;
-  hint: string;
+  imageUrl: string;
+  imageHint: string;
 };
 
-// This is a bit of a hack to deal with the fact that the AI is trained on a slightly different format
-const mapData = (item: any) => ({
-  id: item.id,
-  description: item.description,
-  imageUrl: item.imageUrl,
-  imageHint: item.imageHint,
-});
-
-
-export const PlaceHolderImages = placeholderImages.map(mapData);
+export const PlaceHolderImages: ImagePlaceholder[] = placeholderData;
