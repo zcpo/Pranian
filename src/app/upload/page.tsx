@@ -6,8 +6,8 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useDropzone } from 'react-dropzone';
-import { useUser, useFirestore } from '@/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { useUser, useFirestore, addDocumentNonBlocking } from '@/firebase';
+import { collection, serverTimestamp } from 'firebase/firestore';
 import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -86,7 +86,7 @@ export default function UploadPage() {
       createdAt: serverTimestamp(),
     };
     
-    addDoc(collection(firestore, 'posts'), postData);
+    addDocumentNonBlocking(collection(firestore, 'posts'), postData);
     toast({ title: "Success!", description: "Your post has been created." });
     router.push('/feed');
   };
@@ -326,3 +326,5 @@ export default function UploadPage() {
     </div>
   );
 }
+
+    
