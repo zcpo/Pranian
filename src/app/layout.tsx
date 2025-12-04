@@ -29,9 +29,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${poppins.variable}`}>
-      <head>
-        <link rel='stylesheet' href='https://unpkg.com/plyr@3/dist/plyr.css' />
-      </head>
+      <head/>
       <body className="dark font-body antialiased text-foreground">
         <ClientProviders>
           <div className="flex flex-col min-h-screen">
