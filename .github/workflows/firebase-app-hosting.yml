@@ -4,7 +4,6 @@
 # To connect this repository to Firebase App Hosting, make sure you
 # have the following secrets configured in your GitHub repository settings:
 #
-# - FIREBASE_API_KEY: The API key of your Firebase project.
 # - FIREBASE_SERVICE_ACCOUNT_KEY: A JSON service account key with the "Firebase App Hosting Admin" role.
 # - PROJECT_ID: The ID of your Firebase project.
 #
@@ -30,6 +29,4 @@ jobs:
       - name: 'Deploy to App Hosting'
         uses: 'FirebaseExtended/apphosting-deploy@v0'
         with:
-          repoId: 'zcpo/Pranian'
-          branchName: '${{ github.ref_name }}'
           projectId: '${{ secrets.PROJECT_ID }}'
