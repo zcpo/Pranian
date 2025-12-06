@@ -1,36 +1,33 @@
 
+import GenkitWebpackPlugin from '@genkit-ai/next';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // This is a dev-only configuration to allow the Next.js dev server to accept requests
-  // from the Firebase Studio environment.
-  allowedDevOrigins: [
-    'https://6000-firebase-studio-1764097066853.cluster-ux5mmlia3zhhask7riihruxydo.cloudworkstations.dev',
-  ],
+  webpack: (config, { isServer }) => {
+    config.plugins.push(new GenkitWebpackPlugin({
+      allowedDevOrigins: ["http://localhost:4000", "https://*.firebase.app", "https://*.web.app"]
+    }));
+    return config;
+  },
   images: {
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-      },
       {
         protocol: 'https',
         hostname: 'picsum.photos',
       },
       {
         protocol: 'https',
-        hostname: 'storage.googleapis.com',
+        hostname: 'images.unsplash.com',
       },
        {
         protocol: 'https',
-        hostname: 'firebasestorage.googleapis.com',
+        hostname: 'i.pravatar.cc',
       },
+      {
+        protocol: 'https',
+        hostname: 'storage.googleapis.com',
+      }
     ],
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
   },
 };
 
