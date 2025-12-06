@@ -1,5 +1,5 @@
 // This file is populated with environment variables.
-// In a local development environment, these variables are loaded from .env.local.
+// In a local development environment, these are loaded from .env.local.
 // In a deployed environment (like Firebase App Hosting), these are set in the backend configuration.
 
 export const firebaseConfig = {

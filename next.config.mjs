@@ -1,33 +1,14 @@
-
-import GenkitWebpackPlugin from '@genkit-ai/next';
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: true,
   webpack: (config, { isServer }) => {
-    config.plugins.push(new GenkitWebpackPlugin({
-      allowedDevOrigins: ["http://localhost:4000", "https://*.firebase.app", "https://*.web.app"]
-    }));
+    if (!isServer) {
+      // Don't resolve 'fs' module on the client to prevent errors
+      config.resolve.fallback = {
+        fs: false,
+      };
+    }
     return config;
-  },
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'picsum.photos',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-      },
-       {
-        protocol: 'https',
-        hostname: 'i.pravatar.cc',
-      },
-      {
-        protocol: 'https',
-        hostname: 'storage.googleapis.com',
-      }
-    ],
   },
 };
 
