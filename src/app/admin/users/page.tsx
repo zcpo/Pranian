@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect } from 'react';
@@ -28,7 +29,7 @@ function UserRow({ user }: { user: AppUser }) {
         <div className="flex items-center justify-between p-4 border-b">
             <div className="flex items-center gap-4">
                 <Avatar>
-                    <AvatarImage src={user.avatarUrl} alt={user.displayName} />
+                    <AvatarImage src={user.avatarUrl || ''} alt={user.displayName} />
                     <AvatarFallback>{userInitial.toUpperCase()}</AvatarFallback>
                 </Avatar>
                 <div>
